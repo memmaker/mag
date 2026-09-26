@@ -183,8 +183,7 @@ cl_eol()
  */
 
 void
-pline(str, ...)
-char	*str;
+pline(char *str, ...)
 {
 	register char	*cp;
 	char		buf[140];
