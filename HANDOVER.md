@@ -144,6 +144,42 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
   inspired by Rogue: tree entry `<li class="insp">` under Rogue, 1988 (1985
   UNIX), Michael J. Teixeira. (RogueBasin/dosgames pages are blocked from the
   cloud; facts above from search-result text, verify on the Mac.)
-- **Next: stage 2** (explore + stairs): hook `port_idle()`/`tgetch()` in
-  `dispatch()`; the known grid is `dun[][]` with `D_SEEN` (+ `putwhat()`
-  rules); stairs `DNSTAIR`/`UPSTAIR` cells, commands `stepdown`/`stepup`.
+
+### Stage 2 — explore + stairs (done, 2026-09-26)
+
+- **Explore key `Z`** (MAG's `x` is "swap to the secondary weapon"; `Z` is
+  unbound in `COMMAND.H`). Code: `port/rvip.c` (`port_command()`,
+  `port_auto()`, `next_dir()` BFS). **Main-loop hook** in `dispatch()`
+  (`src/MOVE.C`, `#ifdef PORT`): before reading a command
+  `typed = port_auto()` (next step while exploring/walking), after reading
+  `typed = port_command(typed)` (0 = handled by the port -> `continue`).
+  Steps go through the game's own walk command (a direction key).
+- **Known-grid test:** `dun[l][c].d_data & D_SEEN` or a non-blank cell in the
+  game's page-0 shadow screen `optscr[0]`, remembered per level in
+  `known[][]` (MAG clears `D_SEEN` of dark-room floors when you leave:
+  `know(d, NO)`); `stood[][]` = cells the player stood on. Targets: unvisited
+  known passable cells next to unknown cells, and unvisited items.
+  Passable = not `D_STONE`, not a known trap (`TRAPC`) or water (`POOL`),
+  not a door with `DR_WITHLOCK` (magic locks are never picked); diagonals
+  follow `nodiagmove()`. Stops: new top-line message, a monster coming into
+  view, any key, a step that did not move, blind/confused; a visible monster
+  on the next step -> "There's a jackal in the way." (never attacks).
+- **Stairs:** `>`/`<` on the right stairs (or in wizard mode) run the
+  original `stepdown`/`stepup`; elsewhere they walk to the nearest *known*
+  staircase (`D_STAIRCASE`, `DNSTAIR`/`UPSTAIR`) and take it on arrival;
+  `+`/`-` keep the original meaning. Walking to the level-1 up staircase
+  stops there with "These stairs lead out of the dungeon. Press < to leave."
+- **Tests:** native `python3 port/tests/explore_stairs.py [seeds]` (needs
+  `make -C port ASAN=1`; `MAG_KEYS` escapes `\^W` = Ctrl-W); browser
+  `node web/tests/stage2.cjs` (page `?seed=N` passes MAG's undocumented `sN`
+  argument: seed 3 explores 117 -> ~290 cells, seed 1 walks to the stairs
+  and reaches level 2; it fights adjacent monsters by walking into them).
+  Wizard mode for tests: `^W` + `frakola`, `#` maps walls/stairs only (room
+  floors stay unknown, so the walk can't use them).
+- Help screens (`data/mkhelp.py`) and the page hint mention `Z` and `<`/`>`.
+- **Next: stage 3** (Enter menu + inventory). Enter (^M) is the wizard
+  command `wmonstat`: take it only when `wizard != YES`. Item actions: the
+  game's `utilize()` (COMMAND1.C, `util[]` table: command letters
+  `"qezprwtWcd\025L\013SI/\011])[sX"`) reads the item letter with
+  `ctgetch()`; push the letter into a port key queue. Item lines:
+  `form(o, NO)`, colours `o_type + 1 + (o_type > 6)` (O_COLORINV).

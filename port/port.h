@@ -80,5 +80,7 @@ void	port_exit(int code);
 void	port_idle(void);
 int	port_save_ok(void);
 void	port_remember(void);
+int	port_auto(void);
+int	port_command(int k);
 
 #endif

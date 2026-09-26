@@ -19,7 +19,7 @@ async function start(port) {
 	const url = `http://localhost:${port}/`;
 	const t = {
 		page, errors, url,
-		async open() { await page.goto(url); await page.waitForFunction(() => window.Module && Module.mag && Module.mag.screen().length > 0, null, { timeout: 20000 }); },
+		async open() { await page.goto(t.url); await page.waitForFunction(() => window.Module && Module.mag && Module.mag.screen().length > 0, null, { timeout: 20000 }); },
 		screen() { return page.evaluate(() => Module.mag.screen()); },
 		async waitFor(re, ms = 10000) {
 			const t0 = Date.now();

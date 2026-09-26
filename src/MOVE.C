@@ -46,12 +46,21 @@ dispatch()
 
 #ifdef PORT
 			port_idle();	/* autosave, RVIP additions */
+			if ((typed = port_auto()) != 0)
+				;	/* explore / walk to stairs: next step */
+			else {
 #endif
 			/* the cursor appear when player is polymorphed */
 			if (u.u_sym != PLAYER && u.u_sym != IPLAYER) {
 				doset(scrline(u.u_d), scrcol(u.u_d));
 				typed = ctgetch();
 			} else typed = tgetch();
+#ifdef PORT
+			if (!(u.u_data & UD_FIND) &&
+					(typed = port_command(typed)) == 0)
+				continue;	/* the port handled it */
+			}
+#endif
 
 			if ((u.u_data & UD_FIND) && typed != '\033') {
 				/* make sure a legal 'f' direction */

@@ -249,7 +249,8 @@
 	/* ---------- startup ---------- */
 	window.Module = {
 		mag: mag,
-		arguments: [],
+		/* ?seed=N: a fixed dungeon for tests (MAIN.C's undocumented s<N>) */
+		arguments: (function () { var m = /[?&]seed=(\d+)/.exec(location.search); return m ? ['s' + m[1]] : []; })(),
 		preRun: [function () {
 			var FS = Module.FS;
 			FS.mkdirTree(DIR);

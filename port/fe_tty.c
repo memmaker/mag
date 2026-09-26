@@ -2,7 +2,7 @@
  * fe_tty.c - headless native frontend for tests (RVIP port, 2026)
  *
  * No terminal: keys come from the environment, the screen goes to a file.
- *   MAG_KEYS="..."	keys to type (C escapes: \r \e \n \\ \xNN; \F1..\F10,
+ *   MAG_KEYS="..."	keys to type (C escapes: \r \e \n \\ \xNN, \^W = Ctrl-W; \F1..\F10,
  *			\U \D \L \R arrows)
  *   MAG_RANDOM=N	then N random keys (MAG_SEED picks the sequence;
  *			no quit/save keys so the run goes the distance)
@@ -88,6 +88,7 @@ next_scripted(void)
 	case 'D': return FK_DOWN;
 	case 'L': return FK_LEFT;
 	case 'R': return FK_RIGHT;
+	case '^': return *keys ? *keys++ & 0x1f : -1;
 	case 'x': k = (int)strtol(keys, (char **)&keys, 16); return k;
 	case 'F': k = (int)strtol(keys, (char **)&keys, 10); return FK_F1 + k - 1;
 	case 0: keys--; return -1;
