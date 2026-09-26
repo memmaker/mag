@@ -408,3 +408,27 @@ Material:
   walkthrough (CRPG Addict posts linked instead). Cheats: wizard `^W` + `frakola`, in our build.
 
 Next: stage 9 (graveyard + leaderboard).
+
+### Stage 9 — graveyard + leaderboard (done, Mac, 2026-09-26)
+
+- **Hook:** `port_run_end(kill)` (`port/rvip.c`) from MAIN.C `doquit()` (before `topten`)
+  and `doexit()` (before "Press any key...", so the tomb/escape screen already reported;
+  covers death via ATTACK.C's tomb and the level-1 escape in MISC.C `newlev()`).
+  ev: `"quit"` -> quit; `"escaped"` -> win if `in_inv(SAPPHIRE)`, else quit; anything else ->
+  death with `killer` = MAG's `killer` (monster `p_name`, "monster" when unseen, trap/item
+  names like "bear trap", no articles). URL-encoded in C, `fe_beacon()` (EM_JS in
+  `port/fe_web.c`) only calls `RvipWM.report` (fallback fetch). Native `fe_tty.c` prints it
+  with `MAG_BEACON=1`.
+- **Fields:** g=mag, ev, name (`u.u_name`, the game asks it), killer (deaths only), depth
+  (`u.u_dlevel`; 0 after an escape), score (`getscore(YES)`, 0 after wizard mode, as the Hall
+  of Heroes), turns (`u.u_moves`), lvl (`u.u_elevel`). None missing.
+- **Killer art:** `roguelikes-index` `killers/make.py` `mag()`: 55 DawnLike sprites from
+  `port/tiles-dawn.png` by `mon_tile` (MONSTER.H order), commit `7fb03b1`, deployed.
+- **Verified live** (browser pane, fetch patched): quit -> `ev=quit` 204; death (wizard `>` x22
+  to level 23, wizard off with a second `^W`, since wizard mode is immortal) -> `ev=death
+  &killer=white%20dragon` 204, sent at the tomb; escape on level 1 without the Sapphire ->
+  `ev=quit&depth=0` 204; outbox empty each time. `/mag` IndexedDB deleted afterwards.
+- **Open:** the win branch (`in_inv(SAPPHIRE)`) not reached live (no wizard item creation);
+  it is the escape path above with the Sapphire in the pack. Native `make -C port` fails on the
+  Mac (Apple clang: incompatible function pointer errors in VARS.H; the Makefile was written for
+  Linux gcc), web build fine.
