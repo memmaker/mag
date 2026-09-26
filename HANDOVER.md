@@ -266,3 +266,38 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
   seeds x 20000 random keys clean. Shots `web/shots/s4-*.png`.
 - **Next: stage 5** (window polish, game end overlay, `web/deploy.sh`,
   `make-help.py`).
+
+### Stage 5 — web page (done except the deploy, 2026-09-26)
+
+- **Windows** (rvip-wm.js, as Rogue PC): Map (DawnLike, player centred via
+  `RvipWM.center` with the hero cell from C), Messages (history from the
+  `pline()` hook, `(xN)` folding, live top line + `RvipWM.prompt`), Status
+  (row 23), Inventory (game lines + O_COLORINV colours), Visible (monsters
+  and objects in view, names/colours from the game tables); pop-up over the
+  map for port menus and MAG's page-1 screens; Text mode = one VGA window.
+  Layout/zoom/mode in `/mag/web-layout.json` (IDBFS), auto_more in
+  `/mag/web.cfg`. Resize 1000x650 / 1440x900 / 760x500 / 1280x800 checked.
+- **Game end:** `port_exit()` clears `port_started`, so the last screen
+  (Hall of Heroes, drawn on page 0) goes out as text; `fe_exit()` waits for
+  a key, syncs, shows the overlay (saved / game over) with *Play again*.
+  R (+ y) keeps the save and Play again restores ("Welcome back"); Q
+  (+ y) and death delete it.
+- **Help:** `web/make-help.py` -> `dist/help.html`, content from
+  `docs/web/magguide.py` (shared with the stage 6 Docs page; stands in for
+  the Mac's Docs `build-docs.py`/`guides.py` entry): about, keys to
+  remember + essentials + complete key list, saving (web), tips, new
+  player's guide, history, playing in the browser, About this version (W1:
+  base = MAG PC-1.1, untouched import commit `cc36a63`, compare link to
+  memmaker/mag main) + credits (Teixeira licence, DawnLike CC BY 4.0,
+  VGA font CC BY-SA 4.0).
+- **Deploy:** `web/deploy.sh` written (guard: clean tree, HEAD ==
+  origin/main, build present; target `ruzzoli.de:/var/www/ruzzoli.de/
+  roguelikes/mag/`), **never run** in the cloud (no key). Live URL after
+  the Mac deploys: https://ruzzoli.de/roguelikes/mag/
+- **Tests:** `node web/tests/stage5.cjs` (windows filled, Help, resize,
+  zoom kept over reload, R -> overlay -> Play again restores, Q -> Hall of
+  Heroes as text -> overlay, save deleted, no page errors); stage1-4 pass.
+- **Open for the Mac:** run `sh web/build.sh` with `RVIP_WM=~/Games/rvip-tools/web`
+  and `sh web/deploy.sh`, check the live URL; the page has no og: meta yet
+  (`<!--og--><!--/og-->` placeholder for the selection-page step); no
+  beacon (stage 9).

@@ -145,6 +145,7 @@ port_exit(int code)
 		remove(path);
 		clr_save();
 	}
+	port_started = 0;	/* the last screen (Hall of Heroes) is text */
 	fe_exit(code);
 }
 
