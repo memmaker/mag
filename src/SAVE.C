@@ -194,6 +194,9 @@ remember()
 	doset(2, 0);
 	cursor(YES);
 	reset_kb();	/* reset interrupts */
+#ifdef PORT
+	port_remember();
+#endif
 	exit(0);
 }
 
@@ -208,6 +211,10 @@ rest_game()
 	register	i;
 	int		len;
 
+#ifdef PORT
+	if (!port_save_ok())	/* only this build's pointers fit */
+		return NO;
+#endif
 	sprintf(path, "%s\\savefile.mag", u.u_savedir);
 
 	if ((openfile = open(path, (O_RDONLY|O_BINARY))) == -1)

@@ -44,6 +44,9 @@ dispatch()
 			if (blineflg)
 				pr_bline();
 
+#ifdef PORT
+			port_idle();	/* autosave, RVIP additions */
+#endif
 			/* the cursor appear when player is polymorphed */
 			if (u.u_sym != PLAYER && u.u_sym != IPLAYER) {
 				doset(scrline(u.u_d), scrcol(u.u_d));

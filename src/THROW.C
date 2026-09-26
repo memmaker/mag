@@ -363,10 +363,14 @@ void
 tick_tock(ticks)
 register	ticks;
 {
+#ifdef PORT
+	port_delay(ticks);	/* no BIOS tick counter at 0040:006C */
+#else
 	long	dud = *(long far *)0x0040006c;
 
 	while (*(long far *)0x0040006c < dud + ticks)
 		;
+#endif
 }
 
 

@@ -75,4 +75,75 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
 
 ## RVIP progress
 
-(nothing yet — start with stage 1)
+### Stage 1 — build (done, 2026-09-26)
+
+- **Case R, R-PC notes** (DOS roguelike on the BIOS text screen). Game:
+  "MAG version PC-1.1, Summer 1989 - by Michael J. Teixeira" (`version()`
+  in `src/COMMAND3.C`). No docs in the drop: `data/mkhelp.py` rebuilds the
+  missing `help/help.1-7` and `pics/header|tomb|herobox` from the game's own
+  tables and the coordinates the code draws into them (MAIN.C refuses to
+  start without them).
+- **Port layer** (`port/`, game code untouched except `#ifdef PORT` hooks):
+  `port/port.h` is force-included (`-include port.h`) and replaces the Microsoft
+  C / DOS headers (`port/inc/{dos,conio,graph,io,process,malloc,memory}.h`);
+  `port/inc/*.h` are lowercase symlinks to `src/*.H`. `port/pcvideo.c`
+  emulates BIOS int 10h (two 80x25 pages of attr<<8|CP437, cursor, scroll,
+  write char+attr), int 16h keys (scan codes for arrows/F-keys/keypad),
+  `kbhit/getch`, `_setvisualpage`, `_dos_findfirst`, DOS paths (`help\x` ->
+  `/magdata/help/x`, `save\x` -> `save/x`). `port/rvip.c`: autosave
+  (`port_idle()` from `dispatch()` in MOVE.C, every >=2 s at the command
+  prompt, same files as `R`), build stamp `save/build.id` (the saves hold raw
+  pointers, so a save only fits the build that wrote it; others are dropped),
+  `port_exit()` deletes the autosave at game end unless `R` saved.
+- **Frontends:** `port/fe_web.c` (Module.mag in `web/mag.js`: init(font),
+  text(vram, cursor), key/pending/flush, sync, end) and `port/fe_tty.c`
+  (native headless test: `MAG_KEYS`, `MAG_RANDOM=N`, `MAG_SEED`, `MAG_DUMP`,
+  `MAG_DATA=data`).
+- **Build:** `sh web/build.sh` (emcc 6.0.10 via emsdk, `web/toolchain.sh`):
+  each `src/*.C` compiled with `-x c` (emcc treats `.C` as C++), flags
+  `-O2 -std=gnu89 -fcommon -w -funsigned-char -DPORT -Iinc -I. -include port.h
+  -Wno-error=incompatible-function-pointer-types,int-conversion,incompatible-pointer-types,implicit-function-declaration`;
+  link `-sASYNCIFY -sASYNCIFY_STACK_SIZE=65536 -sSTACK_SIZE=1048576
+  -sALLOW_MEMORY_GROWTH -sFORCE_FILESYSTEM -lidbfs.js -sEXIT_RUNTIME=0`,
+  `--preload-file data/help@/magdata/help` (+pics). IDBFS mounted on `/mag`
+  (cwd; `save/`, `options.mag`, `heroes.mag`). wasm 275 KB.
+  Native: `make -C port [ASAN=1]` (gcc; clang 18 here has no ASan runtime).
+- **Tests:** ASan+UBSan native, 40 seeds x up to 30000 random keys (~75k keys
+  played) clean after the fixes below; emcc `-fsanitize=address` build through
+  new game, save/reload and 400 random keys to death: clean. Playwright:
+  `node web/tests/stage1.cjs` (title, new game, autosave, reload -> "Welcome
+  back", status line equal, 400 random keys, no page errors), screenshots
+  `web/shots/s1-*.png`.
+- **Upstream fixes (`port:` commits):** DOS `^Z` EOF bytes; K&R variadic
+  `pline(str, ...)`; `<sys\types.h>`; `possitems()` wrote `final[-1]`;
+  `long t; time(&t)` (8-byte time_t into a 4-byte long on wasm32: stack
+  overwrite in `main()` and the tombstone).
+- **Quirks:** DOS `int` was 16 bit, saves are raw struct dumps with pointers
+  (fine within one build, see build stamp). `R` saves *and exits*; restore
+  deletes the save (autosave rewrites it). `Enter` (^M) is the wizard
+  command `wmonstat` in COMMAND.H (free for the Enter menu: wizard-only).
+  Wizard password (WIZARD.C): `frakola` (^W). Game start argv: `l<N>` start
+  level, `s<N>` seed (MAIN.C, undocumented).
+- **Tiles count (DawnLike, `DawnLikeAtlas/renamed`, 4152 names):** MAG draws
+  55 monsters (`MONSTER.H`), 12 object classes / 151 kinds (`OBJECT.H`,
+  `VARS.H` CITEMS), ~15 features (walls, 4 corners, corridor, floor, door,
+  up/down stairs, pool, marble, trap, 4 wall torches, player). Exact name
+  hits: monsters 13/55, object kinds 16/151; unidentified potions/wands/
+  scrolls/rings show MAG's random appearance names (`fpotions` "bubbly",
+  `fwands` "ebony" ...), many of which DawnLike has by name ("bubbly potion",
+  "ebony wand"). Every monster has a fitting DawnLike stand-in (drakes,
+  wyrms, nymphs, golems, spirits, vortices, ...). **Decision: DawnLike only,
+  one set, 100% of slots via name + hand table (stage 4), no NetHack mix.**
+- **Lineage (web, 2026-09-26):** MobyGames / DOS Games Archive / RogueBasin
+  "Mike's Adventure Game": MAG = *Mike's Adventure Game*, by Michael J.
+  Teixeira, DOS 1988 (RogueBasin: "1985 if you count the original UNIX
+  version"), freeware with C source; "an early Rogue clone", "somewhere
+  between the complexity of the original rogue and that of hack", uses the
+  PC extended character set like PC Rogue; goal: the Sudbury Sapphire, held
+  by the Imperial Dragons. CRPG Addict played it as Game 52 (1988). New code
+  inspired by Rogue: tree entry `<li class="insp">` under Rogue, 1988 (1985
+  UNIX), Michael J. Teixeira. (RogueBasin/dosgames pages are blocked from the
+  cloud; facts above from search-result text, verify on the Mac.)
+- **Next: stage 2** (explore + stairs): hook `port_idle()`/`tgetch()` in
+  `dispatch()`; the known grid is `dun[][]` with `D_SEEN` (+ `putwhat()`
+  rules); stairs `DNSTAIR`/`UPSTAIR` cells, commands `stepdown`/`stepup`.
