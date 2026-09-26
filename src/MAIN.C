@@ -387,7 +387,8 @@ setupgame()
 		set_vis(0);
 
 		cp = get_str(YES);
-		cp[25] = 0;
+		if (strlen(cp) > 24)	/* u_name[25]; ESC returns the literal "-1" */
+			cp[24] = 0;
 
 		if (*cp == '-' || !*cp)  /* '-' means they pressed ESC */
 			strcpy(u.u_name, "Bozo the Clown");
