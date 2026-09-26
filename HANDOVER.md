@@ -388,3 +388,23 @@ Material:
   `frakola` (WIZARD.C), in our build too; `l<N>`/`s<N>` start arguments.
 - Links to add: Info button on the card, ✦ in the tree entry, `#bar h1` link
   to `../shrine/mag.html`; shrine gets its own og block (image `roguelikes/mag.png`).
+
+### Stage 8 — shrine (done, Mac, 2026-09-26)
+
+- **Live:** https://ruzzoli.de/roguelikes/shrine/mag.html (+ `shrine/mag/manual.html`,
+  `shrine/mag/license.txt`), roguelikes-index commit `8eda39e` (deployed from a fresh
+  clone: the main checkout has another session's uncommitted `index.html`). Card Info
+  button, tree ✦ and the game page's `#bar h1` link (`954cbfe`, rebuilt + deployed) live.
+  og block by hand (image `roguelikes/mag.png`, card text as description).
+- **Lineage checked:** the "1985 UNIX version" is from the DOS Games Archive, not
+  RogueBasin (RogueBasin: 1988, influences Rogue + Hack, "between rogue and hack");
+  CRPG Addict: 1988, $10, a small instruction guide in the release. Tree entry unchanged.
+- **Manual:** none in the source drop; shrine manual = our rebuilt F1 screens
+  (`data/mkhelp.py`, marked as rebuilt; symbol screen left out). The CRPG Addict's
+  "small instruction guide" is probably in the DOS zips (DOS Games Archive
+  `pc-mag-rogue.zip` 80 kB, SourceForge `Original_Dos_Version_from_1988.zip` 196 kB):
+  not downloaded (needs the user's OK); if it turns up, add it as `shrine/mag/mag.doc`.
+- **Missing:** no change log / version history (only PC-1.1, Summer 1989), no
+  walkthrough (CRPG Addict posts linked instead). Cheats: wizard `^W` + `frakola`, in our build.
+
+Next: stage 9 (graveyard + leaderboard).
