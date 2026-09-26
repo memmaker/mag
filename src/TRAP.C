@@ -357,4 +357,3 @@ register MONSTER *m;
 	}
 }
 
-

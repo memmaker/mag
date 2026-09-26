@@ -479,4 +479,3 @@ register MONSTER	*m;
 	putwhat(m->m_d);
 }
 
-

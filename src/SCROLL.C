@@ -433,4 +433,3 @@ dolab()
 		newlev(DOWN, FLOOR, YES);
 	}
 }
-

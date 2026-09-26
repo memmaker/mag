@@ -409,4 +409,3 @@ register OBJECT	*o;
 			u.u_use[i]--;
 }
 
-

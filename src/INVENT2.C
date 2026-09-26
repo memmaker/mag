@@ -285,4 +285,3 @@ register OBJECT	*o;
 	if (--o->o_quantity < 1)
 		rm_inv(o);
 }
-

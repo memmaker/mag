@@ -510,4 +510,3 @@ extern  i_line[2],		/* imaginary cursor locs for scrn bufs */
 extern long	oldexp;	/* old epts storage for HEROISM potion */
 
 #include	"defs.h"
-

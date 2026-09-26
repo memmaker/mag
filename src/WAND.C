@@ -576,4 +576,3 @@ register MONSTER *m;
 		mteleport(m, (DUNGEON *)0);
 	else teleport((DUNGEON *)0);	/* heh, yet another */
 }
-

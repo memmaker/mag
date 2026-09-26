@@ -516,4 +516,3 @@ register MONSTER *m;
 	if (pr_wand(off, m))
 		dozap(what_dir(m->m_d, u.u_d), m->m_d, off, m);
 }
-

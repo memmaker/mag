@@ -214,4 +214,3 @@ register	off;
 {
 	return (lfinger(off) + rfinger(off));
 }
-

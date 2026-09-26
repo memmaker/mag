@@ -262,4 +262,3 @@ clr_save()
 			remove(path);
 		} while (!_dos_findnext(&ft));
 }
-

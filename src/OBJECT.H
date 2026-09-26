@@ -298,4 +298,3 @@ char	*fscrolls[] = {
 	"Tuum Subligaculum Decadat",
 	"Mein Bustenhalter Uberflute",
 };
-

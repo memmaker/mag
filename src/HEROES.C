@@ -133,4 +133,3 @@ char	*kill;
 	set_vis(0);
 	doset(22, 0);
 }
-

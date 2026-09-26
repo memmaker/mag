@@ -416,4 +416,3 @@ extern int	wmonstat(void);
 extern int	wexpstat(void);
 extern int	wmakewall(void);
 extern int	wgeno(void);
-

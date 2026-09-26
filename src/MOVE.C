@@ -479,4 +479,3 @@ shouldstop()
 
 	return NO;
 }
-

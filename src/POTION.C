@@ -265,4 +265,3 @@ register	what;	/* magic=0, treasure=1, food=2 */
 
 	return flag;	/* returns whether anything was detected */
 }
-

@@ -501,4 +501,3 @@ get_game()
 		pline("Welcome back, %s.", u.u_name);
 	}
 }
-

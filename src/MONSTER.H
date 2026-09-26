@@ -123,4 +123,3 @@ struct permmon	pmon[NUMMON] = {		 /* 5=human
 "zabloron",	'Z',	8, 210, 7, 3, "1d8/1d8",	5, "crunched",
 	(BLUE | RED),
 };
-

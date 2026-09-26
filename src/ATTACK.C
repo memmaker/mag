@@ -374,4 +374,3 @@ resurrect()
 	blineflg = REDRAW_ALL;
 	teleport((DUNGEON *)0);	/* good luck to the player (he'll need it) */
 }
-

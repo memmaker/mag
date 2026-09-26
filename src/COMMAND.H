@@ -272,4 +272,3 @@ int	(*cmd[])() = {		/* this file contains all of the key/     */
 /* ALT-= */	illegal,
 /* C-PGUP */	illegal,
 };
-

@@ -106,4 +106,3 @@ int     i_line[2],
 	visual_page;
 
 long	oldexp;
-

@@ -490,4 +490,3 @@ register OBJECT	*o;
 
 	return YES;
 }
-

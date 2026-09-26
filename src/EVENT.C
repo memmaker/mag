@@ -645,4 +645,3 @@ oilexplode()
 
 	return NO;
 }
-

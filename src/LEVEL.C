@@ -497,4 +497,3 @@ register DUNGEON *sd;
 		make_maze(r, d);
 	}
 }
-

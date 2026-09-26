@@ -462,4 +462,3 @@ register MONSTER	*m;
 		m->m_data |= M_GOTBOW;
 }
 
-

@@ -593,4 +593,3 @@ docompass()
 		teleport(d);
 	}
 }
-

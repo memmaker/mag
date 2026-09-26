@@ -152,4 +152,3 @@
 #define		GOLD		148
 #define		ELECTRUM	149
 #define		SILVER		150
-

@@ -529,4 +529,3 @@ bell()
 	if (u.u_options & O_BELL)
 		putchar(7);
 }
-

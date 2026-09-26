@@ -406,4 +406,3 @@ register	page;
 	_setvisualpage(page);
 }
 
-

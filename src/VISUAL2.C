@@ -476,4 +476,3 @@ register OBJECT	*o;
 		return (BLUE | INTENSE);
 	}
 }
-

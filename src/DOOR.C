@@ -157,4 +157,3 @@ register DOOR	*d;
 
 	return YES;
 }
-

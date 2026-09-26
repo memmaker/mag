@@ -341,4 +341,3 @@ register ROOM	*r;
 	tr_room(r);
 	r->r_data |= R_TROVE;
 }
-
