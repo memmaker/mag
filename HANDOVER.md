@@ -332,3 +332,59 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
 - **Stages 1-6 done in the cloud.** Next: stage 7 (publish, Mac): merge
   `rvip/LESSONS.md` into RVIP.md, `sounds.py` + build + `deploy.sh`,
   selection-page card, Docs entry.
+
+### Stage 7 — publish (done, Mac, 2026-09-26)
+
+- **Mac check** (browser pane, own tab, `web/dist` on a local no-store
+  server): name prompt -> tiles, explore `Z` (fights by walking into
+  monsters), `>` walks to the stairs and descends (seed 1), Enter menu ->
+  Things you carry -> Inventory -> item menu -> Eat, windows (drop-down,
+  hide/show, Reset), gutter drag + zoom + Sound kept over reload, `R` y ->
+  overlay -> Play again -> "Welcome back", death -> tomb -> Hall of Heroes ->
+  overlay (save deleted), Help button (7 sections, 50 keys), F1 screens,
+  Sound off by default, samples fetched only after turning it on, no `.cfg`
+  fetch, no console errors. **Fixed** (`RVIP: stage 1-6 fixes (Mac)`): the
+  Inventory window painted items in use white while the pop-up list used the
+  type colours -> game's O_COLORINV in both (`port/fe_web.c`).
+- **Toolchain (Mac):** Homebrew emcc 6.0.10; `web/build.sh` copies
+  `rvip-wm.js`/`rvip-sound.js` from `~/Games/rvip-tools/web` and runs
+  `web/sounds.py` (Dubtrain pack in `~/Downloads`, samples not committed;
+  `hurt`/`scroll`/`wear`/`ignite`/`stairs` mapped to `mon_hit`/`study`/
+  `wield`/`breathe_fire`/`stairs_down`).
+- **Docs:** entry `mag.html` in `~/Desktop/Games/Roguelikes/Docs`
+  (`build-docs.py` GAMES, `guides.py` GUIDES + SAVING; other pages
+  byte-identical after the rebuild). `web/make-help.py` reads it like
+  LambdaRogue and writes `docs/web/mag-docs.html` with `--page`;
+  `docs/web/magguide.py` and `docs/web/build-docs.py` are gone.
+- **Repos:** this folder = public **memmaker/mag** (remote `memmaker`,
+  branch `main`), history without `rvip/`, `web/shots/`, LESSONS.md; the
+  cloud history is private **memmaker/mag-cloud** (`~/Games/mag-cloud`,
+  remote `origin`). Upstream commit `cc36a63`; README with the compare view.
+  `web/deploy.sh` checks against `memmaker/main`.
+- **Live:** https://ruzzoli.de/roguelikes/mag/ (`sh web/build.sh && sh
+  web/deploy.sh`). Card on https://ruzzoli.de/roguelikes/ (`mag.png`: a
+  torch-lit room of 28 DawnLike monster sprites + player + stairs, 12x5 at
+  2x = 384x160), count 35. Tree: `li.insp` under Rogue after Rogue Clone,
+  "1988 (UNIX version 1985) · Michael J. Teixeira" (RogueBasin: 1988, "1985
+  if you count the original UNIX version"; "between the complexity of the
+  original rogue and that of hack"). og block in `web/index.html` by hand.
+  No Info button / ✦ / title link yet (stage 8).
+
+Next: stage 8 (shrine). Template `~/Games/roguelikes-index/shrine/lambdarogue.html`.
+Material:
+- Manual/help: none in the drop (36 source files only, `~/Downloads/mag_src`).
+  The in-game help screens are rebuilt by `data/mkhelp.py` (from COMMAND.H
+  and the game's tables); the web guide (`web/dist/help.html`, Docs
+  `mag.html`, `docs/web/mag-docs.html`). Check the web (DOS Games Archive
+  zip, SourceForge "mikesadvgame") for an original MAG.DOC.
+- Licence: header of every source file ("General permission to copy or
+  modify, but not for profit ... copyright notice is included"), copyright
+  1986, 87, 88 Michael J. Teixeira.
+- Changelog: none; version string `version()` in `src/COMMAND3.C` ("PC-1.1,
+  Summer 1989"), file dates 1988-89.
+- Walkthrough: none known; CRPG Addict Game 52 posts
+  (crpgaddict.blogspot.com/2011/03/game-52-mikes-aventure-game-mag-1988.html),
+  RogueBasin "Mike's Adventure Game". Cheats: wizard mode `^W` + password
+  `frakola` (WIZARD.C), in our build too; `l<N>`/`s<N>` start arguments.
+- Links to add: Info button on the card, ✦ in the tree entry, `#bar h1` link
+  to `../shrine/mag.html`; shrine gets its own og block (image `roguelikes/mag.png`).
