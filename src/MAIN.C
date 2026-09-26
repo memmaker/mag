@@ -36,7 +36,7 @@ void
 main(argc, argv)
 char	*argv[];
 {
-	long		t;
+	time_t		t;
 	register char	*cp;
 
 	if (access("help\\help.1", 0) || access("pics\\header", 0)) {

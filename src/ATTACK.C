@@ -262,7 +262,7 @@ die()
 {
 	char		line[100];
 	register char	*cp;
-	long		t;
+	time_t		t;
 
 	if (wizard == YES)	/* one of the benefits of being a wizard */
 		return;
