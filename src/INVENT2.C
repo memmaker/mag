@@ -202,7 +202,8 @@ possitems(which)
 	if (blet != -1)
 		sealup(final, blet, elet);
 
-	final[strlen(final) - 1] = 0;
+	if (final[0])		/* nothing fits: final[-1] was written (RVIP port) */
+		final[strlen(final) - 1] = 0;
 
 	return final;
 }
