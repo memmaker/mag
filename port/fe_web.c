@@ -35,6 +35,7 @@ EM_JS(void, js_tiles, (const void *scr, const void *vr, const int *t, const int 
 	{ Module.mag.tiles(scr, vr, t, u, inv, at, ninv, pr0, pc0, pr1, pc1, cr, cc, con, hy, hx, lvl); });
 EM_JS(void, js_msg, (const char *s), { Module.mag.msg(UTF8ToString(s)); });
 EM_JS(void, js_vis, (const char *s), { Module.mag.vis(UTF8ToString(s)); });
+EM_JS(void, js_sound, (const char *s), { Module.mag.sound(UTF8ToString(s)); });
 EM_JS(int, js_key, (int atcmd), { return Module.mag.key(atcmd); });
 EM_JS(int, js_pending, (void), { return Module.mag.pending(); });
 EM_JS(int, js_click, (void), { return Module.mag.click(); });
@@ -273,4 +274,11 @@ int
 port_auto_more(void)
 {
 	return fe_auto_more && port_started;
+}
+
+void
+port_sound(const char *ev)
+{
+	if (ev && *ev)
+		js_sound(ev);
 }

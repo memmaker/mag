@@ -177,6 +177,8 @@ shows and resets them. Hover over a text window's title for <em>A−</em> / <em>
 than its window follows you.</li>
 <li><strong>auto_more</strong> (on by default) skips the top-line =-More-= prompts; every
 message stays in the Messages window.</li>
+<li><strong>Sound</strong> (off by default) plays a short sample for hits, misses, kills,
+stairs, eating, drinking and other game actions; the game names the events.</li>
 <li><strong>Mouse:</strong> click an entry of a menu or list to choose it; right-click is Escape.</li>
 <li>Browsers keep a few shortcuts for themselves (<kbd>Ctrl+W</kbd>, <kbd>Ctrl+T</kbd>,
 <kbd>Ctrl+N</kbd>), so those never reach the game.</li>

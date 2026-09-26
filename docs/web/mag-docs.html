@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MAG · Docs</title><style>
+:root { --bg: #0b0b0d; --panel: #16161a; --line: #2b2b33; --text: #d8d8de; --dim: #8a8a96; --accent: #d9b24c; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { color: var(--accent); margin: 0 0 4px; font-size: 28px; letter-spacing: .04em; }
+.tag { color: var(--dim); margin: 0 0 16px; }
+h2 { font-size: 19px; margin: 32px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin: 18px 0 8px; }
+p, ul { max-width: 76ch; }
+a { color: var(--accent); }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 12px 0; }
+.facts dt { color: var(--dim); }
+.facts dd { margin: 0; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; list-style: none; }
+.toc a { display: block; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--text); text-decoration: none; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.box { background: #1c1c22; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.key { background: #221d10; border-color: #4a3d18; }
+dl { margin: 0; display: grid; grid-template-columns: minmax(5.5em, max-content) 1fr; gap: 6px 12px; align-items: baseline; }
+dd { margin: 0; }
+.all { columns: 3 240px; column-gap: 24px; }
+.all div { break-inside: avoid; display: flex; gap: 10px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+kbd { display: inline-block; min-width: 1.7em; padding: 0 6px; text-align: center; font: 600 12px/1.6 ui-monospace, Menlo, monospace;
+	background: #22222a; border: 1px solid #3a3a46; border-bottom-width: 2px; border-radius: 4px; }
+code { font: 13px ui-monospace, Menlo, monospace; background: #22222a; padding: 0 4px; border-radius: 3px; }
+.or, .plus { color: var(--dim); font-size: 12px; margin: 0 3px; }
+</style></head><body><main><h1>MAG</h1><p class="tag">Mike&#x27;s Adventure Game (1986-89): a DOS roguelike by Michael J. Teixeira, between Rogue and Hack in size. Find the Sudbury Sapphire, held by the Imperial Dragons deep below, and bring it back up.</p>
+<dl class="facts"><dt>Game</dt><dd>MAG (Mike's Adventure Game), MAG version PC-1.1, Summer 1989</dd><dt>Author</dt><dd>Michael J. Teixeira</dd><dt>Years</dt><dd>1986-89 (DOS); a UNIX version from about 1985</dd><dt>Lineage</dt><dd>Original game inspired by Rogue (no Rogue code)</dd><dt>Licence</dt><dd>Free to copy or modify, not for profit (source headers)</dd><dt>Play</dt><dd><a href="https://ruzzoli.de/roguelikes/mag/">ruzzoli.de/roguelikes/mag</a> (in the browser)</dd><dt>Source</dt><dd><a href="https://github.com/memmaker/mag">memmaker/mag</a></dd></dl>
+<ul class="toc"><li><a href="#about">About</a></li><li><a href="#keys">Keys</a></li><li><a href="#tips">Tips</a></li><li><a href="#guide">New player&#x27;s guide</a></li><li><a href="#saving">Saving</a></li><li><a href="#browser">In the browser</a></li><li><a href="#history">History</a></li><li><a href="#credits">Credits</a></li></ul>
+<h2 id="about">About</h2><p><strong>MAG</strong> is Michael J. Teixeira's <em>Dungeon Adventuring Game</em>,
+written in C for the IBM PC and released as freeware with its source ("general permission
+to copy or modify, but not for profit"). This is version PC-1.1 from the summer of 1989; the
+game goes back to a UNIX version from about 1985. Like PC Rogue it draws the dungeon with the
+PC's extended character set in colour: double-line walls, dotted floors, shaded corridors.</p>
+<p>It sits between the original Rogue and Hack: 55 monsters (a to z, A to Z, four dragons),
+151 kinds of objects in twelve classes (food, potions, scrolls, wands/staffs/rods, rings,
+weapons, armour, shields, keys, miscellaneous things, gems, treasure), locked doors that need
+the right key, dark rooms lit by wall torches, pools of water, traps, a secondary weapon for
+bows and slings, and levels that stay as you left them.</p>
+<h2 id="keys">Keys</h2><div class="box key"><h3>The keys to remember</h3><dl><dt><kbd>F1</kbd></dt><dd>In-game help screens</dd><dt><kbd>Z</kbd></dt><dd>Auto-explore: walk to what you have not seen yet</dd><dt><kbd>Enter</kbd></dt><dd>Menu of all commands</dd><dt><kbd>i</kbd></dt><dd>Inventory with a cursor: letter = main action, Enter = all actions</dd><dt><kbd>&gt;</kbd> <kbd>&lt;</kbd></dt><dd>Take the stairs, or walk to the nearest known staircase</dd><dt><kbd>R</kbd></dt><dd>Save and leave (the game also autosaves)</dd><dt><kbd>F12</kbd></dt><dd>Tiles / text</dd></dl></div><h3>Essentials</h3><div class="grid"><div class="box"><h3>Moving</h3><dl><dt><kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd> <kbd>y</kbd> <kbd>u</kbd> <kbd>b</kbd> <kbd>n</kbd></dt><dd>Walk (arrows, keypad, Home/End/PgUp/PgDn too)</dd><dt><kbd>Shift+dir</kbd></dt><dd>Run</dd><dt><kbd>f</kbd> <kbd>dir</kbd></dt><dd>Find: move until something is reached</dd><dt><kbd>Z</kbd></dt><dd>Explore (web port)</dd><dt><kbd>&gt;</kbd> <kbd>&lt;</kbd></dt><dd>Stairs down / up; elsewhere: walk to the known stairs</dd><dt><kbd>s</kbd></dt><dd>Search once</dd><dt><kbd>.</kbd></dt><dd>Rest a turn</dd></dl></div><div class="box"><h3>Things you carry</h3><dl><dt><kbd>i</kbd></dt><dd>Inventory (letter = use, Enter = all actions)</dd><dt><kbd>g</kbd></dt><dd>Get</dd><dt><kbd>d</kbd></dt><dd>Drop</dd><dt><kbd>e</kbd></dt><dd>Eat</dd><dt><kbd>q</kbd></dt><dd>Quaff</dd><dt><kbd>r</kbd></dt><dd>Read</dd><dt><kbd>z</kbd></dt><dd>Zap</dd><dt><kbd>w</kbd></dt><dd>Wield</dd><dt><kbd>t</kbd></dt><dd>Throw / fire</dd><dt><kbd>W</kbd></dt><dd>Wear armour</dd><dt><kbd>x</kbd></dt><dd>Swap to the secondary weapon</dd></dl></div><div class="box"><h3>Information and the game</h3><dl><dt><kbd>Enter</kbd></dt><dd>Menu of every command (web port)</dd><dt><kbd>F1</kbd></dt><dd>The help screens</dd><dt><kbd>^R</kbd></dt><dd>Previous messages</dd><dt><kbd>v</kbd></dt><dd>What is here</dd><dt><kbd>F</kbd></dt><dd>Hunger</dd><dt><kbd>o</kbd></dt><dd>Options</dd><dt><kbd>R</kbd></dt><dd>Save and leave</dd><dt><kbd>Q</kbd></dt><dd>Quit</dd></dl></div></div><h3>Complete key list (50 commands)</h3><div class="all"><div><kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd> <kbd>y</kbd> <kbd>u</kbd> <kbd>b</kbd> <kbd>n</kbd><span>Walk one step (also the arrow keys, Home, End, PgUp, PgDn, keypad)</span></div><div><kbd>H</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>Y</kbd> <kbd>U</kbd> <kbd>B</kbd> <kbd>N</kbd><span>Run until something interesting happens</span></div><div><kbd>f</kbd><span class="plus">+</span><kbd>direction</kbd><span>Find: move in a direction until you reach something</span></div><div><kbd>.</kbd><span>Rest one turn</span></div><div><kbd>:</kbd><span>Rest several turns (F8)</span></div><div><kbd>s</kbd><span>Search for secret doors and traps</span></div><div><kbd>;</kbd><span>Search several turns (F7)</span></div><div><kbd>&gt;</kbd><span class="or">or</span><span>Go down a staircase</span></div><div><kbd>&lt;</kbd><span class="or">or</span><kbd>-</kbd><span>Go up a staircase</span></div><div><kbd>Z</kbd><span>Explore: walk to what you have not seen (web port)</span></div><div><kbd>&gt;</kbd> <kbd>&lt;</kbd><span>Not on stairs: walk to the nearest known staircase (web port)</span></div><div><kbd>Enter</kbd><span>Menu of every command (web port)</span></div><div><kbd>i</kbd><span class="or">or</span><kbd>F3</kbd><span>Inventory</span></div><div><kbd>g</kbd><span>Get what is lying here</span></div><div><kbd>d</kbd><span>Drop something</span></div><div><kbd>e</kbd><span>Eat</span></div><div><kbd>q</kbd><span>Quaff a potion</span></div><div><kbd>r</kbd><span>Read a scroll</span></div><div><kbd>z</kbd><span>Zap a wand, staff or rod</span></div><div><kbd>w</kbd><span>Wield a weapon</span></div><div><kbd>t</kbd><span>Throw (fire arrows with a bow)</span></div><div><kbd>W</kbd><span>Wear or take off armour</span></div><div><kbd>S</kbd><span>Strap on or unstrap a shield</span></div><div><kbd>p</kbd><span>Put on or remove a ring</span></div><div><kbd>x</kbd><span>Swap in the secondary weapon</span></div><div><kbd>X</kbd><span>Choose the secondary weapon</span></div><div><kbd>^U</kbd><span>Use a miscellaneous item</span></div><div><kbd>I</kbd><span>Ignite a torch</span></div><div><kbd>E</kbd><span>Extinguish a torch</span></div><div><kbd>^K</kbd><span>Unlock a door with a key</span></div><div><kbd>c</kbd><span>Call (name) a kind of object</span></div><div><kbd>a</kbd><span class="or">or</span><kbd>F5</kbd><span>Objects you know</span></div><div><kbd>C</kbd><span class="or">or</span><kbd>P</kbd><span>How full your pack is</span></div><div><kbd>v</kbd><span class="or">or</span><kbd>F6</kbd><span>View: describe what you can see here</span></div><div><kbd>^H</kbd><span class="or">or</span><kbd>F2</kbd><span>What is which symbol on the screen</span></div><div><kbd>F</kbd><span>How your stomach feels</span></div><div><kbd>T</kbd><span>Your title (rank)</span></div><div><kbd>A</kbd><span>How long you have been down here</span></div><div><kbd>^R</kbd><span>Show the previous messages again</span></div><div><kbd>^L</kbd><span>Redraw the screen</span></div><div><kbd>o</kbd><span class="or">or</span><kbd>F4</kbd><span>Options</span></div><div><kbd>V</kbd><span>MAG&#x27;s version</span></div><div><kbd>R</kbd><span>Remember (save) the game and leave</span></div><div><kbd>Q</kbd><span class="or">or</span><kbd>^C</kbd><span>Quit the game</span></div><div><kbd>ESC</kbd><span>Stop what you are doing</span></div><div><kbd>F1</kbd><span class="or">or</span><kbd>DEL</kbd><span>The help screens</span></div><div><kbd>{</kbd><span>Start recording a macro</span></div><div><kbd>}</kbd><span>End the macro</span></div><div><kbd>^E</kbd><span class="or">or</span><kbd>F9</kbd><span>Play the macro back</span></div><div><kbd>number</kbd><span class="plus">+</span><kbd>command</kbd><span>Repeat a command (9s searches nine times)</span></div></div>
+<h2 id="tips">Tips</h2><ul>
+<li><strong>Light.</strong> Rooms are dark until a wall torch burns. Stand next to one and
+press <kbd>I</kbd> to light it with your tinderbox; a lit room shows everything in it.</li>
+<li><strong>Keys and doors.</strong> Some doors carry a copper, silver or golden lock. Carry
+the matching key (<kbd>,</kbd> items) and unlock with <kbd>^K</kbd>; a skeleton key opens
+any lock. Explore walks around locked doors.</li>
+<li><strong>Bows.</strong> You start with a long bow as the secondary weapon. Press
+<kbd>x</kbd> to swap it in, fire arrows with <kbd>t</kbd>, and <kbd>x</kbd> back to the dagger
+before a monster reaches you.</li>
+<li><strong>Hunger.</strong> A <code>*</code> in front of a message means hungry, a
+<code>!</code> means fainting: eat (<kbd>e</kbd>). <kbd>F</kbd> tells you how full you are.</li>
+<li><strong>Unknown items.</strong> Potions, scrolls, wands and rings have random names each
+game. Use <kbd>c</kbd> to call a kind something you will remember; <kbd>a</kbd> lists what
+you know.</li>
+<li><strong>Water.</strong> Some monsters hate water: a pool (<code>÷</code>) between you and
+them can hold them off.</li>
+<li><strong>Search.</strong> A dead end usually hides a secret door: <kbd>;</kbd> searches
+several turns.</li>
+<li><strong>Levels stay.</strong> Levels you leave are remembered: you can go back up to
+rest or fetch what you left.</li>
+</ul>
+<h2 id="guide">New player&#x27;s guide</h2><h3>Your goal</h3><p>Somewhere below lies the <strong>Sudbury Sapphire</strong>, guarded by
+the Imperial Dragons. Take it and climb back out of the dungeon (the up staircase on the
+first level leads outside). Points come from experience, treasure and how deep you went;
+the Hall of Heroes keeps the best games.</p><h3>The screen</h3><p>The top line shows messages, the bottom line your level, hit points,
+strength, armour class, experience level and score. You are the smiling face; letters are
+monsters (lowercase are the weaker ones), symbols are objects: <code>%</code> food,
+<code>!</code> potions, <code>?</code> scrolls, <code>/</code> wands, <code>=</code> rings,
+<code>)</code> weapons, <code>]</code> armour, <code>[</code> shields, <code>,</code> keys,
+<code>"</code> miscellaneous, <code>*</code> gems, <code>$</code> treasure.
+<kbd>^H</kbd> explains every symbol.</p><h3>Your first levels</h3><p>You start with food, a dagger, a long bow with arrows,
+studded leather armour, a shield and a tinderbox. Explore with <kbd>Z</kbd>, pick things up
+by walking over them (auto-get) or with <kbd>g</kbd>, and fight by walking into monsters.
+Jackals, giant rats and kobolds come in packs: fight them in a corridor so only one reaches
+you at a time. Go down with <kbd>&gt;</kbd> once the level is explored.</p><h3>Getting stronger</h3><p>Experience levels raise your hit points. Read unknown scrolls
+when nothing dangerous is near (enchant armour and weapon are common); quaff unknown potions
+at full health. Wear the best armour you find and keep a spare food ration. Rings can be
+cursed: a ring you can't remove is a reason to hope for a remove curse scroll.</p>
+<h2 id="saving">Saving</h2><ul>
+<li><strong>Saving is automatic.</strong> The game is stored in this browser (IndexedDB)
+between your commands (at most every two seconds). Reloading the page continues from there.</li>
+<li><kbd>R</kbd> saves and ends the session, as in the original; press <em>Play again</em>
+(or reload) to continue.</li>
+<li>When your character dies or you quit with <kbd>Q</kbd>, the save is deleted: death is
+final. The Hall of Heroes stays.</li>
+<li>Each browser keeps <strong>one game</strong>. <em>New game</em> deletes it and starts over.</li>
+<li><em>Export save</em> downloads the game (all its files, as <code>mag-save.json</code>);
+<em>Import save</em> loads one. A save only fits the version of the page that wrote it: after
+an update of this page an old save is dropped and a new game starts.</li>
+<li>Window layout, zoom, tiles/text, auto_more and the game's options are stored in the same
+browser storage.</li>
+<li>Private/incognito windows and "clear site data" delete the stored game.</li>
+</ul>
+<h2 id="browser">In the browser</h2><ul>
+<li><strong>Tiles / Text</strong> in the top bar (or <kbd>F12</kbd>) switch between the tiled
+windows and the original IBM PC text screen: VGA font, CP437 symbols, CGA colours.</li>
+<li><strong>Tiles windows:</strong> the map on top; Messages (with history) and Status below;
+Inventory and Visible (monsters and objects in view) on the right. Menus and the game's own
+full screens pop up over the map.</li>
+<li><strong>Resize windows</strong> by dragging the gaps between them; <em>Windows</em> hides,
+shows and resets them. Hover over a text window's title for <em>A−</em> / <em>A+</em>.</li>
+<li><strong>Zoom:</strong> <em>Zoom −</em> / <em>Zoom +</em> change the map tiles; a map bigger
+than its window follows you.</li>
+<li><strong>auto_more</strong> (on by default) skips the top-line =-More-= prompts; every
+message stays in the Messages window.</li>
+<li><strong>Sound</strong> (off by default) plays a short sample for hits, misses, kills,
+stairs, eating, drinking and other game actions; the game names the events.</li>
+<li><strong>Mouse:</strong> click an entry of a menu or list to choose it; right-click is Escape.</li>
+<li>Browsers keep a few shortcuts for themselves (<kbd>Ctrl+W</kbd>, <kbd>Ctrl+T</kbd>,
+<kbd>Ctrl+N</kbd>), so those never reach the game.</li>
+<li>If the game ever crashes, a message appears at the top; reload the page to continue from
+the last autosave.</li>
+</ul>
+<h2 id="history">History</h2><p>MAG ("Mike's Adventure Game") is an original game inspired by Rogue, not a
+Rogue source variant. Teixeira wrote a UNIX version around 1985 and the DOS version in
+1986-88 (copyright 1986, 87, 88; files dated up to September 1989). It was spread as
+freeware on bulletin boards and shareware disks, with the C source (Microsoft C, BIOS
+video and keyboard calls). RogueBasin files it as an early Rogue clone; the CRPG Addict
+played it in 1988's list.</p>
+<p>The source drop this port starts from has no help or picture files (the game refuses to
+start without them): the port rebuilds them from the game's own tables and the screen
+positions the code writes to, and says so on the help screens.</p>
+<h2 id="credits">Credits and this version</h2><ul>
+<li>MAG by <strong>Michael J. Teixeira</strong>, copyright 1986, 87, 88: "General permission
+to copy or modify, but not for profit, is hereby granted, provided that the above copyright
+notice is included."</li>
+<li>Map sprites: <strong>DawnLike</strong> by DragonDePlatino with DawnBringer's palette
+(CC BY 4.0); sprite names from DawnLikeAtlas by Tommy Ettinger (CC BY 4.0).</li>
+<li>Text mode font: IBM VGA 9x16 from The Oldschool PC Font Resource by VileR (CC BY-SA 4.0).</li>
+</ul><ul><li>Based on <strong>MAG version PC-1.1, Summer 1989</strong> (Michael J. Teixeira), from a source drop without history.</li><li>Original source: <a href="https://github.com/memmaker/mag/tree/cc36a63" target="_blank" rel="noopener">untouched import, commit cc36a63</a>.</li><li>Our changes (DOS layer replaced by an 80x25 BIOS screen emulation, explore, command menu, inventory, tiles, web build): <a href="https://github.com/memmaker/mag/compare/cc36a63...main" target="_blank" rel="noopener">memmaker/mag</a>.</li></ul></main></body></html>

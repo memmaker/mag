@@ -452,6 +452,9 @@ utilize()
 		   since I can't figure out how to type-cast it */
 		proc = util[cmnd].c_pr;
 
+#ifdef PORT
+		port_sound_verb(util[cmnd].c_comname);
+#endif
 		if ((where = (*proc)(o)) == YES) /* exec the proper func */
 			pline(form(o, NO));
 		else if (where == -1)	/* -1 means func aborted */

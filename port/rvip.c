@@ -14,6 +14,7 @@
 #include "fe.h"
 #include <stdint.h>
 #include <time.h>
+#include <string.h>
 #undef exit
 
 extern int	openfile;
@@ -432,4 +433,24 @@ port_auto(void)
 	fe_sleep(25);		/* let the walk be seen */
 	fe_at_cmd = 0;
 	return dirkeys[dir];
+}
+
+/* ---- sound (RVIP R7): item commands name their event ---- */
+void
+port_sound_verb(const char *verb)
+{
+	static const char *map[][2] = {
+		{ "quaff", "quaff" }, { "eat", "eat" }, { "zap", "zap" },
+		{ "put on/remove", "ring" }, { "read", "scroll" }, { "wield", "wield" },
+		{ "throw", "shoot" }, { "wear/take off", "wear" }, { "drop", "drop" },
+		{ "unlock with", "unlock" }, { "strap on/unstrap", "wear" },
+		{ "ignite a torch with", "ignite" }, { "ignite", "ignite" },
+	};
+	unsigned i;
+
+	for (i = 0; i < sizeof map / sizeof map[0]; i++)
+		if (!strcmp(verb, map[i][0])) {
+			port_sound(map[i][1]);
+			return;
+		}
 }

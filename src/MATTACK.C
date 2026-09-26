@@ -72,6 +72,9 @@ register MONSTER *m;
 		pline("You are attacked from the %s!", dirdesc[what_dir(
 							u.u_d, m->m_d)]);
 
+#ifdef PORT
+	port_sound(hits ? "hurt" : "mmiss");
+#endif
 	if (hits) {
 		pline("The %s %s you%s", mname(m), (m->m_perm->p_attack ?
 			m->m_perm->p_attack : "hit"), mhtimes[hits - 1]);

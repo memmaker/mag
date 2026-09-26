@@ -30,6 +30,9 @@ register	save;
 				foo[100];
 	int			i;
 
+#ifdef PORT
+	port_sound("stairs");
+#endif
 	/* get rid of lamp residue surrounding the stairs */
 	if (u.u_r && !(u.u_r->r_data & R_TORCHED))
 		know(u.u_d, NO);
@@ -137,6 +140,9 @@ register DUNGEON	*wd;
 	register DUNGEON	*d = u.u_d;
 
 	redraw();
+#ifdef PORT
+	port_sound("teleport");
+#endif
 
 	if (u.u_dir != -1)	/* are we moving right now? */
 		stop();
@@ -252,6 +258,9 @@ ck_exp()
 	u.u_hp += newhp;
 	u.u_maxhp += newhp;
 	u.u_elevel++;
+#ifdef PORT
+	port_sound("level");
+#endif
 
 	pline("Congratulations!  You have reached the rank of %s.",
 						titles[u.u_elevel-1]);

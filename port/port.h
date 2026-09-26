@@ -88,7 +88,9 @@ void	port_push_key(int k);
 int	port_pop_key(void);
 int	port_menu(void);
 void	port_msg(const char *m);	/* a top-line message (frontend: Messages window) */
-int	port_auto_more(void);	/* skip the top-line =-More-= */
+int	port_auto_more(void);
+void	port_sound(const char *ev);	/* a game sound event (web page plays it) */
+void	port_sound_verb(const char *verb);	/* sound for an item command (COMMAND1.C util[]) */	/* skip the top-line =-More-= */
 int	port_inventory(void);
 extern int port_inv_again;
 

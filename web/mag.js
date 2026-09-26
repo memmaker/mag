@@ -30,7 +30,7 @@
 
 	/* tests: queue keys (strings as characters, numbers as key codes) */
 	window.magKeys = function (a) { a.forEach(function (k) { events.push(typeof k === 'string' ? k.charCodeAt(0) : k); }); };
-	var events = [], clickAt = 0, running = false;
+	var events = [], clickAt = 0, running = false, sounds = [];
 	var dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
 	var L = null, rects = {};
 	var fontSheets = [];
@@ -298,6 +298,7 @@
 					if (s.font && s.font[k] >= FONT_MIN && s.font[k] <= FONT_MAX) d.font[k] = s.font[k];
 				});
 				if (s.mode === 'text') d.mode = 'text';
+				if (s.sound) d.sound = true;
 				if (s.wm) d.wm = s.wm;
 			}
 		} catch (err) { /* nothing saved yet */ }
@@ -375,19 +376,21 @@
 		applyDom(); saveLayout();
 	}
 	function resetLayout() {
-		var m = L.mode;
-		L = defaultLayout(); L.mode = m; L.wm = wm.state();
+		var m = L.mode, snd = L.sound;
+		L = defaultLayout(); L.mode = m; L.sound = snd; L.wm = wm.state();
 		applyDom(); saveLayout();
 	}
 
 	/* ---------- called by the game (port/fe_web.c) ---------- */
 	var autoMore = 0;
+	function renderSound() { var on = !!(L && L.sound); $('btn-sound').textContent = 'Sound: ' + (on ? 'on' : 'off'); $('btn-sound').classList.toggle('on', on); }
 	function renderMore() { $('btn-more').textContent = 'auto_more: ' + (autoMore ? 'on' : 'off'); $('btn-more').classList.toggle('on', !!autoMore); }
 	var mag = {
 		init: function (font, ntiles, am) {
 			buildFont(font);
 			autoMore = am; renderMore();
 			if (!L) loadLayout();
+			renderSound();
 			$('game').hidden = false;
 			applyDom();
 		},
@@ -437,6 +440,13 @@
 		},
 		frame: function () { return F; },
 		history: function () { return hist.slice(); },
+		/* a game sound event (port_sound): sound/<event>.wav, off by default */
+		sound: function (ev) {
+			sounds.push(ev);
+			if (sounds.length > 50) sounds.shift();
+			if (L && L.sound && window.RVIPSound) RVIPSound.play([ev], 0.6);
+		},
+		sounds: function () { return sounds.slice(); },
 		mode: function () { return L ? L.mode : ''; },
 		toggle: function () { setMode(L.mode === 'text' ? 'tiles' : 'text'); },
 		key: function (atCmd) { if (kind === 'tiles') RvipWM.prompt.wait(atCmd); return events.length ? events.shift() : -1; },
@@ -642,6 +652,7 @@
 		$('btn-text').onclick = function () { setMode('text'); };
 		$('btn-more').onclick = function () { autoMore = autoMore ? 0 : 1; renderMore(); Module._web_set_auto_more(autoMore); };
 		$('btn-restart').onclick = function () { location.reload(); };
+		$('btn-sound').onclick = function () { if (!L) return; L.sound = !L.sound; renderSound(); saveLayout(); };
 		document.querySelectorAll('button').forEach(function (b) {
 			b.addEventListener('mousedown', function (e) { e.preventDefault(); });
 		});

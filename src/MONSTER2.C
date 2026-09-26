@@ -388,6 +388,9 @@ register	how;
 	if (m->m_hp < 1) {
 		keep();
 
+#ifdef PORT
+		port_sound("kill");
+#endif
 		if (how) {
 			pline("You killed the %s!", m->m_data & M_POLYPOWER ?
 						"polymorpher" : mname(m));

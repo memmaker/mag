@@ -301,3 +301,34 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
   and `sh web/deploy.sh`, check the live URL; the page has no og: meta yet
   (`<!--og--><!--/og-->` placeholder for the selection-page step); no
   beacon (stage 9).
+
+### Stage 6 — docs + sound (done in the cloud; Docs merge on the Mac, 2026-09-26)
+
+- **Sound (R7):** the game names the events, no message matching:
+  `port_sound()` calls under `#ifdef PORT` in `src/ATTACK.C` (hit/miss,
+  death), `src/MATTACK.C` (hurt/mmiss), `src/MONSTER2.C` (kill),
+  `src/MISC.C` (level, stairs in `newlev()`, teleport), `src/OBJECT.C`
+  (pickup/gold), `src/COMMAND1.C` `utilize()` -> `port_sound_verb()`
+  (`port/rvip.c`: quaff, eat, zap, ring, scroll, wield, shoot, wear, drop,
+  unlock, ignite). `port/fe_web.c` -> `Module.mag.sound(ev)` ->
+  `RVIPSound.play(['<ev>'])` = `sound/<ev>.wav` (shared rvip-sound.js),
+  only when the **Sound** button is on (off by default, kept in
+  web-layout.json). **No samples in the cloud** (the Dubtrain pack is on
+  the Mac): run `python3 web/sounds.py <Dubtrain dir>` -> `web/sound/*.wav`
+  (first sample of the mapped Angband events; prints the mapping), then
+  `sh web/build.sh` copies them to `dist/sound`. Missing files stay silent.
+- **Docs:** `docs/web/magguide.py` (tagline, about, essentials, 50-key list,
+  tips, new-player guide, saving, in the browser, history, credits, W1
+  version line) feeds both `web/make-help.py` (dist/help.html) and
+  `docs/web/build-docs.py` -> `docs/web/mag-docs.html` (standalone page in
+  the Docs' shape). The Mac's `~/Desktop/Games/Roguelikes/Docs` was not
+  reachable: move the dicts into a `GAMES` entry of `build-docs.py` +
+  `guides.py` there, rebuild, and switch `make-help.py` to import them like
+  the template does.
+- **Tests:** `node web/tests/stage6.cjs` (sound off by default, events sent
+  during play [stairs gold hurt eat mmiss ...], no sample requests while
+  off, requests when on, setting kept over reload, Docs page renders with
+  all sections); stage1-5 pass; ASan native random keys clean.
+- **Stages 1-6 done in the cloud.** Next: stage 7 (publish, Mac): merge
+  `rvip/LESSONS.md` into RVIP.md, `sounds.py` + build + `deploy.sh`,
+  selection-page card, Docs entry.

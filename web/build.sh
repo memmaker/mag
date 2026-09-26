@@ -26,7 +26,9 @@ emcc -O2 "$OBJ"/*.o \
 	-sFORCE_FILESYSTEM -lidbfs.js -sENVIRONMENT=web -sEXIT_RUNTIME=0 ${EMFLAGS:-}
 rm -rf "$OBJ"
 RVIP_WM=${RVIP_WM:-../rvip/web}
-cp ../web/index.html ../web/mag.js "$RVIP_WM/rvip-wm.js" tiles-dawn.png "$OUT/"
+cp ../web/index.html ../web/mag.js "$RVIP_WM/rvip-wm.js" "$RVIP_WM/rvip-sound.js" tiles-dawn.png "$OUT/"
+# sound samples: web/sounds.py fills web/sound from the Dubtrain pack (Mac)
+if [ -d ../web/sound ]; then cp -r ../web/sound "$OUT/sound"; fi
 
 python3 ../web/make-help.py > "$OUT/help.html"
 ls -la "$OUT"

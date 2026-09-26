@@ -60,6 +60,9 @@ register DUNGEON *d;
 
 		if (numinv < MAXINV && singlewt * (long)l->l_o.o_quantity <=
 							carryleft()) {
+#ifdef PORT
+			port_sound(l->l_o.o_type == TREASURE ? "gold" : "pickup");
+#endif
 			add_invent(&l->l_o, YES);
 			rm_lobj(l);
 			continue;
@@ -77,6 +80,9 @@ register DUNGEON *d;
 		pline("You can only pick up %d of %s.", howmany, obj_str(
 								&l->l_o));
 		l->l_o.o_quantity -= howmany;
+#ifdef PORT
+		port_sound(l->l_o.o_type == TREASURE ? "gold" : "pickup");
+#endif
 		add_invent(copy_obj(&l->l_o, howmany), NO);
 		l++;
 	}

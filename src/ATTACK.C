@@ -112,6 +112,9 @@ register MONSTER	*m;
 		}
 	}
 
+#ifdef PORT
+	port_sound(hits ? "hit" : "miss");
+#endif
 	if (hits) {
 		pline("You hit the %s%s", mname(m), (hits==1?"!":" twice!"));
 
@@ -274,6 +277,9 @@ die()
 		return;
 	}
 
+#ifdef PORT
+	port_sound("death");
+#endif
 	/* set up the tomb screen */
 	set_act(1);
 
