@@ -212,3 +212,57 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
 - **Open:** 3d auto_more (MAG's `=-More-=` waits in `more()`/`domore()`)
   goes with the Messages window in stage 5. Keys picked inside our lists
   bypass `tgetch()`, so macros (`{ }`) don't record them.
+
+### Stage 4 — tiles (done, 2026-09-26, resumed cloud session)
+
+- **Set: DawnLike only** (DragonDePlatino, CC BY 4.0, palette DawnBringer),
+  sprites looked up by name in DawnLikeAtlas `renamed/` (Tommy Ettinger);
+  no NetHack mix, no text fallback on the map. `port/mkdawn.py [atlas dir]`
+  reads MAG's own lists (`MONSTER.H` pmon, `OBJECT.H` pobj + the fake
+  appearance arrays) and writes `port/tiles-dawn.png` (230 sprites, 16x16,
+  32 per row) + `port/tiles.h` (slot tables). Credits:
+  `port/dawnlike/CREDITS.txt` (Help page/README must repeat them).
+- **Coverage (script output):** monsters 13/55 by exact name + 42 stand-ins
+  from DawnLike (drakes/wyrms for the dragons: red=searwyrm, white=icewyrm,
+  blue=storrmwyrm [atlas spelling], Imperial=kingwyrm; axe beak=terror bird,
+  zephyr=air elemental, ...); object kinds 15/151 by name, rest stand-ins;
+  unidentified potions/wands/rings/scrolls by their random appearance
+  (27/87 appearance names exact, e.g. "bubbly potion", "ebony wand"; the
+  rest take unused sprites of that kind); 30 feature slots (walls, 4
+  corners, 4 wall torches, marble, corridor, floor, door, locked door,
+  up/down stairs, pool, 9 trap kinds, staff, player). **100% of 323 slots
+  from the one set** (>= 95% rule met).
+- **Loader:** `port/tiles.c` `tile_for(l, c, &under)` decides per map cell
+  from the game's page-0 shadow screen `optscr[0]` + its lists (player
+  `u.u_d`, `mons[]` by `m_perm - pmon` when the shown letter matches, i.e.
+  invisible/deluded monsters stay as MAG shows them, `lobjs[]` by kind or
+  appearance `nameptr[off][1]`, `doors[]` locked state, `traps[]` kind);
+  sprites with see-through parts get the floor under them. Native
+  `fe_tty.c` runs the same lookup every frame so ASan covers it.
+- **Frame:** `port/fe_web.c` `fe_present()` sends `js_tiles(vram[0], visual
+  page, tile/under arrays 22x80, inventory lines, pop-up box, cursor, hero,
+  level)` once a game runs (`port_started`), text frames before (title,
+  name). Pop-up = `fe_popup()` box of the port menus, or the bounding box
+  of page 1 (MAG's own full screens, tomb). `fe_idle()` (from
+  `port_idle()`) builds the inventory (`form()`, O_COLORINV colours) and
+  the Visible list (monster/object names from the game tables) only at the
+  command prompt, since `form()`/`obj_str()` use static buffers.
+- **Page:** `web/mag.js` is now the Rogue PC template's `roguepc.js`
+  adapted: tiles mode default with Map / Messages / Status / Inventory /
+  Visible windows (rvip-wm.js), pop-up over the map, text mode = VGA screen,
+  Tiles/Text buttons + F12, Zoom, nearest-neighbour sprites at 12-64 px
+  (scale = `L.tile`, DawnLike native 16). JS only blits; slots come from C.
+- **Messages:** `pline()` hook (`port_msg`, `src/VISUAL1.C` `#ifdef PORT`)
+  feeds the Messages window (repeats fold to `(xN)` in JS since MAG itself
+  drops exact repeats of the last line). **auto_more** (3d): `more()` skips
+  the top-line `=-More-=` while `fe_auto_more` (button, default on, kept in
+  `/mag/web.cfg`); `fe_at_cmd` drives `RvipWM.prompt.wait()`.
+- **Upstream fix:** MAIN.C name prompt wrote `cp[25]` (into the "-1" ESC
+  literal, and one past `u_name[25]`): `port:` commit.
+- **Tests:** `node web/tests/stage4.cjs` (tiles default, 117 sprite cells /
+  0 text cells on seed 3, player sprite pixels, F12 text/tiles, inventory
+  window); stage1-3 tests pass again (stage3 now clicks inside the pop-up
+  and reads the eat message from the Messages history). ASan native 25
+  seeds x 20000 random keys clean. Shots `web/shots/s4-*.png`.
+- **Next: stage 5** (window polish, game end overlay, `web/deploy.sh`,
+  `make-help.py`).

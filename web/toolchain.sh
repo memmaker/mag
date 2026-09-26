@@ -14,3 +14,8 @@ gcc --version | head -1
 # Browser tests: Playwright 1.56.1 (global npm) with the preinstalled Chromium
 # in /opt/pw-browsers (PLAYWRIGHT_BROWSERS_PATH); no `playwright install`.
 # Tiles: python3 + Pillow (port/mktiles.py), node 22 for the test scripts.
+# Stage 4 tiles (2026-09-26, resumed session): Pillow for port/mkdawn.py and
+# the DawnLike sprites named by DawnLikeAtlas
+pip install pillow || pip install --break-system-packages pillow
+git clone --depth 1 https://github.com/tommyettinger/DawnLikeAtlas "$HOME/tools/DawnLikeAtlas"
+python3 port/mkdawn.py "$HOME/tools/DawnLikeAtlas"

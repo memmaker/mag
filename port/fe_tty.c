@@ -67,6 +67,16 @@ fe_init(void)
 void
 fe_present(void)
 {
+	/* run the tile lookup the web frame does, so ASan checks it too */
+	extern int port_started;
+	int tile_for(int l, int c, int *under);
+	static long sum;
+	int l, c, u;
+
+	if (port_started)
+		for (l = 1; l <= 22; l++)
+			for (c = 0; c < 80; c++)
+				sum += tile_for(l, c, &u) + u;
 }
 
 static int
@@ -174,3 +184,9 @@ fe_exit(int code)
 	fprintf(stderr, "mag: exit %d after %ld keys\n", code, nkeys);
 	exit(code);
 }
+
+/* tiles-mode windows exist only on the web */
+int fe_at_cmd;
+void fe_idle(void) {}
+void port_msg(const char *m) { (void)m; }
+int port_auto_more(void) { return 0; }

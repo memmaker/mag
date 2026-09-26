@@ -87,6 +87,8 @@ int	port_item_prompt(int which, const char *verb);
 void	port_push_key(int k);
 int	port_pop_key(void);
 int	port_menu(void);
+void	port_msg(const char *m);	/* a top-line message (frontend: Messages window) */
+int	port_auto_more(void);	/* skip the top-line =-More-= */
 int	port_inventory(void);
 extern int port_inv_again;
 

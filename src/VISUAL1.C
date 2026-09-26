@@ -217,6 +217,9 @@ pline(char *str, ...)
 	if (u.u_data & (UD_HUNGRY | UD_FAINTING))
 		sprintf(message, "%c %s", u.u_data & UD_HUNGRY ? '*':'!',cp);
 	else strcpy(message, cp);
+#ifdef PORT
+	port_msg(message);	/* the Messages window (RVIP W4) */
+#endif
 
 	i_set(0, 0);
 	color(WHITE);
@@ -238,6 +241,10 @@ register	line,
 {
 	if (proceed)	/* if proceed flag set, don't wait for MORE */
 		return;
+#ifdef PORT
+	if (!line && how && port_auto_more())
+		return;	/* the Messages window keeps it (web auto_more) */
+#endif
 
 	i_set(line, col);
 	color(WHITE | INTENSE);

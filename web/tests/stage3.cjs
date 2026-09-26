@@ -31,8 +31,14 @@ const { start } = require('./lib.cjs');
 		await t.press('Enter'); await t.press('4');
 		s = await t.waitFor(/Your title/);
 		const row = s.split('\n').findIndex(l => /Your title/.test(l));
-		const box = await t.page.locator('#t-text canvas').boundingBox();
-		await t.page.mouse.click(box.x + box.width * 40 / 80, box.y + box.height * (row + 0.5) / 25);
+		/* tiles mode: the menu is a pop-up over the map (rows/cols of the text screen) */
+		await t.idle(200);
+		const col = s.split('\n')[row].indexOf('Your title') + 2;
+		const xy = await t.page.evaluate(([row, col]) => {
+			const el = document.getElementById('pop'), P = el.pop, b = el.querySelector('canvas').getBoundingClientRect();
+			return { x: b.left + (P.pad + (col - P.c0 + 0.5) * P.cw) * P.sc, y: b.top + (P.pad + (row - P.r0 + 0.5) * P.ch) * P.sc };
+		}, [row, col]);
+		await t.page.mouse.click(xy.x, xy.y);
 		await t.idle(300);
 		s = await t.screen();
 		check(/^You have attained the rank of/.test(s) && !/Information/.test(s), 'click on "Your title" in the Information group runs T: ' + s.split('\n')[0]);
@@ -48,8 +54,11 @@ const { start } = require('./lib.cjs');
 		await t.press('Escape'); await t.press('Escape');
 		await t.press('i'); await t.waitFor(/Inventory/);
 		await t.press('a');   /* food: main action = eat */
-		s = await t.waitFor(/^(Yucko|Ahh|Yum|Oh\.  That sure|Mmmmmm)/);
-		check(true, 'letter a eats: ' + s.split('\n')[0]);
+		/* auto_more: the message goes to the Messages window without a =-More-= */
+		let eat = '';
+		for (let i = 0; i < 50 && !eat; i++, await t.idle(100))
+			eat = (await t.page.evaluate(() => Module.mag.history())).find(l => /^(Yucko|Ahh|Yum|Oh\.  That sure|Mmmmmm)/.test(l)) || '';
+		check(eat, 'letter a eats: ' + eat);
 		await t.press('Space'); await t.idle(300);
 		s = await t.screen();
 		const monsters = s.split('\n').slice(1, 23).join('').match(/[a-zA-Z]/g);

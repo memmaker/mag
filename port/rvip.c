@@ -19,7 +19,9 @@
 extern int	openfile;
 extern char	wizpword[];
 int		port_saved;	/* R saved the game: keep the files on exit */
-static int	port_started;	/* a game (new or restored) is on screen */
+int		port_started;	/* a game (new or restored) is on screen */
+extern int	fe_at_cmd;
+void		fe_idle(void);
 
 static void
 stamp(char *buf, int n)
@@ -121,6 +123,7 @@ port_idle(void)
 		last = now;
 		port_save_game();
 	}
+	fe_idle();	/* side windows; the prompt line waits for a command */
 }
 
 /* R: the save stays (SAVE.C remember) */
@@ -336,6 +339,7 @@ port_command(int k)
 {
 	int dir, want;
 
+	fe_at_cmd = 0;
 	auto_stop();
 	if (k == '\r' && wizard != YES)
 		k = port_menu();	/* Enter: the command menu (RVIP 3b) */
@@ -407,6 +411,7 @@ port_auto(void)
 				pline("These stairs lead out of the dungeon. Press < to leave.");
 				return 0;
 			}
+			fe_at_cmd = 0;
 			return dir;	/* arrived: take the stairs */
 		}
 	}
@@ -424,5 +429,6 @@ port_auto(void)
 	strcpy(last_msg, message);
 	fe_present();
 	fe_sleep(25);		/* let the walk be seen */
+	fe_at_cmd = 0;
 	return dirkeys[dir];
 }
