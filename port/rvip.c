@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <string.h>
+#include <ctype.h>
 #undef exit
 
 extern int	openfile;
@@ -453,4 +454,48 @@ port_sound_verb(const char *verb)
 			port_sound(map[i][1]);
 			return;
 		}
+}
+
+/* ---- graveyard + leaderboard beacon (RVIP step 12) ----
+ *
+ * One report per finished run, from the game's own end paths (MAIN.C
+ * doquit / doexit): quit, death (killer = MAG's `killer`, no articles),
+ * escaped with the Sudbury Sapphire = win, escaped without it = quit.
+ * Score as the Hall of Heroes gets it (0 after wizard mode). */
+long	getscore();
+void	fe_beacon(const char *q);
+
+static void
+enc(char *d, const char *s, int n)
+{
+	static const char hex[] = "0123456789ABCDEF";
+	int	i = 0;
+
+	for (; *s && i < n - 4; s++)
+		if (isalnum((unsigned char)*s) || strchr("-_.~", *s))
+			d[i++] = *s;
+		else {
+			d[i++] = '%';
+			d[i++] = hex[(unsigned char)*s >> 4];
+			d[i++] = hex[*s & 15];
+		}
+	d[i] = 0;
+}
+
+void
+port_run_end(const char *kill)
+{
+	char	q[400], nm[80], kl[130];
+	const char *ev = "death";
+
+	if (!strcmp(kill, "quit"))
+		ev = "quit";
+	else if (!strcmp(kill, "escaped"))
+		ev = in_inv(SAPPHIRE) ? "win" : "quit";
+	enc(nm, u.u_name, sizeof nm);
+	enc(kl, kill, sizeof kl);
+	snprintf(q, sizeof q, "g=mag&ev=%s&name=%s%s%s&depth=%d&score=%ld&turns=%ld&lvl=%d",
+		ev, nm, strcmp(ev, "death") ? "" : "&killer=", strcmp(ev, "death") ? "" : kl,
+		u.u_dlevel, wizard ? 0L : getscore(YES), (long)u.u_moves, u.u_elevel);
+	fe_beacon(q);
 }

@@ -173,6 +173,9 @@ doquit()
 		return NO;
 	}
 
+#ifdef PORT
+	port_run_end("quit");
+#endif
 	/* sorry, if used wizard mode at all means no hero */
 	topten((wizard ? 0L : getscore(YES)), "quit");
 
@@ -306,6 +309,9 @@ register char	*filename;
 void
 doexit()
 {
+#ifdef PORT
+	port_run_end(killer);
+#endif
 	emptybuf();
 	i_set(22, 0);
 	swrite("Press any key...");

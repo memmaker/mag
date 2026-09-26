@@ -42,6 +42,10 @@ EM_JS(int, js_click, (void), { return Module.mag.click(); });
 EM_JS(void, js_flush_keys, (void), { Module.mag.flush(); });
 EM_JS(void, js_sync, (void), { Module.mag.sync(); });
 EM_JS(void, js_end, (int saved), { Module.mag.end(saved); });
+EM_JS(void, fe_beacon, (const char *q), {
+	try { q = UTF8ToString(q); if (window.RvipWM && RvipWM.report) RvipWM.report(q);
+	else fetch('/roguelikes/beacon?' + q, { keepalive: true, mode: 'no-cors' }).catch(function () {}); } catch (e) {}
+});
 
 void
 fe_init(void)

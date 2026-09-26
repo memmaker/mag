@@ -191,3 +191,4 @@ void fe_idle(void) {}
 void port_msg(const char *m) { (void)m; }
 int port_auto_more(void) { return 0; }
 void port_sound(const char *ev) { (void)ev; }
+void fe_beacon(const char *q) { if (getenv("MAG_BEACON")) fprintf(stderr, "beacon %s\n", q); }
