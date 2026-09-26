@@ -114,7 +114,7 @@ fe_idle(void)
 	fe_at_cmd = 1;
 	for (inv_n = 0, o = inv; o < &inv[numinv] && inv_n < MAXINV; o++, inv_n++) {
 		snprintf(inv_l[inv_n], 81, "%s", form(o, NO));
-		inv_at[inv_n] = (o->o_data & O_INUSE) ? 15 : o->o_type + 1 + (o->o_type > 6);
+		inv_at[inv_n] = o->o_type + 1 + (o->o_type > 6);	/* pr_obj O_COLORINV */
 	}
 	*p = 0;
 	for (m = mons; m < &mons[nummons] && p < e; m++) {

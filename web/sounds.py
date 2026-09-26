@@ -14,13 +14,13 @@ import os, re, shutil, sys
 
 MAP = {  # MAG event -> Angband/Dubtrain events to try
     'hit': ['hit', 'hit_good'], 'miss': ['miss'], 'kill': ['kill', 'n_kill'],
-    'hurt': ['bite', 'claw', 'hit_hi', 'touch'], 'mmiss': ['miss'],
-    'death': ['death'], 'level': ['level'], 'stairs': ['tplevel', 'walk'],
+    'hurt': ['mon_hit', 'mon_bite', 'mon_claw'], 'mmiss': ['miss'],
+    'death': ['death'], 'level': ['level'], 'stairs': ['stairs_down', 'tplevel'],
     'teleport': ['teleport'], 'pickup': ['pickup', 'drop'], 'gold': ['money1', 'store5', 'pickup'],
     'quaff': ['quaff'], 'eat': ['eat'], 'zap': ['zap_rod', 'zap', 'use_staff'],
-    'scroll': ['scroll'], 'ring': ['wear', 'wield'], 'wield': ['wield'], 'wear': ['wear'],
+    'scroll': ['study', 'cast_spell'], 'ring': ['wear', 'wield'], 'wield': ['wield'], 'wear': ['wield'],
     'shoot': ['shoot'], 'drop': ['drop'], 'unlock': ['locksmith', 'opendoor'],
-    'ignite': ['fire', 'breath'],
+    'ignite': ['breathe_fire'],
 }
 
 pack = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser('~/Downloads/Dubtrain Angband Sound Pack v3.1.0')

@@ -19,3 +19,7 @@ gcc --version | head -1
 pip install pillow || pip install --break-system-packages pillow
 git clone --depth 1 https://github.com/tommyettinger/DawnLikeAtlas "$HOME/tools/DawnLikeAtlas"
 python3 port/mkdawn.py "$HOME/tools/DawnLikeAtlas"
+# Mac (maintainer, 2026-09-26): Homebrew emscripten (`brew install emscripten`,
+# emcc 6.0.10 in /opt/homebrew/bin), Python 3 + Pillow 12. build.sh copies
+# rvip-wm.js and rvip-sound.js from ~/Games/rvip-tools/web (RVIP_WM=...), not
+# from rvip/; make-help.py reads the Docs entry mag.html.

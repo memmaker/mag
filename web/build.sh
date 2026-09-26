@@ -25,9 +25,11 @@ emcc -O2 "$OBJ"/*.o \
 	-sEXPORTED_FUNCTIONS=_main,_web_set_auto_more \
 	-sFORCE_FILESYSTEM -lidbfs.js -sENVIRONMENT=web -sEXIT_RUNTIME=0 ${EMFLAGS:-}
 rm -rf "$OBJ"
-RVIP_WM=${RVIP_WM:-../rvip/web}
+RVIP_WM=${RVIP_WM:-$HOME/Games/rvip-tools/web}
 cp ../web/index.html ../web/mag.js "$RVIP_WM/rvip-wm.js" "$RVIP_WM/rvip-sound.js" tiles-dawn.png "$OUT/"
-# sound samples: web/sounds.py fills web/sound from the Dubtrain pack (Mac)
+# sound samples: web/sounds.py fills web/sound from the Dubtrain pack (Mac;
+# not committed, as for Larn/Umoria); without the pack the page stays silent
+python3 ../web/sounds.py >/dev/null || true
 if [ -d ../web/sound ]; then cp -r ../web/sound "$OUT/sound"; fi
 
 python3 ../web/make-help.py > "$OUT/help.html"
