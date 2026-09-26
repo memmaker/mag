@@ -56,9 +56,10 @@ fe_getkey(int msdelay)
 	for (;;) {
 		if ((k = js_key()) >= 0) {
 			if (k == FK_CLICK) {
-				k = js_click();
-				fe_click_row = k >> 8;
-				fe_click_col = k & 0xff;
+				int rc = js_click();
+
+				fe_click_row = rc >> 8;
+				fe_click_col = rc & 0xff;
 			}
 			return k;
 		}
@@ -98,6 +99,12 @@ double
 fe_now(void)
 {
 	return emscripten_get_now();
+}
+
+void
+fe_popup(int r0, int c0, int r1, int c1)
+{
+	/* tiles mode shows it as a pop-up (stage 5); text mode draws the cells */
 }
 
 void

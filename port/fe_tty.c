@@ -149,6 +149,11 @@ fe_sleep(int ms)
 }
 
 void
+fe_popup(int r0, int c0, int r1, int c1)
+{
+}
+
+void
 fe_sync(void)
 {
 }

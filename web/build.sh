@@ -12,7 +12,7 @@ CFLAGS="-O2 -std=gnu89 -fcommon -w -funsigned-char -DPORT -Iinc -I. -include por
 	-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration ${EMCFLAGS:-}"
 OBJ=../web/obj
 mkdir -p "$OBJ"
-for f in ../src/*.C pcvideo.c rvip.c fe_web.c; do
+for f in ../src/*.C pcvideo.c rvip.c menu.c fe_web.c; do
 	# the game's .C files are C (emcc would take them for C++)
 	emcc $CFLAGS -x c -c "$f" -o "$OBJ/$(basename "$f" | sed 's/\.[cC]$//').o" &
 done

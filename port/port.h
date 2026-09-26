@@ -82,5 +82,12 @@ int	port_save_ok(void);
 void	port_remember(void);
 int	port_auto(void);
 int	port_command(int k);
+int	port_item_prompt(int which, const char *verb);
+/* port/menu.c */
+void	port_push_key(int k);
+int	port_pop_key(void);
+int	port_menu(void);
+int	port_inventory(void);
+extern int port_inv_again;
 
 #endif

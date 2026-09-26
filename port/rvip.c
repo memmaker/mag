@@ -115,6 +115,8 @@ port_idle(void)
 	double now = fe_now();
 
 	port_started = 1;
+	while (port_pop_key() >= 0)
+		;	/* an item letter no command took */
 	if (now - last >= 2000 && !fe_kbhit()) {
 		last = now;
 		port_save_game();
@@ -335,6 +337,10 @@ port_command(int k)
 	int dir, want;
 
 	auto_stop();
+	if (k == '\r' && wizard != YES)
+		k = port_menu();	/* Enter: the command menu (RVIP 3b) */
+	if (k == 'i' || k == 128 + 0x3d)	/* i, F3: inventory with a cursor */
+		k = port_inventory();
 	if (k != EXPLORE_KEY && k != '>' && k != '<')
 		return k;
 	if (k != EXPLORE_KEY) {
@@ -373,6 +379,16 @@ port_auto(void)
 {
 	int dir, want;
 
+	if (port_inv_again) {
+		/* after an item action the inventory comes back, unless a
+		   monster is in view (RVIP 3c) */
+		port_inv_again = 0;
+		new_monster(YES);
+		for (dir = 0; dir < nummons; dir++)
+			if (seen_mon[dir])
+				return 0;
+		return port_command('i');
+	}
 	if (!auto_mode)
 		return 0;
 	update_known();

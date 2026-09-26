@@ -177,9 +177,38 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
   Wizard mode for tests: `^W` + `frakola`, `#` maps walls/stairs only (room
   floors stay unknown, so the walk can't use them).
 - Help screens (`data/mkhelp.py`) and the page hint mention `Z` and `<`/`>`.
-- **Next: stage 3** (Enter menu + inventory). Enter (^M) is the wizard
-  command `wmonstat`: take it only when `wizard != YES`. Item actions: the
-  game's `utilize()` (COMMAND1.C, `util[]` table: command letters
-  `"qezprwtWcd\025L\013SI/\011])[sX"`) reads the item letter with
-  `ctgetch()`; push the letter into a port key queue. Item lines:
-  `form(o, NO)`, colours `o_type + 1 + (o_type > 6)` (O_COLORINV).
+
+### Stage 3 — Enter menu + inventory (done, 2026-09-26)
+
+- **Files:** `port/menu.c` (menus, inventory, item prompts, key queue),
+  hooks in `port/rvip.c` `port_command()` (Enter -> `port_menu()` unless in
+  wizard mode, where ^M stays `wmonstat`; `i`/F3 -> `port_inventory()`) and
+  `port_auto()` (reopen the inventory after an item action unless a monster
+  is in view: `port_inv_again`). `src/COMMAND1.C` `utilize()`: the item
+  prompt calls `port_item_prompt(util[cmnd].c_types, verb)` under
+  `#ifdef PORT`.
+- **Menu:** `port_menu()`: group box (1-5: Moving, Things you carry,
+  Listing what you carry, Information, Macros and the game, as the help
+  screens group them), then `group_menu()` with key + description; arrows /
+  keypad 8 2, digits, Enter / keypad 5 / Right, Escape / keypad 0 / Left,
+  the command's own key, mouse click (FK_CLICK row from `web/mag.js`).
+  Boxes are drawn onto the visual BIOS page (`box_open()` sized to the
+  content, rows 1-22 only, restored by `box_close()`); `fe_popup()` tells
+  the frontend the box (used by the tiles page in stage 5).
+- **Item actions run through the game:** the command key is returned to
+  `dispatch()` and the item letter is queued (`port_push_key()`; pcvideo's
+  `bios_key()` and `port_item_prompt()` read the queue first; `port_idle()`
+  clears stale letters). Main action by pobj flags: eat, quaff, read, zap,
+  put on, wear, strap, wield, use, unlock, throw, else examine
+  (`pline(form(o, YES))`). Shift+letter drops (only where MAG's letter is
+  lowercase: items 27+ are `A`-`Z` in MAG), Ctrl+letter examines,
+  Enter/Space/click -> `item_menu()` (every fitting `util[]` action with its
+  key + Examine), numpad `+ - *`, `0`/`.` close. Colours: the game's own
+  O_COLORINV (`o_type + 1 + (o_type > 6)`).
+- **Tests:** `node web/tests/stage3.cjs` (menu groups, group list, Escape,
+  click runs `T`, inventory, item menu, letter eats, reopen/stay closed,
+  wield prompt list); ASan random keys (25 seeds, Enter and `i` in the pool)
+  clean.
+- **Open:** 3d auto_more (MAG's `=-More-=` waits in `more()`/`domore()`)
+  goes with the Messages window in stage 5. Keys picked inside our lists
+  bypass `tgetch()`, so macros (`{ }`) don't record them.

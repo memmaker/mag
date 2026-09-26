@@ -84,7 +84,8 @@ bios_key(void)
 	unsigned i;
 
 	for (;;) {
-		k = fe_getkey(-1);
+		if ((k = port_pop_key()) < 0)	/* keys the port queued (item actions) */
+			k = fe_getkey(-1);
 		if (k == FK_KP5)	k = '.';
 		if (k == FK_KPENTER)	k = '\r';
 		if (k == FK_KPPLUS)	k = '+';

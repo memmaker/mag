@@ -299,6 +299,16 @@
 		$('btn-help').onclick = toggleHelp;
 		$('help-close').onclick = toggleHelp;
 		$('btn-restart').onclick = function () { location.reload(); };
+		/* a click on a text cell: menus and lists take it (FK_CLICK) */
+		textCv.addEventListener('mousedown', function (e) {
+			if (!running) return;
+			var b = textCv.getBoundingClientRect();
+			var r = Math.floor((e.clientY - b.top) / b.height * 25), c = Math.floor((e.clientX - b.left) / b.width * 80);
+			if (r < 0 || r > 24 || c < 0 || c > 79) return;
+			clickAt = (r << 8) | c;
+			events.push(FK_CLICK);
+			e.preventDefault();
+		});
 		document.querySelectorAll('button').forEach(function (b) {
 			b.addEventListener('mousedown', function (e) { e.preventDefault(); });
 		});

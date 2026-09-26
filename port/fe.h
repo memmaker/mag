@@ -31,5 +31,6 @@ void	fe_exit(int code);
 void	fe_sync(void);			/* files changed: write them back (web) */
 double	fe_now(void);			/* milliseconds */
 extern int fe_click_row, fe_click_col;
+void	fe_popup(int r0, int c0, int r1, int c1);	/* a port pop-up box (r0 < 0: none) */
 
 #endif

@@ -398,7 +398,12 @@ utilize()
 		pline("@What do you want to %s? ([%s] or SPACE) ",util[cmnd].
 							 c_comname, cp);
 		doset(0, strlen(message));
+#ifdef PORT
+		/* the fitting items with a cursor (RVIP 3c) */
+		c = port_item_prompt(util[cmnd].c_types, util[cmnd].c_comname);
+#else
 		c = ctgetch();
+#endif
 
 		/* if spacebar hit, list all available.  if item symbol
 		   typed, list ALL items of that type in inv */
