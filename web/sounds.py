@@ -22,6 +22,10 @@ MAP = {  # MAG event -> Angband/Dubtrain events to try
     'shoot': ['shoot'], 'drop': ['drop'], 'unlock': ['locksmith', 'opendoor'],
     'ignite': ['breathe_fire'],
 }
+# DASP's event names lie (Angband's `miss` is a bow sample): fixed samples
+# for the attack events (RVIP finetuning, Sound)
+OVERRIDE = {'miss': 'plc_miss_swish.wav', 'mmiss': 'plc_miss_swish.wav',
+            'hit': 'plc_hit_body.wav', 'shoot': 'plc_miss_arrow.wav', 'hurt': 'mco_hit_whip.wav'}
 
 pack = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser('~/Downloads/Dubtrain Angband Sound Pack v3.1.0')
 cfg = None
@@ -39,6 +43,11 @@ for line in open(cfg, encoding='latin-1'):
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sound')
 os.makedirs(out, exist_ok=True)
 for ev, cands in MAP.items():
+    o = OVERRIDE.get(ev)
+    if o and os.path.exists(os.path.join(os.path.dirname(cfg), o)):
+        shutil.copy(os.path.join(os.path.dirname(cfg), o), os.path.join(out, ev + '.wav'))
+        print('%-9s <- %s (fixed)' % (ev, o))
+        continue
     for c in cands:
         wavs = [w for w in names.get(c, []) if os.path.exists(os.path.join(os.path.dirname(cfg), w))]
         if wavs:
