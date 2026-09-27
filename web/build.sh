@@ -26,7 +26,7 @@ emcc -O2 "$OBJ"/*.o \
 	-sFORCE_FILESYSTEM -lidbfs.js -sENVIRONMENT=web -sEXIT_RUNTIME=0 ${EMFLAGS:-}
 rm -rf "$OBJ"
 RVIP_WM=${RVIP_WM:-$HOME/Games/rvip-tools/web}
-cp ../web/index.html ../web/mag.js tiles-dawn.png "$OUT/"
+cp ../web/index.html ../web/mag.js tiles-dawn.png tiles-dawn-1.png "$OUT/"
 # sound samples: web/sounds.py fills web/sound from the Dubtrain pack (Mac;
 # not committed, as for Larn/Umoria); without the pack the page stays silent
 python3 ../web/sounds.py >/dev/null || true

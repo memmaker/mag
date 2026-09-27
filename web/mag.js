@@ -76,15 +76,48 @@
 
 	/* DawnLike (port/mkdawn.py): 16x16, 32 per row; the game picks the slot */
 	/* Tiles button: DawnLike -> None (text map in the windows) -> PC screen (text mode) */
-	var TILESETS = [['tiles-dawn.png', 'DawnLike'], [null, 'None'], [null, 'PC screen']];
+	var TILESETS = [['tiles-dawn.png', 'DawnLike'], ['tiles-dawn.png', 'DawnLike|a', 'tiles-dawn-1.png'], [null, 'None'], [null, 'PC screen']];
 	var dawn = new Image(), dawnReady = false;
 	dawn.onload = function () { dawnReady = true; if (L) applyDom(); };
 	dawn.src = 'tiles-dawn.png';
 	/* tiles drawn: DawnLike picked and loaded (a late onload can't turn None back) */
 	function tilesOn() { return dawnReady && L && !L.noTiles; }
-	function tile(ctx, t, x, y, w, h) {
-		if (tilesOn()) ctx.drawImage(dawn, (t & 31) * 16, (t >> 5) * 16, 16, 16, x, y, w, h);
+	function tile(ctx, t, x, y, w, h, im) {
+		if (tilesOn()) ctx.drawImage(im || dawn, (t & 31) * 16, (t >> 5) * 16, 16, 16, x, y, w, h);
 	}
+	/* DawnLike|a (opt-in): the map swaps to DawnLike's second frame
+	 * (port/mkdawn.py tiles-dawn-1.png) twice a second, redrawing only the
+	 * cells whose sprite or floor has a different 2nd frame (anim[slot]) */
+	var dawn1 = new Image(), frame = 0, anim = null;
+	function pixels(im) {
+		var c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight;
+		var x = c.getContext('2d'); x.drawImage(im, 0, 0); return x.getImageData(0, 0, c.width, c.height).data;
+	}
+	function findAnim() {
+		if (!dawn.naturalWidth || !dawn1.naturalWidth) return;
+		var a = pixels(dawn), b = pixels(dawn1), W = dawn.naturalWidth, n = (W / 16) * (dawn.naturalHeight / 16);
+		anim = new Uint8Array(n);
+		for (var s = 0; s < n; s++)
+			for (var y = 0, x0 = (s % (W / 16)) * 16, y0 = ((s / (W / 16)) | 0) * 16; y < 16 && !anim[s]; y++)
+				for (var i = ((y0 + y) * W + x0) * 4, e = i + 64; i < e; i++) if (a[i] !== b[i]) { anim[s] = 1; break; }
+	}
+	dawn1.onload = findAnim;
+	function animOn() { return tilesOn() && L.anim && L.mode !== 'text' && kind === 'tiles'; }
+	setInterval(function () {
+		if (!running || !F || !mapCtx || document.hidden || !animOn()) { frame = 0; return; }
+		if (!dawn1.src) dawn1.src = 'tiles-dawn-1.png';
+		if (!anim) { findAnim(); if (!anim) return; }
+		frame ^= 1;
+		var s = L.tile, h = cellH(), im = frame ? dawn1 : dawn;
+		for (var i = 0; i < 22 * 80; i++) {
+			var t = F.t[i], u = F.u[i];
+			if (!(anim[t] || anim[u])) continue;
+			var x = (i % 80) * s, y = ((i / 80) | 0) * h;
+			mapCtx.fillStyle = '#000'; mapCtx.fillRect(x, y, s, h);
+			if (u >= 0) tile(mapCtx, u, x, y, s, h, im);
+			if (t >= 0) tile(mapCtx, t, x, y, s, h, im);
+		}
+	}, 500);
 	/* fonts from the index page's fonts/ (web/build.sh writes fonts.json) */
 	function face(id) { var n = L && (id === 'map' ? L.mapFace : L.face); return n ? '"' + n + '", ' + FONT : FONT; }
 	function cellH() { return L.tile; }
@@ -225,8 +258,9 @@
 			c.fillStyle = '#000'; c.fillRect(x, y, s, h);
 			if (t === -2) continue;
 			if (!tilesOn()) t = u = -1;          /* Tiles: None, the characters */
-			if (u >= 0) tile(c, u, x, y, s, h);
-			if (t >= 0) tile(c, t, x, y, s, h);
+			var im = frame && animOn() && dawn1.naturalWidth ? dawn1 : dawn;
+			if (u >= 0) tile(c, u, x, y, s, h, im);
+			if (t >= 0) tile(c, t, x, y, s, h, im);
 			else {
 				var g = v & 255;
 				if ((a >> 4) & 7) { c.fillStyle = PAL[(a >> 4) & 7]; c.fillRect(x, y, s, h); }
@@ -318,6 +352,7 @@
 				if (s.mode === 'text') d.mode = 'text';
 				if (s.sound) d.sound = true;
 				if (s.noTiles) d.noTiles = true;
+				if (s.anim) d.anim = true;
 				if (typeof s.face === 'string') d.face = s.face;
 				if (typeof s.mapFace === 'string') d.mapFace = s.mapFace;
 				if (s.wm) d.wm = s.wm;
@@ -399,8 +434,8 @@
 		applyDom(); saveLayout();
 	}
 	function resetLayout() {
-		var m = L.mode, snd = L.sound, nt = L.noTiles, fc = L.face, mf = L.mapFace;
-		L = defaultLayout(); L.mode = m; L.sound = snd; L.noTiles = nt; L.face = fc; L.mapFace = mf; L.wm = wm.state();
+		var m = L.mode, snd = L.sound, nt = L.noTiles, an = L.anim, fc = L.face, mf = L.mapFace;
+		L = defaultLayout(); L.mode = m; L.sound = snd; L.noTiles = nt; L.anim = an; L.face = fc; L.mapFace = mf; L.wm = wm.state();
 		applyDom(); saveLayout();
 	}
 
@@ -409,20 +444,20 @@
 	function renderSound() { $('chk-sound').checked = !!(L && L.sound); }
 	function renderMore() { $('chk-more').checked = !!autoMore; }
 	/* Tiles: DawnLike -> None -> PC screen */
-	function tileset() { return !L ? 0 : L.mode === 'text' ? 2 : L.noTiles ? 1 : 0; }
+	function tileset() { return !L ? 0 : L.mode === 'text' ? 3 : L.noTiles ? 2 : L.anim ? 1 : 0; }
 	function renderTiles() {
 		$('btn-tiles').textContent = 'Tiles: ' + TILESETS[tileset()][1];
 		renderMapSel();
 	}
 	var atCmd = 0, visStr = '';
 	/* the game builds the inventory rows with or without icons */
-	function syncIcons() { if (Module._web_set_icons) Module._web_set_icons(tileset() === 0 ? 1 : 0); }
+	function syncIcons() { if (Module._web_set_icons) Module._web_set_icons(tileset() < 2 ? 1 : 0); }
 	function cycleTiles() {
 		if (!L) return;
 		var n = (tileset() + 1) % TILESETS.length;
-		L.noTiles = n === 1;
+		L.noTiles = n === 2; L.anim = n === 1;
 		syncIcons();
-		if (n === 2) setMode('text');
+		if (n === 3) setMode('text');
 		else if (L.mode === 'text') setMode('tiles');
 		else { applyDom(); saveLayout(); if (atCmd && running) events.push(12); }
 		/* both lists follow at once: Visible from its cached string, the
@@ -445,7 +480,7 @@
 	function renderMapSel() {
 		var bs = document.querySelector('#t-map .wm-btns');
 		if (bs && mapSel.parentNode !== bs) bs.insertBefore(mapSel, bs.firstChild);
-		mapSel.hidden = tileset() !== 1;
+		mapSel.hidden = tileset() !== 2;
 		mapSel.value = (L && L.mapFace) || '';
 	}
 	function loadFace(n, now) {
