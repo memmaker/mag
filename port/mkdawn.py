@@ -8,21 +8,37 @@ DawnLike; names MAG shares with the atlas map directly, the rest take a
 stand-in from the same set (hand table below). Writes
   port/tiles-dawn.png   32 sprites per row, 16x16
   port/tiles.h          slot tables for tiles.c
-and prints the coverage numbers. Run: python3 port/mkdawn.py [atlas dir]
-(default $DAWNLIKE_ATLAS or ~/tools/DawnLikeAtlas)."""
+and prints the coverage numbers. Run: python3 port/mkdawn.py [tilesets dir]
+(default $RVIP_TILESETS or ~/Games/rvip-tools/tilesets). Also writes
+  port/tiles-dawn-1.png  DawnLike's second animation frame, same slots"""
 import os, re, sys
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ATLAS = sys.argv[1] if len(sys.argv) > 1 else os.environ.get(
-    'DAWNLIKE_ATLAS', os.path.expanduser('~/tools/DawnLikeAtlas'))
-REN = os.path.join(ATLAS, 'renamed')
-FILES = {}
-for f in sorted(os.listdir(REN)):
-    m = re.fullmatch(r'(.+?)(_0)?\.png', f)
-    if m and not re.search(r'_\d$', m.group(1)):
-        FILES.setdefault(m.group(1), f)     # frame 0 of animated sprites
-NAMES = set(FILES)
+# sprites by name: dawnlike_names.tsv (name, frame, sheet, col, row) next to
+# the original DawnLike sheets, from rvip-tools/tilesets (dawnlike_index.py
+# made it from DawnLikeAtlas); override the folder with $RVIP_TILESETS
+TS = sys.argv[1] if len(sys.argv) > 1 else os.environ.get(
+    'RVIP_TILESETS', os.path.expanduser('~/Games/rvip-tools/tilesets'))
+POS = {}
+for line in open(os.path.join(TS, 'dawnlike_names.tsv')).read().splitlines()[1:]:
+    n, fr, sheet, c, r = line.split('\t')
+    if fr == '0':
+        POS.setdefault(n, (sheet, int(c), int(r)))
+# atlas names from sheets dawnlike_names.tsv skips (Commissions/)
+POS.setdefault('warrior s', ('Commissions/Warrior.png', 0, 0))
+NAMES = set(POS)
+_sheets = {}
+def crop(sheet, c, r):
+    if sheet not in _sheets:
+        _sheets[sheet] = Image.open(os.path.join(TS, 'DawnLike', sheet)).convert('RGBA')
+    return _sheets[sheet].crop((c * 16, r * 16, c * 16 + 16, r * 16 + 16))
+def sprite(name, frame=0):
+    """frame 1: the same cell of DawnLike's <sheet>1.png where it has one"""
+    sheet, c, r = POS[name]
+    if frame and sheet.endswith('0.png') and os.path.exists(os.path.join(TS, 'DawnLike', sheet[:-5] + '1.png')):
+        sheet = sheet[:-5] + '1.png'
+    return crop(sheet, c, r)
 
 
 def src(path):
@@ -99,7 +115,7 @@ TRAPS = ['webbing a', 'magic trap tile', 'rolling boulder trap tile', 'small rot
 
 slots, index = [], {}
 def slot(name):
-    assert name in NAMES, 'not in DawnLikeAtlas: ' + name
+    assert name in NAMES, 'no DawnLike sprite named: ' + name
     if name not in index:
         index[name] = len(slots)
         slots.append(name)
@@ -142,13 +158,25 @@ ring_t = appearance(FRING, 'ring', r'[a-z ]+ ring')
 scr_t = appearance(FSCROLL, 'scroll', r'(ancient|mystery|dusty) [a-z]+ scroll')
 feat_t = {k: slot(v) for k, v in FEAT.items()}
 trap_t = [slot(n) for n in TRAPS]
+# autotiled floors (tiles.c): slot base+m is bordered on the sides of mask m
+# (n8 s4 w2 e1), 'c' = no border, base+15 = 'nswe'
+def autotile(style):
+    base = len(slots)
+    for m in range(16):
+        n = style + ' ' + (''.join(c for b, c in ((8, 'n'), (4, 's'), (2, 'w'), (1, 'e')) if m & b) or 'c')
+        assert n in NAMES, n
+        slots.append(n)
+    return base
+feat_t['FLOORS'] = autotile('night tile floor')
+feat_t['CORRS'] = autotile('night dirt floor')
 
 # ---- the sheet ------------------------------------------------------------
 N = len(slots)
-img = Image.new('RGBA', (32 * 16, (N + 31) // 32 * 16), (0, 0, 0, 0))
-for i, n in enumerate(slots):
-    img.paste(Image.open(os.path.join(REN, FILES[n])).convert('RGBA'), ((i % 32) * 16, (i // 32) * 16))
-img.save(os.path.join(HERE, 'tiles-dawn.png'))
+for fr, out in ((0, 'tiles-dawn.png'), (1, 'tiles-dawn-1.png')):
+    img = Image.new('RGBA', (32 * 16, (N + 31) // 32 * 16), (0, 0, 0, 0))
+    for i, n in enumerate(slots):
+        img.paste(sprite(n, fr), ((i % 32) * 16, (i // 32) * 16))
+    img.save(os.path.join(HERE, out))
 
 def arr(name, a):
     return 'static const short %s[%d] = {%s};' % (name, len(a), ','.join(map(str, a)))

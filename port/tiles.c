@@ -125,12 +125,69 @@ by_letter(int ch)
 }
 
 /*
+ * DawnLike floors are autotiles (RVIP finetuning): a room floor or corridor
+ * cell is bordered on each orthogonal side whose neighbour on the real level
+ * (dun[], not what the player has seen) is not the same floor kind. Stairs,
+ * traps and pools count as room floor, a visible door as either kind; a
+ * secret door still reads as wall. Things lying on a cell don't change dun[].
+ */
+static int
+floor_kind(int l, int c)
+{
+	DUNGEON *d;
+
+	if (l < 0 || l >= LINES || c < 0 || c >= COLUMNS)
+		return 0;
+	d = &dun[l][c];
+	switch (d->d_what) {
+	case FLOOR: case UPSTAIR: case DNSTAIR: case TRAPC: case POOL:
+		return 1;
+	case CORRIDOR:
+		return 2;
+	case DOORC:
+		return 3;	/* matches both */
+	}
+	return 0;
+}
+
+static int
+autotile(int t, int l, int c)
+{
+	static const int dl[4] = { -1, 1, 0, 0 }, dc[4] = { 0, 0, -1, 1 };
+	int k, m = 0, i, n;
+
+	if (t == TL_FLOOR)
+		k = 1;
+	else if (t == TL_CORRIDOR)
+		k = 2;
+	else
+		return t;
+	for (i = 0; i < 4; i++) {
+		n = floor_kind(l + dl[i], c + dc[i]);
+		if (n != k && n != 3)
+			m |= 8 >> i;	/* n8 s4 w2 e1 */
+	}
+	return (k == 1 ? TL_FLOORS : TL_CORRS) + m;
+}
+
+static int tile_raw(int l, int c, int *under);
+
+int
+tile_for(int l, int c, int *under)
+{
+	int t = tile_raw(l, c, under);
+
+	*under = autotile(*under, l, c);
+	return autotile(t, l, c);
+}
+
+/*
  * Sprite for map line l, column c (1..LINES-2); *under gets the terrain
  * to draw first (or -1). Returns -2 for an empty (black) cell and -1 for
  * a cell drawn as text.
  */
-int
-tile_for(int l, int c, int *under)
+static int
+tile_raw(int l, int c, int *under)
 {
 	DUNGEON *d = &dun[l][c];
 	int ch = (unsigned char)optscr[0][l][c], t;
