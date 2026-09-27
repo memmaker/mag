@@ -407,15 +407,13 @@ port_auto(void)
 	if (auto_mode == '>' || auto_mode == '<') {
 		want = auto_mode == '>' ? DNSTAIR : UPSTAIR;
 		if (u.u_d->d_what == want) {
+			/* arrived: stop here; the player presses the key again to
+			   take the stairs (RVIP finetuning: auto-stairs only walks) */
 			dir = auto_mode;
 			auto_stop();
-			if (dir == '<' && u.u_dlevel == 1) {
-				/* never walk out of the dungeon by accident */
+			if (dir == '<' && u.u_dlevel == 1)
 				pline("These stairs lead out of the dungeon. Press < to leave.");
-				return 0;
-			}
-			fe_at_cmd = 0;
-			return dir;	/* arrived: take the stairs */
+			return 0;
 		}
 	}
 	if ((dir = next_dir()) < 0) {
@@ -431,7 +429,7 @@ port_auto(void)
 	last_pos = u.u_d;
 	strcpy(last_msg, message);
 	fe_present();
-	fe_sleep(25);		/* let the walk be seen */
+	fe_sleep(40);		/* let each step be seen */
 	fe_at_cmd = 0;
 	return dirkeys[dir];
 }

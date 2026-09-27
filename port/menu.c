@@ -142,7 +142,6 @@ static const struct cmd g_move[] = {
 	{'Z', "Explore (walk to what you haven't seen)"},
 	{'>', "Go down / walk to the down stairs"},
 	{'<', "Go up / walk to the up stairs"},
-	{'f', "Find: move in a direction until something"},
 	{'.', "Rest one turn"},
 	{':', "Rest several turns"},
 	{'s', "Search once"},
