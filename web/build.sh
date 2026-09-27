@@ -22,7 +22,7 @@ emcc -O2 "$OBJ"/*.o \
 	-o "$OUT/mag-core.js" \
 	-sASYNCIFY -sASYNCIFY_STACK_SIZE=65536 -sSTACK_SIZE=1048576 \
 	-sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=FS,IDBFS,HEAPU8,HEAPU16,HEAP32,UTF8ToString,addRunDependency,removeRunDependency \
-	-sEXPORTED_FUNCTIONS=_main,_web_set_auto_more \
+	-sEXPORTED_FUNCTIONS=_main,_web_set_auto_more,_web_set_icons \
 	-sFORCE_FILESYSTEM -lidbfs.js -sENVIRONMENT=web -sEXIT_RUNTIME=0 ${EMFLAGS:-}
 rm -rf "$OBJ"
 RVIP_WM=${RVIP_WM:-$HOME/Games/rvip-tools/web}
@@ -32,5 +32,9 @@ cp ../web/index.html ../web/mag.js tiles-dawn.png "$OUT/"
 python3 ../web/sounds.py >/dev/null || true
 if [ -d ../web/sound ]; then cp -r ../web/sound "$OUT/sound"; fi
 
+# font choosers: the index page's fonts/*.woff (loaded from ../fonts/)
+FONTS=${RVIP_FONTS:-$HOME/Games/roguelikes-index/fonts}
+(cd "$FONTS" 2>/dev/null && ls *.woff 2>/dev/null | sed 's/\.woff$//') |
+	python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().split()))' > "$OUT/fonts.json"
 python3 ../web/make-help.py > "$OUT/help.html"
 ls -la "$OUT"

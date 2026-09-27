@@ -75,12 +75,18 @@
 	}
 
 	/* DawnLike (port/mkdawn.py): 16x16, 32 per row; the game picks the slot */
+	/* Tiles button: DawnLike -> None (text map in the windows) -> PC screen (text mode) */
+	var TILESETS = [['tiles-dawn.png', 'DawnLike'], [null, 'None'], [null, 'PC screen']];
 	var dawn = new Image(), dawnReady = false;
 	dawn.onload = function () { dawnReady = true; if (L) applyDom(); };
 	dawn.src = 'tiles-dawn.png';
+	/* tiles drawn: DawnLike picked and loaded (a late onload can't turn None back) */
+	function tilesOn() { return dawnReady && L && !L.noTiles; }
 	function tile(ctx, t, x, y, w, h) {
-		if (dawnReady) ctx.drawImage(dawn, (t & 31) * 16, (t >> 5) * 16, 16, 16, x, y, w, h);
+		if (tilesOn()) ctx.drawImage(dawn, (t & 31) * 16, (t >> 5) * 16, 16, 16, x, y, w, h);
 	}
+	/* fonts from the index page's fonts/ (web/build.sh writes fonts.json) */
+	function face(id) { var n = L && (id === 'map' ? L.mapFace : L.face); return n ? '"' + n + '", ' + FONT : FONT; }
 	function cellH() { return L.tile; }
 
 	/* ---------- text mode: one window, 80x25 VGA cells ---------- */
@@ -113,9 +119,9 @@
 	}
 
 	/* ---------- tiles mode: text windows ---------- */
-	function measure(px) {
+	function measure(px, fnt) {
 		var c = document.createElement('canvas').getContext('2d');
-		c.font = px + 'px ' + FONT;
+		c.font = px + 'px ' + (fnt || face());
 		return Math.ceil(c.measureText('M').width);
 	}
 	function cp(g) { return CP437.charAt(g); }
@@ -130,8 +136,8 @@
 		c.setTransform(dpr, 0, 0, dpr, 0, 0);
 		c.fillStyle = '#000'; c.fillRect(0, 0, w, h);
 		var f = L.font[id];
-		c.font = f + 'px ' + FONT; c.textBaseline = 'middle';
-		return { c: c, w: w, h: h, cw: measure(f), ch: Math.round(f * 1.3) };
+		c.font = f + 'px ' + face(id); c.textBaseline = 'middle';
+		return { c: c, w: w, h: h, cw: measure(f, face(id)), ch: Math.round(f * 1.3) };
 	}
 	/* one line of vram cells (attr << 8 | char) */
 	function cells(P, arr, start, n, y, x0) {
@@ -181,7 +187,18 @@
 		if (!rects.inv) return;
 		var P = textPane('inv');
 		if (!F) return;
-		F.inv.forEach(function (l, i) { line(P, l.s, i * P.ch, l.c); });   /* colours from the game */
+		/* rows and colours from the game; with tiles the row is "a)   name"
+		 * and the item's sprite is centred on cols 2-4, square, side
+		 * min(2 cells, row height), so a wide or tall font never stretches it */
+		F.inv.forEach(function (l, i) {
+			line(P, l.s, i * P.ch, l.c);
+			var t = tilesOn() && F.invT ? F.invT[i] : -1;
+			if (t >= 0) {
+				var side = Math.min(2 * P.cw, P.ch);
+				P.c.imageSmoothingEnabled = false;
+				tile(P.c, t, 2 + 3.5 * P.cw - side / 2, i * P.ch + (P.ch - side) / 2, side, side);
+			}
+		});
 	}
 
 	/* ---------- tiles mode: the map ---------- */
@@ -198,7 +215,7 @@
 	function drawMap() {
 		if (!F) return;
 		var s = L.tile, h = cellH(), c = mapCtx, i, r, col;
-		c.font = 'bold ' + Math.round(s * 0.9) + 'px ' + FONT;
+		c.font = (L.mapFace ? '' : 'bold ') + Math.round(s * 0.9) + 'px ' + face('map');
 		c.textAlign = 'center'; c.textBaseline = 'middle';
 		for (i = 0; i < 22 * 80; i++) {
 			var v = F.scr[80 + i], t = F.t[i], u = F.u[i];
@@ -207,6 +224,7 @@
 			var x = col * s, y = r * h, a = v >> 8;
 			c.fillStyle = '#000'; c.fillRect(x, y, s, h);
 			if (t === -2) continue;
+			if (!tilesOn()) t = u = -1;          /* Tiles: None, the characters */
 			if (u >= 0) tile(c, u, x, y, s, h);
 			if (t >= 0) tile(c, t, x, y, s, h);
 			else {
@@ -239,7 +257,7 @@
 		var c = cv.getContext('2d');
 		c.setTransform(dpr, 0, 0, dpr, 0, 0);
 		c.fillStyle = '#000'; c.fillRect(0, 0, w, h);
-		c.font = f + 'px ' + FONT; c.textBaseline = 'middle';
+		c.font = f + 'px ' + face(); c.textBaseline = 'middle';
 		var P = { c: c, cw: cw, ch: ch };
 		for (var r = 0; r < rows; r++) cells(P, F.vr, (p[0] + r) * 80 + p[1], cols, pad + r * ch, pad);
 		if (F.con && F.cr >= p[0] && F.cr <= p[2] && curOn()) {
@@ -299,6 +317,9 @@
 				});
 				if (s.mode === 'text') d.mode = 'text';
 				if (s.sound) d.sound = true;
+				if (s.noTiles) d.noTiles = true;
+				if (typeof s.face === 'string') d.face = s.face;
+				if (typeof s.mapFace === 'string') d.mapFace = s.mapFace;
 				if (s.wm) d.wm = s.wm;
 			}
 		} catch (err) { /* nothing saved yet */ }
@@ -335,22 +356,22 @@
 			wins: [{ id: 'map', title: 'Map' }, { id: 'msg', title: 'Messages' }, { id: 'stat', title: 'Status' }, { id: 'inv', title: 'Inventory' }, { id: 'vis', title: 'Visible' }],
 			multi: { d: 'v', r: d.bottom, a: 'map', b: { d: 'h', r: 0.4, a: { d: 'v', r: d.stat, a: 'msg', b: 'stat' }, b: { d: 'h', r: 0.5, a: 'inv', b: 'vis' } } },
 			single: { d: 'v', r: line / A.h, a: 'msg', b: { d: 'v', r: 1 - stat / (A.h - line), a: 'map', b: 'stat' } },
-			state: L.wm, noFont: 'map',
+			state: L.wm,
 			save: function (st) { L.wm = st; saveLayout(); },
 			layout: function (r) {
 				var A = areaSize(), txt = showText();
 				rects = r; rects.text = [0, 0, A.w, A.h];
 				$('t-text').hidden = !txt;
 				place($('t-text'), rects.text);
-				$('btn-tiles').classList.toggle('on', L.mode === 'tiles');
-				$('btn-text').classList.toggle('on', L.mode === 'text');
-				['btn-zoom-in', 'btn-zoom-out'].forEach(function (b) { $(b).disabled = L.mode === 'text'; });
+				renderTiles();
 				$('vis').style.fontSize = (L.font.vis || 13) + 'px';
+				$('vis').style.fontFamily = L.face ? '"' + L.face + '", monospace' : '';
 				if (txt) { $('pop').hidden = true; fitText(); drawText(); }
 				else { drawTiles(true); scrollMap(true); drawPop(); }
 			},
 			font: function (id, d) {
-				if (id === 'vis') { L.font.vis = clamp((L.font.vis || 13) + d, FONT_MIN, FONT_MAX); applyDom(); saveLayout(); }
+				if (id === 'map') zoomMap(d);        /* zoom lives on the Map title bar */
+				else if (id === 'vis') { L.font.vis = clamp((L.font.vis || 13) + d, FONT_MIN, FONT_MAX); applyDom(); saveLayout(); }
 				else zoomText(id, d);
 			},
 			onReset: resetLayout
@@ -360,6 +381,8 @@
 		if (!L || L.mode === m) return;
 		L.mode = m;
 		if (m === 'text' && F) T = { scr: F.vr, cr: F.cr, cc: F.cc, con: F.con };
+		syncIcons();
+		if (atCmd && running) events.push(12);
 		applyDom(); saveLayout();
 	}
 
@@ -376,21 +399,70 @@
 		applyDom(); saveLayout();
 	}
 	function resetLayout() {
-		var m = L.mode, snd = L.sound;
-		L = defaultLayout(); L.mode = m; L.sound = snd; L.wm = wm.state();
+		var m = L.mode, snd = L.sound, nt = L.noTiles, fc = L.face, mf = L.mapFace;
+		L = defaultLayout(); L.mode = m; L.sound = snd; L.noTiles = nt; L.face = fc; L.mapFace = mf; L.wm = wm.state();
 		applyDom(); saveLayout();
 	}
 
 	/* ---------- called by the game (port/fe_web.c) ---------- */
 	var autoMore = 0;
-	function renderSound() { var on = !!(L && L.sound); $('btn-sound').textContent = 'Sound: ' + (on ? 'on' : 'off'); $('btn-sound').classList.toggle('on', on); }
-	function renderMore() { $('btn-more').textContent = 'auto_more: ' + (autoMore ? 'on' : 'off'); $('btn-more').classList.toggle('on', !!autoMore); }
+	function renderSound() { $('chk-sound').checked = !!(L && L.sound); }
+	function renderMore() { $('chk-more').checked = !!autoMore; }
+	/* Tiles: DawnLike -> None -> PC screen */
+	function tileset() { return !L ? 0 : L.mode === 'text' ? 2 : L.noTiles ? 1 : 0; }
+	function renderTiles() {
+		$('btn-tiles').textContent = 'Tiles: ' + TILESETS[tileset()][1];
+		renderMapSel();
+	}
+	var atCmd = 0, visStr = '';
+	/* the game builds the inventory rows with or without icons */
+	function syncIcons() { if (Module._web_set_icons) Module._web_set_icons(tileset() === 0 ? 1 : 0); }
+	function cycleTiles() {
+		if (!L) return;
+		var n = (tileset() + 1) % TILESETS.length;
+		L.noTiles = n === 1;
+		syncIcons();
+		if (n === 2) setMode('text');
+		else if (L.mode === 'text') setMode('tiles');
+		else { applyDom(); saveLayout(); if (atCmd && running) events.push(12); }
+		/* both lists follow at once: Visible from its cached string, the
+		 * Inventory rows come from the game on a redraw (^L at the prompt) */
+		$('vis')._vis = null; if (visStr) mag.vis(visStr);
+	}
+	/* Visible window icon: the sprite as a 16px CSS sprite */
+	function visIcon(t) {
+		if (!tilesOn() || !(t >= 0)) return null;
+		var e = document.createElement('i');
+		e.className = 'wm-ic';
+		e.style.cssText = 'image-rendering:pixelated;background:url(tiles-dawn.png) -' + (t & 31) * 16 + 'px -' + (t >> 5) * 16 + 'px';
+		return e;
+	}
+	/* map font: on the Map title bar (on hover), Tiles: None only */
+	var mapSel = document.createElement('select');
+	mapSel.title = 'Map font (Tiles: None)';
+	mapSel.innerHTML = '<option value="">Default font</option>';
+	mapSel.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+	function renderMapSel() {
+		var bs = document.querySelector('#t-map .wm-btns');
+		if (bs && mapSel.parentNode !== bs) bs.insertBefore(mapSel, bs.firstChild);
+		mapSel.hidden = tileset() !== 1;
+		mapSel.value = (L && L.mapFace) || '';
+	}
+	function loadFace(n, now) {
+		if (!n) { if (now) applyDom(); return; }
+		var ff = new FontFace(n, 'url(../fonts/' + n + '.woff)');
+		ff.load().then(function () { document.fonts.add(ff); applyDom(); })
+			.catch(function () { status('Could not load the font ' + n + '.', true); setTimeout(function () { status(''); }, 2000); });
+	}
 	var mag = {
 		init: function (font, ntiles, am) {
 			buildFont(font);
 			autoMore = am; renderMore();
 			if (!L) loadLayout();
 			renderSound();
+			syncIcons();
+			$('sel-font').value = L.face || '';
+			loadFace(L.face); loadFace(L.mapFace);
 			$('game').hidden = false;
 			applyDom();
 		},
@@ -399,7 +471,7 @@
 			if (kind !== 'text') { kind = 'text'; applyDom(); }
 			else drawText();
 		},
-		tiles: function (scr, vr, t, u, inv, at, ninv, pr0, pc0, pr1, pc1, cr, cc, con, hy, hx, lvl) {
+		tiles: function (scr, vr, t, u, inv, at, it, ninv, pr0, pc0, pr1, pc1, cr, cc, con, hy, hx, lvl) {
 			var H = Module.HEAPU8, lines = [];
 			for (var i = 0; i < ninv; i++) {
 				var s = '', o = inv + i * 81;
@@ -408,7 +480,7 @@
 			}
 			F = { scr: Module.HEAPU16.slice(scr >> 1, (scr >> 1) + 2000), vr: Module.HEAPU16.slice(vr >> 1, (vr >> 1) + 2000),
 				t: Module.HEAP32.slice(t >> 2, (t >> 2) + 1760), u: Module.HEAP32.slice(u >> 2, (u >> 2) + 1760),
-				inv: lines, pop: pr0 >= 0 ? [pr0, pc0, pr1, pc1] : null, cr: cr, cc: cc, con: con };
+				inv: lines, invT: Module.HEAP32.slice(it >> 2, (it >> 2) + ninv), pop: pr0 >= 0 ? [pr0, pc0, pr1, pc1] : null, cr: cr, cc: cc, con: con };
 			T = { scr: F.vr, cr: cr, cc: cc, con: con };
 			var moved = hy !== hero.y || hx !== hero.x;
 			hero.y = hy; hero.x = hx;
@@ -419,8 +491,10 @@
 			lastLevel = lvl;
 		},
 		vis: function (s) {
+			/* lines "M<hex glyph><name>\t<colour>\t<tile>" from the game */
+			visStr = s;
 			RvipWM.visible($('vis'), s.replace(/^([MI])([0-9a-f]{2})/gm, function (m, k, h) { return k + cp(parseInt(h, 16)); })
-				.replace(/\t(\d+)$/gm, function (m, c) { return '\t' + PAL[+c]; }));
+				.replace(/\t(\d+)\t(-?\d+)$/gm, function (m, c, t) { return '\t' + PAL[+c] + '\t' + t; }), visIcon);
 		},
 		/* every top-line message; MAG itself drops a repeat of the last one */
 		msg: function (s) {
@@ -449,7 +523,7 @@
 		sounds: function () { return sounds.slice(); },
 		mode: function () { return L ? L.mode : ''; },
 		toggle: function () { setMode(L.mode === 'text' ? 'tiles' : 'text'); },
-		key: function (atCmd) { if (kind === 'tiles') RvipWM.prompt.wait(atCmd); return events.length ? events.shift() : -1; },
+		key: function (ac) { atCmd = ac; if (kind === 'tiles') RvipWM.prompt.wait(ac); return events.length ? events.shift() : -1; },
 		click: function () { return clickAt; },
 		pending: function () { return events.length ? 1 : 0; },
 		flush: function () { events.length = 0; },
@@ -646,13 +720,21 @@
 		$('btn-new').onclick = newGame;
 		$('btn-help').onclick = toggleHelp;
 		$('help-close').onclick = toggleHelp;
-		$('btn-zoom-in').onclick = function () { zoomMap(1); };
-		$('btn-zoom-out').onclick = function () { zoomMap(-1); };
-		$('btn-tiles').onclick = function () { setMode('tiles'); };
-		$('btn-text').onclick = function () { setMode('text'); };
-		$('btn-more').onclick = function () { autoMore = autoMore ? 0 : 1; renderMore(); Module._web_set_auto_more(autoMore); };
+		$('btn-tiles').onclick = cycleTiles;
+		$('chk-more').onchange = function () { autoMore = this.checked ? 1 : 0; Module._web_set_auto_more(autoMore); };
 		$('btn-restart').onclick = function () { location.reload(); };
-		$('btn-sound').onclick = function () { if (!L) return; L.sound = !L.sound; renderSound(); saveLayout(); };
+		$('chk-sound').onchange = function () { if (!L) return; L.sound = this.checked; saveLayout(); };
+		RvipWM.dropdown($('btn-file'), $('menu-file'));
+		RvipWM.dropdown($('btn-audio'), $('menu-audio'));
+		fetch('fonts.json').then(function (r) { return r.json(); }).then(function (list) {
+			[[$('sel-font'), 'face'], [mapSel, 'mapFace']].forEach(function (a) {
+				list.forEach(function (n) { var o = document.createElement('option'); o.value = n; o.textContent = n.replace(/^Web(Plus|437)_/, '').replace(/_/g, ' '); a[0].appendChild(o); });
+				a[0].value = (L && L[a[1]]) || '';
+			});
+		}).catch(function () { });
+		[[$('sel-font'), 'face'], [mapSel, 'mapFace']].forEach(function (a) {
+			a[0].onchange = function () { if (!L) return; L[a[1]] = this.value; saveLayout(); loadFace(this.value, true); this.blur(); };
+		});
 		document.querySelectorAll('button').forEach(function (b) {
 			b.addEventListener('mousedown', function (e) { e.preventDefault(); });
 		});
