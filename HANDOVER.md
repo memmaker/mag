@@ -358,8 +358,8 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
   `docs/web/magguide.py` and `docs/web/build-docs.py` are gone.
 - **Repos:** this folder = public **memmaker/mag** (remote `memmaker`,
   branch `main`), history without `rvip/`, `web/shots/`, LESSONS.md; the
-  cloud history is private **memmaker/mag-cloud** (`~/Games/mag-cloud`,
-  remote `origin`). Upstream commit `cc36a63`; README with the compare view.
+  cloud history is private **memmaker/mag-cloud** (GitHub only;
+  branch `mac-fixes` there too). Upstream commit `cc36a63`; README with the compare view.
   `web/deploy.sh` checks against `memmaker/main`.
 - **Live:** https://ruzzoli.de/roguelikes/mag/ (`sh web/build.sh && sh
   web/deploy.sh`). Card on https://ruzzoli.de/roguelikes/ (`mag.png`: a
