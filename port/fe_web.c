@@ -21,6 +21,7 @@
 int fe_click_row, fe_click_col;
 int fe_at_cmd;			/* the game waits for a command (prompt line) */
 int fe_auto_more = 1;		/* top-line =-More-= needs no key (web option) */
+static int fe_icons = 1;	/* the page shows tiles (not Tiles: None): item icons */
 extern int port_started;
 
 int tile_for(int l, int c, int *under);
@@ -30,9 +31,9 @@ EM_JS(void, js_init, (const void *font, int ntiles, int auto_more),
 EM_JS(void, js_text, (const void *scr, int cr, int cc, int con),
 	{ Module.mag.text(scr, cr, cc, con); });
 EM_JS(void, js_tiles, (const void *scr, const void *vr, const int *t, const int *u,
-	const void *inv, const void *at, int ninv, int pr0, int pc0, int pr1, int pc1,
+	const void *inv, const void *at, const int *it, int ninv, int pr0, int pc0, int pr1, int pc1,
 	int cr, int cc, int con, int hy, int hx, int lvl),
-	{ Module.mag.tiles(scr, vr, t, u, inv, at, ninv, pr0, pc0, pr1, pc1, cr, cc, con, hy, hx, lvl); });
+	{ Module.mag.tiles(scr, vr, t, u, inv, at, it, ninv, pr0, pc0, pr1, pc1, cr, cc, con, hy, hx, lvl); });
 EM_JS(void, js_msg, (const char *s), { Module.mag.msg(UTF8ToString(s)); });
 EM_JS(void, js_vis, (const char *s), { Module.mag.vis(UTF8ToString(s)); });
 EM_JS(void, js_sound, (const char *s), { Module.mag.sound(UTF8ToString(s)); });
@@ -79,6 +80,13 @@ web_set_auto_more(int on)
 	}
 }
 
+/* Tiles: DawnLike or None (text map): the inventory rows change with it */
+EMSCRIPTEN_KEEPALIVE void
+web_set_icons(int on)
+{
+	fe_icons = on;
+}
+
 /* ---- messages, inventory and visible list (tiles-mode windows) ---- */
 
 /* every top-line message (VISUAL1.C pline) */
@@ -101,6 +109,8 @@ port_msg(const char *m)
 
 static char inv_l[MAXINV][81];
 static unsigned char inv_at[MAXINV];
+static int inv_t[MAXINV];	/* the item's sprite, -1 in text mode */
+int obj_sprite(OBJECT *o);
 static int inv_n;
 
 /* the game waits for a command: fetch what the side windows show (game
@@ -117,21 +127,28 @@ fe_idle(void)
 
 	fe_at_cmd = 1;
 	for (inv_n = 0, o = inv; o < &inv[numinv] && inv_n < MAXINV; o++, inv_n++) {
-		snprintf(inv_l[inv_n], 81, "%s", form(o, NO));
+		/* icons: "a)   name", the page centres the sprite on cols 2-4;
+		   text: "a) ! name", the item's own symbol */
+		char *f = form(o, NO);
+		if (fe_icons)
+			snprintf(inv_l[inv_n], 81, "%.2s   %s", f, f + 3);
+		else
+			snprintf(inv_l[inv_n], 81, "%.2s %c %s", f, CITEMS[o->o_type], f + 3);
+		inv_t[inv_n] = fe_icons ? obj_sprite(o) : -1;
 		inv_at[inv_n] = o->o_type + 1 + (o->o_type > 6);	/* pr_obj O_COLORINV */
 	}
 	*p = 0;
 	for (m = mons; m < &mons[nummons] && p < e; m++) {
 		int l0 = scrline(m->m_d), c0 = scrcol(m->m_d);
 		if (!(m->m_data & M_DEAD) && (unsigned char)optscr[0][l0][c0] == (unsigned char)m->m_perm->p_letter)
-			p += sprintf(p, "M%02x%.60s\t%d\n", (unsigned char)m->m_perm->p_letter,
-				m->m_perm->p_name, m->m_perm->p_data & 15);
+			p += sprintf(p, "M%02x%.60s\t%d\t%d\n", (unsigned char)m->m_perm->p_letter,
+				m->m_perm->p_name, m->m_perm->p_data & 15, mon_tile[m->m_perm - pmon]);
 	}
 	for (l = lobjs; l < &lobjs[numlobjs] && p < e; l++) {
 		int l0 = scrline(l->l_d), c0 = scrcol(l->l_d);
 		if ((unsigned char)optscr[0][l0][c0] == (unsigned char)CITEMS[l->l_o.o_type])
-			p += sprintf(p, "I%02x%.80s\t%d\n", (unsigned char)CITEMS[l->l_o.o_type],
-				obj_str(&l->l_o), obj_color(&l->l_o) & 15);
+			p += sprintf(p, "I%02x%.80s\t%d\t%d\n", (unsigned char)CITEMS[l->l_o.o_type],
+				obj_str(&l->l_o), obj_color(&l->l_o) & 15, obj_sprite(&l->l_o));
 	}
 	for (i = 0; vis[i]; i++)
 		if ((unsigned char)vis[i] > 126)
@@ -187,7 +204,7 @@ fe_present(void)
 		r0 = pop_r0, c0 = pop_c0, r1 = pop_r1, c1 = pop_c1;
 	else if (vis_page != 0 && !page_bbox(vis_page, &r0, &c0, &r1, &c1))
 		r0 = -1;
-	js_tiles(vram[0], vram[vis_page], map_t, map_u, inv_l, inv_at, inv_n,
+	js_tiles(vram[0], vram[vis_page], map_t, map_u, inv_l, inv_at, inv_t, inv_n,
 		r0, c0, r1, c1, cur_row[vis_page], cur_col[vis_page], cur_on,
 		scrline(u.u_d) - 1, scrcol(u.u_d), u.u_dlevel);
 }
