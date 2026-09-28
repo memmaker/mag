@@ -43,6 +43,9 @@ eat, `q` quaff, `r` read, `z` zap, `w` wield, `W` wear, `t` throw/fire,
 Build: `sh web/build.sh` -> `web/dist` (Homebrew emscripten, see
 `web/toolchain.sh`). Native headless test build: `make -C port [ASAN=1]`.
 Browser tests: `node web/tests/stage1.cjs` ... `stage6.cjs` (Playwright).
+They serve `web/dist` as `mag/` next to the shared `rvip-*.js` from
+`../rvip-tools/web`; set `PLAYWRIGHT` to a Playwright module directory when it
+is not in `/opt/node22` (e.g. the one `npx playwright` unpacked under `~/.npm/_npx`).
 Deploy: `sh web/deploy.sh`. Notes: `HANDOVER.md`.
 
 Credits and licence: MAG by Michael J. Teixeira, copyright 1986, 87, 88:

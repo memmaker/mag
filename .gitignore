@@ -3,3 +3,4 @@ web/obj/
 port/mag-native
 __pycache__/
 web/sound/
+web/shots/

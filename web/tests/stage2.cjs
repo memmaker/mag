@@ -24,15 +24,16 @@ async function play(seed, port) {
 	await t.type('Tester'); await t.press('Enter');
 	let s = await t.waitFor(/Level: 1 /);
 	const c0 = cells(s);
-	let fights = 0, zs = 0, stairs = 0, max = 0, same = 0;
+	let fights = 0, zs = 0, stairs = 0, max = 0, same = 0, seen = false;
 	for (let i = 0; i < 160; i++) {
 		s = await t.screen();
 		if (/Level: 2 /.test(s) || /Hall Of Heroes|R\.I\.P/.test(s)) break;
 		max = Math.max(max, cells(s));
+		seen = seen || /»/.test(s);   /* once the walk arrives, the player hides the » */
 		const m = adjacentMonster(s);
 		same = m ? same + 1 : 0;
 		if (m && same < 5) { fights++; await t.press(m); }
-		else if (i >= 25 && /»/.test(s)) { stairs++; await t.press('>'); await t.idle(400); }
+		else if (i >= 25 && seen) { stairs++; await t.press('>'); await t.idle(400); }
 		else { zs++; await t.press('Z'); await t.idle(400); }
 		await t.press('Escape');
 		if (i === 3) await t.shot('s2-exploring-' + seed);

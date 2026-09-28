@@ -23,18 +23,18 @@ const { start } = require('./lib.cjs');
 		await t.waitFor(/What is your name/);
 		await t.type('Tester'); await t.press('Enter');
 		await t.waitFor(/Level: 1 /);
-		check(await t.page.evaluate(() => document.getElementById('btn-sound').textContent) === 'Sound: off', 'Sound is off by default');
+		check(await t.page.evaluate(() => document.getElementById('chk-sound').checked) === false, 'Sound is off by default');
 		for (let i = 0; i < 30; i++) { await t.press('Z'); await t.idle(250); await t.press('Escape'); }
 		const ev1 = await t.page.evaluate(() => Module.mag.sounds());
 		check(ev1.length > 0, 'the game sends sound events: ' + [...new Set(ev1)].join(' '));
 		check(reqs.length === 0, 'no samples loaded while sound is off');
-		await t.page.click('#btn-sound'); await t.idle(200);
+		await t.page.click('#btn-audio'); await t.page.click('#chk-sound'); await t.press('Escape');   /* Audio ▾ → Sound effects */ await t.idle(200);
 		await t.press('i'); await t.idle(300); await t.press('a'); await t.idle(1500);
 		for (let i = 0; i < 10; i++) { await t.press('Z'); await t.idle(250); await t.press('Escape'); }
 		check(reqs.length > 0, 'sound on: samples requested: ' + [...new Set(reqs)].join(' '));
 		await t.idle(1000);
 		await t.page.reload(); await t.waitFor(/Welcome back/, 20000);
-		check(await t.page.evaluate(() => document.getElementById('btn-sound').textContent) === 'Sound: on', 'the Sound setting survives a reload');
+		check(await t.page.evaluate(() => document.getElementById('chk-sound').checked) === true, 'the Sound setting survives a reload');
 		check(t.errors.length === 0, 'no page errors ' + t.errors.join(' | '));
 		/* Docs page */
 		await t.page.goto('file://' + path.join(__dirname, '..', '..', 'docs', 'web', 'mag-docs.html'));

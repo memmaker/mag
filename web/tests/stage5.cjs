@@ -36,7 +36,7 @@ const { start } = require('./lib.cjs');
 			check(r[0] > 0 && r[1] > 0, `resize ${W}x${H}: map canvas ${r[0]}x${r[1]} in a ${r[2]} px window`);
 		}
 		/* zoom survives a reload */
-		await t.page.click('#btn-zoom-in'); await t.idle(900);
+		await t.page.click('#t-map .t button[title="Bigger text"]', { force: true })   /* A+ on the Map title bar */; await t.idle(900);
 		const z = await t.page.evaluate(() => document.querySelector('#t-map canvas').style.width);
 		check(await hasSave(), 'autosave exists');
 		await t.page.reload();
