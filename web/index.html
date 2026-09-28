@@ -32,9 +32,10 @@
 		padding: 2px 10px; font: inherit; cursor: pointer; }
 	button:hover { border-color: var(--accent); }
 	button.on { background: var(--accent); color: #000; border-color: var(--accent); }
-	#t-text { background: #000; border: 0; align-items: center; justify-content: center; }
-	#t-text .body { display: flex; align-items: center; justify-content: center; width: 100%; }
-	#t-text canvas { image-rendering: pixelated; }
+	#t-text { background: #000; border: 0; }
+	#t-text .body { display: flex; overflow: auto; width: 100%; }
+	#t-text pre { margin: auto; padding: 0; line-height: 1; cursor: default; }
+	#t-text pre > div { min-height: 1em; }   /* the PC screen: a fixed 80x25 grid (mag.js) */
 	.win[hidden], .split[hidden] { display: none; }
 	#game.txt .win:not(#t-text), #game.txt .wm-bar { display: none !important; }
 	#status { position: fixed; left: 50%; top: 40px; transform: translateX(-50%); z-index: 5;
@@ -53,7 +54,15 @@
 	.win > .body { flex: 1; min-height: 0; overflow: hidden; }
 	.win canvas { display: block; }
 	#pop { position: absolute; z-index: 3; background: #000; border: 1px solid var(--dim); box-shadow: 0 6px 24px rgba(0,0,0,.7); }
-	#pop canvas { display: block; }
+	/* text windows: lines from the game (mag.js), sized by the WM's A−/A+ on the body */
+	.txt { margin: 0; padding: 2px 4px; font-family: var(--tf, monospace); font-size: 1em; line-height: 1.3; color: #aaaaaa; white-space: pre; }
+	.txt > div { min-height: 1.3em; }
+	.txt .cur, .wm-list .cur { box-shadow: inset 0 -2px currentColor; }
+	#t-inv .body > div { white-space: pre; font-family: var(--tf, monospace); color: #aaaaaa; }
+	#vis { font-family: var(--tf, monospace); }
+	.wm-ic.mag-ic { font-size: 1.2em; width: 1em; height: 1em; background: url(tiles-dawn.png) 0 0 / 32em auto; image-rendering: pixelated; }
+	#pop { overflow: auto; }
+	#pop .txt { padding: 1ch; }
 	#pop[hidden] { display: none; }
 	.split { position: absolute; background: var(--gut); z-index: 2; touch-action: none; }
 	.split.v { cursor: col-resize; }
@@ -125,12 +134,12 @@
 
 <div id="game" hidden>
 	<div class="win" id="t-map"><div class="t"><span class="name">Map</span></div><div class="body"><canvas></canvas></div></div>
-	<div class="win" id="t-msg"><div class="t"><span class="name">Messages</span></div><div class="body"><canvas></canvas></div></div>
-	<div class="win" id="t-stat"><div class="t"><span class="name">Status</span></div><div class="body"><canvas></canvas></div></div>
-	<div class="win" id="t-inv"><div class="t"><span class="name">Inventory</span></div><div class="body"><canvas></canvas></div></div>
+	<div class="win" id="t-msg"><div class="t"><span class="name">Messages</span></div><div class="body"><pre class="txt"></pre></div></div>
+	<div class="win" id="t-stat"><div class="t"><span class="name">Status</span></div><div class="body"><pre class="txt"></pre></div></div>
+	<div class="win" id="t-inv"><div class="t"><span class="name">Inventory</span></div><div class="body wm-list"></div></div>
 	<div class="win" id="t-vis"><div class="t"><span class="name">Visible</span></div><div class="body wm-list" id="vis"></div></div>
-	<div id="pop" hidden><canvas></canvas></div>
-	<div class="win" id="t-text" hidden><div class="body"><canvas></canvas></div></div>
+	<div id="pop" hidden><pre class="txt"></pre></div>
+	<div class="win" id="t-text" hidden><div class="body"><pre class="txt"></pre></div></div>
 </div>
 
 <div id="help" hidden>

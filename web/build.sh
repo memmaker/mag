@@ -22,7 +22,7 @@ emcc -O2 "$OBJ"/*.o \
 	-o "$OUT/mag-core.js" \
 	-sASYNCIFY -sASYNCIFY_STACK_SIZE=65536 -sSTACK_SIZE=1048576 \
 	-sALLOW_MEMORY_GROWTH -sEXPORTED_RUNTIME_METHODS=FS,IDBFS,HEAPU8,HEAPU16,HEAP32,UTF8ToString,addRunDependency,removeRunDependency \
-	-sEXPORTED_FUNCTIONS=_main,_web_set_auto_more,_web_set_icons \
+	-sEXPORTED_FUNCTIONS=_main,_web_set_auto_more,_web_set_icons,_web_set_textmode,_web_vram \
 	-sFORCE_FILESYSTEM -lidbfs.js -sENVIRONMENT=web -sEXIT_RUNTIME=0 ${EMFLAGS:-}
 rm -rf "$OBJ"
 RVIP_WM=${RVIP_WM:-$HOME/Games/rvip-tools/web}

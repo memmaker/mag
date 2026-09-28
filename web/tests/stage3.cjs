@@ -33,11 +33,16 @@ const { start } = require('./lib.cjs');
 		const row = s.split('\n').findIndex(l => /Your title/.test(l));
 		/* tiles mode: the menu is a pop-up over the map (rows/cols of the text screen) */
 		await t.idle(200);
-		const col = s.split('\n')[row].indexOf('Your title') + 2;
-		const xy = await t.page.evaluate(([row, col]) => {
-			const el = document.getElementById('pop'), P = el.pop, b = el.querySelector('canvas').getBoundingClientRect();
-			return { x: b.left + (P.pad + (col - P.c0 + 0.5) * P.cw) * P.sc, y: b.top + (P.pad + (row - P.r0 + 0.5) * P.ch) * P.sc };
-		}, [row, col]);
+		/* the pop-up is HTML text (RVIP W0 rule 6): click the words in its row */
+		const xy = await t.page.evaluate(() => {
+			const d = [...document.querySelectorAll('#pop pre > div')].find(e => /Your title/.test(e.textContent));
+			const w = document.createTreeWalker(d, NodeFilter.SHOW_TEXT); let n;
+			while ((n = w.nextNode()) && n.data.indexOf('Your title') < 0);
+			const r = document.createRange(), i = n.data.indexOf('Your title');
+			r.setStart(n, i + 2); r.setEnd(n, i + 3);
+			const b = r.getBoundingClientRect();
+			return { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+		});
 		await t.page.mouse.click(xy.x, xy.y);
 		await t.idle(300);
 		s = await t.screen();

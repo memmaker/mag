@@ -433,3 +433,15 @@ Next: stage 9 (graveyard + leaderboard).
   it is the escape path above with the Sapphire in the pack. Native `make -C port` fails on the
   Mac (Apple clang: incompatible function pointer errors in VARS.H; the Makefile was written for
   Linux gcc), web build fine.
+
+### W0 rule 6 (text windows as HTML) — 2026-09-28
+
+- `port/fe_web.c` sends Messages (history kept in C, repeats "(xN)", row colours), Status
+  (page-0 rows 23-24), Inventory (row colour + tile), the pop-up (port boxes and full text
+  pages at the original's place, box background from the game) and the PC screen (title,
+  setup, Tiles: PC screen) as trimmed lines: `be_line`/`be_rows`, CGA colour runs
+  `"\x05#fg[/#bg]"`…`"\x06"`, CP437 as UTF-8, one `set_cursor()`. The map is the only canvas;
+  the VGA font sheets, measure() and the anim pixel compare are gone (`tile_anim[]` in
+  `tiles.h`, from `mkdawn.py`). PC screen = `<pre>` in the IBM VGA web font at the Messages size.
+- Blink attribute is not shown (steady text). Native build: `make -C port CC=clang` (macOS gcc = clang
+  without the Makefile's clang flags fails on vars.h, pre-existing).
