@@ -1,5 +1,5 @@
 /* Stage 2: Z explores (the map grows, one step a turn), > walks to the known
- * down staircase and takes it. Monsters in the way are fought by walking
+ * down staircase and stops on it, the next > takes it. Monsters in the way are fought by walking
  * into them (the explorer never attacks by itself). SEED env = dungeon. */
 const { start } = require('./lib.cjs');
 const DIRS = [[-1, -1, 'y'], [-1, 0, 'k'], [-1, 1, 'u'], [0, -1, 'h'], [0, 1, 'l'], [1, -1, 'b'], [1, 0, 'j'], [1, 1, 'n']];
@@ -50,7 +50,7 @@ async function play(seed, port) {
 		const a = await play(process.env.EXPLORE_SEED || 3, 8733);
 		check(a.max > a.c0 + 100, `seed 3: explore grew the map ${a.c0} -> ${a.max} cells (${a.zs} Z, ${a.fights} attacks)`);
 		const b = await play(process.env.STAIRS_SEED || 1, 8734);
-		check(b.level2, `seed 1: > walked to the known stairs and went down (${b.stairs} >, ${b.fights} attacks)`);
+		check(b.level2, `seed 1: > walked to the known stairs, > again went down (${b.stairs} >, ${b.fights} attacks)`);
 		check(a.errors.length + b.errors.length === 0, 'no page errors ' + a.errors.concat(b.errors).join(' | '));
 	} catch (e) { console.log('FAIL ' + e.message); ok = false; }
 	process.exit(ok ? 0 : 1);

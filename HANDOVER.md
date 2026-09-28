@@ -166,14 +166,15 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
   on the next step -> "There's a jackal in the way." (never attacks).
 - **Stairs:** `>`/`<` on the right stairs (or in wizard mode) run the
   original `stepdown`/`stepup`; elsewhere they walk to the nearest *known*
-  staircase (`D_STAIRCASE`, `DNSTAIR`/`UPSTAIR`) and take it on arrival;
+  staircase (`D_STAIRCASE`, `DNSTAIR`/`UPSTAIR`) and stop on it (press the
+  key again to take it: auto-stairs only walks);
   `+`/`-` keep the original meaning. Walking to the level-1 up staircase
   stops there with "These stairs lead out of the dungeon. Press < to leave."
 - **Tests:** native `python3 port/tests/explore_stairs.py [seeds]` (needs
   `make -C port ASAN=1`; `MAG_KEYS` escapes `\^W` = Ctrl-W); browser
   `node web/tests/stage2.cjs` (page `?seed=N` passes MAG's undocumented `sN`
   argument: seed 3 explores 117 -> ~290 cells, seed 1 walks to the stairs
-  and reaches level 2; it fights adjacent monsters by walking into them).
+  and takes them with a second `>` to reach level 2; it fights adjacent monsters by walking into them).
   Wizard mode for tests: `^W` + `frakola`, `#` maps walls/stairs only (room
   floors stay unknown, so the walk can't use them).
 - Help screens (`data/mkhelp.py`) and the page hint mention `Z` and `<`/`>`.
