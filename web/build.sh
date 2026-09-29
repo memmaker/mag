@@ -26,10 +26,8 @@ emcc -O2 "$OBJ"/*.o \
 rm -rf "$OBJ"
 RVIP_WM=${RVIP_WM:-$HOME/Games/rvip-tools/web}
 cp ../web/index.html ../web/mag.js tiles-dawn.png tiles-dawn-1.png "$OUT/"
-# sound samples: web/sounds.py fills web/sound from the Dubtrain pack (Mac;
-# not committed, as for Larn/Umoria); without the pack the page stays silent
-python3 ../web/sounds.py >/dev/null || true
-if [ -d ../web/sound ]; then cp -r ../web/sound "$OUT/sound"; fi
+# sound effects, synthesized for the events the port names (port_sound())
+(cd .. && python3 web/mksounds.py web/dist/sound)
 
 # font choosers: the index page's fonts/*.woff (loaded from ../fonts/)
 FONTS=${RVIP_FONTS:-$HOME/Games/roguelikes-index/fonts}

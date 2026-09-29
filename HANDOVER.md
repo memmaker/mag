@@ -29,8 +29,11 @@ cloud session (the old private `memmaker/mag-cloud` repo is deleted).
 - `sh web/build.sh` (emcc; `web/toolchain.sh`): each `src/*.C` with `-x c
   -std=gnu89 -fcommon -w -funsigned-char -DPORT -include port.h`, Asyncify, IDBFS
   on `/mag` (cwd: `save/`, `options.mag`, `heroes.mag`, `web-layout.json`,
-  `web.cfg` = auto_more). Loads the shared `../rvip-*.js`. Runs `web/sounds.py`
-  (Dubtrain pack in `~/Downloads`, samples not committed; missing = silent).
+  `web.cfg` = auto_more). Loads the shared `../rvip-*.js`. Runs `web/mksounds.py`
+  (synthesizes `dist/sound/<event>.wav`, PC-speaker square waves made for MAG).
+- Stage 6 sound search (2026-09-29): MAG's only sound is the DOS bell. Donnie Russell's
+  MAGHD/JSMikesAdvGame ports have effects of unknown origin and no licence: not used.
+  No music.
 - `sh web/deploy.sh` (guard: clean tree, HEAD == `memmaker/main`).
 - Native headless: `make -C port CC=clang [ASAN=1]` (plain macOS gcc fails on
   vars.h); `port/fe_tty.c` env `MAG_KEYS`, `MAG_RANDOM=N`, `MAG_SEED`,

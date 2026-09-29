@@ -31,8 +31,9 @@ and a few `port:` bug fixes):
   no `=-More-=` stops (auto_more) (`port/rvip.c`, `port/menu.c`).
 - **Tiles**: DawnLike only, 100% of the 323 slots by name + same-set
   stand-ins (`port/mkdawn.py`, `port/tiles.c`), nearest-neighbour.
-- **Sound**: events named by the game code (`port_sound()`), Dubtrain
-  Angband samples (`web/sounds.py`), off by default.
+- **Sound**: events named by the game code (`port_sound()`), PC-speaker
+  style effects synthesized for MAG at build time (`web/mksounds.py`),
+  off by default.
 
 Controls: `hjklyubn` / arrows / keypad walk and attack, Shift+direction
 runs, `Z` explore, `>` `<` stairs, Enter command menu, `i` inventory, `e`
@@ -55,5 +56,5 @@ every source file); this port is non-commercial. Map sprites: DawnLike by
 DragonDePlatino with DawnBringer's palette (CC BY 4.0), sprite names from
 DawnLikeAtlas by Tommy Ettinger (CC BY 4.0), see `port/dawnlike/CREDITS.txt`.
 Text font: IBM VGA 9x16 from The Oldschool PC Font Resource by VileR
-(CC BY-SA 4.0). Sound samples: Dubtrain's Angband sound pack. Web port:
+(CC BY-SA 4.0). Sound effects: synthesized for this port. Web port:
 memmaker.

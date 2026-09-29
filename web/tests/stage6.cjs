@@ -6,7 +6,7 @@ const { start } = require('./lib.cjs');
 (async () => {
 	let ok = true;
 	const check = (c, m) => { console.log((c ? 'ok   ' : 'FAIL ') + m); if (!c) ok = false; };
-	/* test samples: a 50 ms silent wav per event (the real ones come from web/sounds.py) */
+	/* test samples: a 50 ms silent wav per event (the real ones come from web/mksounds.py) */
 	const dir = path.join(__dirname, '..', 'dist', 'sound');
 	fs.mkdirSync(dir, { recursive: true });
 	const n = 2205, wav = Buffer.alloc(44 + n * 2);
