@@ -79,10 +79,16 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
 
 - **Case R, R-PC notes** (DOS roguelike on the BIOS text screen). Game:
   "MAG version PC-1.1, Summer 1989 - by Michael J. Teixeira" (`version()`
-  in `src/COMMAND3.C`). No docs in the drop: `data/mkhelp.py` rebuilds the
-  missing `help/help.1-7` and `pics/header|tomb|herobox` from the game's own
-  tables and the coordinates the code draws into them (MAIN.C refuses to
-  start without them).
+  in `src/COMMAND3.C`). The source drop had no data files; since
+  2026-09-29 `data/help/help.1-7` and `data/pics/{header,herobox,tomb}` are the
+  originals from the 1988 DOS release (SourceForge `mikesadvgame`,
+  `Original_Dos_Version_from_1988.zip`, `game/HELP`, `game/PICS`), lowercased,
+  CRLF -> LF and the DOS `^Z` EOF stripped (the port's `fopen(,"r")` keeps both),
+  CP437 bytes as they are. They replace the earlier `data/mkhelp.py` rebuild
+  (deleted; the port's `Z`/`<`/`>` hints are no longer on the F1 screens, the
+  Enter menu and Help button list them). MAIN.C refuses to start without them.
+  The zip's source (`MAG_SRC_...ZIP`, 36 files) is byte-identical to `src/` in
+  the upstream commit `cc36a63`.
 - **Port layer** (`port/`, game code untouched except `#ifdef PORT` hooks):
   `port/port.h` is force-included (`-include port.h`) and replaces the Microsoft
   C / DOS headers (`port/inc/{dos,conio,graph,io,process,malloc,memory}.h`);
@@ -177,7 +183,7 @@ every monster/object/feature glyph MAG draws (count them from `MONSTER.H`,
   and takes them with a second `>` to reach level 2; it fights adjacent monsters by walking into them).
   Wizard mode for tests: `^W` + `frakola`, `#` maps walls/stairs only (room
   floors stay unknown, so the walk can't use them).
-- Help screens (`data/mkhelp.py`) and the page hint mention `Z` and `<`/`>`.
+- The page hint mentions `Z` and `<`/`>` (the F1 screens are the originals since 2026-09-29).
 
 ### Stage 3 — Enter menu + inventory (done, 2026-09-26)
 
@@ -445,3 +451,11 @@ Next: stage 9 (graveyard + leaderboard).
   `tiles.h`, from `mkdawn.py`). PC screen = `<pre>` in the IBM VGA web font at the Messages size.
 - Blink attribute is not shown (steady text). Native build: `make -C port CC=clang` (macOS gcc = clang
   without the Makefile's clang flags fails on vars.h, pre-existing).
+
+### Original DOS release (2026-09-29)
+
+- `Original_Dos_Version_from_1988.zip` (SourceForge `mikesadvgame`, user-approved download):
+  F1 help, tomb, title and Hall of Heroes files now original (see Stage 1), `data/mkhelp.py`
+  gone. Verified in the browser pane: title, F1 pages 1-4 + 5 (wizard), F2 Return pages 6-7
+  (symbols/letters line up with the text), tombstone. README.DOC ("Ver PC-1.1") is the
+  shrine manual (`shrine/mag/readme.txt`).

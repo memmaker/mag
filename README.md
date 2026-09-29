@@ -21,8 +21,8 @@ and a few `port:` bug fixes):
   video on two 80x25 pages, int 16h keys with scan codes, `conio`/`dos.h`
   stand-ins (`port/port.h`, `port/inc/`). Emscripten + Asyncify, saves in the
   browser's IndexedDB with autosave and a build stamp (the saves hold raw
-  pointers). The missing help and picture files are rebuilt from the game's
-  own tables (`data/mkhelp.py`).
+  pointers). The help and picture files (`data/`) are the originals from the
+  1988 DOS release (line ends and the DOS EOF byte converted).
 - **Windows** (`web/mag.js`, shared `rvip-wm.js`): Map (tiles), Messages
   with history, Status, Inventory and Visible, pop-ups over the map; Text
   mode = the original VGA screen (IBM VGA 9x16 font, CGA colours), F12.

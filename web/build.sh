@@ -6,7 +6,6 @@ set -e
 cd "$(dirname "$0")/../port"
 OUT=../web/dist
 rm -rf "$OUT" && mkdir -p "$OUT"
-python3 ../data/mkhelp.py
 CFLAGS="-O2 -std=gnu89 -fcommon -w -funsigned-char -DPORT -Iinc -I. -include port.h \
 	-Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion \
 	-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration ${EMCFLAGS:-}"

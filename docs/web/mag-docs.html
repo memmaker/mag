@@ -9,14 +9,17 @@
 	#bar h1 { font-size: 14px; margin: 0 8px 0 0; color: var(--accent); letter-spacing: .04em; }
 	#bar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 4px; flex: none; }
 	#bar .sp { flex: 1; }
-	#bar .hint { color: var(--dim);  text-overflow: ellipsis; }
-	button { background: #22222a; color: var(--text); border: 1px solid var(--line); border-radius: 4px;
+	#bar .hint { color: var(--dim);  text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+	#bar .hint kbd { font-size: 11px; line-height: 1.3; min-width: 0; }
+	.win > .t .wm-btns select { font-size: 11px; height: 16px; padding: 0 2px; background: #22222a; color: var(--text); border: 1px solid var(--line); border-radius: 3px; }
+	button, #bar select { background: #22222a; color: var(--text); border: 1px solid var(--line); border-radius: 4px;
 		padding: 2px 10px; font: inherit; cursor: pointer; }
 	button:hover { border-color: var(--accent); }
 	button.on { background: var(--accent); color: #000; border-color: var(--accent); }
-	#t-text { background: #000; border: 0; align-items: center; justify-content: center; }
-	#t-text .body { display: flex; align-items: center; justify-content: center; width: 100%; }
-	#t-text canvas { image-rendering: pixelated; }
+	#t-text { background: #000; border: 0; }
+	#t-text .body { display: flex; overflow: auto; width: 100%; }
+	#t-text pre { margin: auto; padding: 0; line-height: 1; cursor: default; }
+	#t-text pre > div { min-height: 1em; }   /* the PC screen: a fixed 80x25 grid (mag.js) */
 	.win[hidden], .split[hidden] { display: none; }
 	#game.txt .win:not(#t-text), #game.txt .wm-bar { display: none !important; }
 	#status { position: fixed; left: 50%; top: 40px; transform: translateX(-50%); z-index: 5;
@@ -32,13 +35,18 @@
 	.win > .t .name:hover { color: var(--text); }
 	.win > .t input { width: 100%; font: inherit; color: var(--text); background: #000; border: 1px solid var(--accent);
 		border-radius: 2px; padding: 0 3px; height: 16px; outline: none; }
-	.win > .t .zoom { flex: none; display: flex; gap: 2px; visibility: hidden; }
-	.win > .t:hover .zoom { visibility: visible; }
-	.win > .t .zoom button { padding: 0 5px; font-size: 11px; line-height: 14px; height: 16px; }
 	.win > .body { flex: 1; min-height: 0;  }
 	.win canvas { display: block; }
 	#pop { position: absolute; z-index: 3; background: #000; border: 1px solid var(--dim); box-shadow: 0 6px 24px rgba(0,0,0,.7); }
-	#pop canvas { display: block; }
+	/* text windows: lines from the game (mag.js), sized by the WM's A−/A+ on the body */
+	.txt { margin: 0; padding: 2px 4px; font-family: var(--tf, monospace); font-size: 1em; line-height: 1.3; color: #aaaaaa; white-space: pre; }
+	.txt > div { min-height: 1.3em; }
+	.txt .cur, .wm-list .cur { box-shadow: inset 0 -2px currentColor; }
+	#t-inv .body > div { white-space: pre; font-family: var(--tf, monospace); color: #aaaaaa; }
+	#vis { font-family: var(--tf, monospace); }
+	.wm-ic.mag-ic { font-size: 1.2em; width: 1em; height: 1em; background: url(tiles-dawn.png) 0 0 / 32em auto; image-rendering: pixelated; }
+	#pop { overflow: auto; }
+	#pop .txt { padding: 1ch; }
 	#pop[hidden] { display: none; }
 	.split { position: absolute; background: var(--gut); z-index: 2; touch-action: none; }
 	.split.v { cursor: col-resize; }
@@ -96,9 +104,9 @@ Rogue source variant. Teixeira wrote a UNIX version around 1985 and the DOS vers
 freeware on bulletin boards and shareware disks, with the C source (Microsoft C, BIOS
 video and keyboard calls). RogueBasin files it as an early Rogue clone; the CRPG Addict
 played it in 1988's list.</p>
-<p>The source drop this port starts from has no help or picture files (the game refuses to
-start without them): the port rebuilds them from the game's own tables and the screen
-positions the code writes to, and says so on the help screens.</p>
+<p>The F1 help screens, the title box, the tombstone and the Hall of Heroes frame are the
+original files from the 1988 DOS release (SourceForge <em>mikesadvgame</em>), which also
+carries the instruction guide README.DOC (Ver PC-1.1).</p>
 <h2 id="h-keys">Keyboard controls</h2><div class="box key"><h3>The keys to remember</h3><dl><dt><kbd>F1</kbd></dt><dd>In-game help screens</dd><dt><kbd>Z</kbd></dt><dd>Auto-explore: walk to what you have not seen yet</dd><dt><kbd>Enter</kbd></dt><dd>Menu of all commands</dd><dt><kbd>i</kbd></dt><dd>Inventory with a cursor: letter = main action, Enter = all actions</dd><dt><kbd>&gt; &lt;</kbd></dt><dd>Take the stairs, or walk to the nearest known staircase</dd><dt><kbd>R</kbd></dt><dd>Save and leave (the game also autosaves)</dd><dt><kbd>F12</kbd></dt><dd>Tiles / text</dd></dl></div><h3>Essential keys</h3><div class="grid"><div class="box"><h3>Moving</h3><dl><dt><kbd>h j k l y u b n</kbd></dt><dd>Walk (arrows, keypad, Home/End/PgUp/PgDn too)</dd><dt><kbd>Shift</kbd><span class="plus">+</span><kbd>dir</kbd></dt><dd>Run</dd><dt><kbd>f dir</kbd></dt><dd>Find: move until something is reached</dd><dt><kbd>Z</kbd></dt><dd>Explore (web port)</dd><dt><kbd>&gt; &lt;</kbd></dt><dd>Stairs down / up; elsewhere: walk to the known stairs</dd><dt><kbd>s</kbd></dt><dd>Search once</dd><dt><kbd>.</kbd></dt><dd>Rest a turn</dd></dl></div><div class="box"><h3>Things you carry</h3><dl><dt><kbd>i</kbd></dt><dd>Inventory (letter = use, Enter = all actions)</dd><dt><kbd>g</kbd></dt><dd>Get</dd><dt><kbd>d</kbd></dt><dd>Drop</dd><dt><kbd>e</kbd></dt><dd>Eat</dd><dt><kbd>q</kbd></dt><dd>Quaff</dd><dt><kbd>r</kbd></dt><dd>Read</dd><dt><kbd>z</kbd></dt><dd>Zap</dd><dt><kbd>w</kbd></dt><dd>Wield</dd><dt><kbd>t</kbd></dt><dd>Throw / fire</dd><dt><kbd>W</kbd></dt><dd>Wear armour</dd><dt><kbd>x</kbd></dt><dd>Swap to the secondary weapon</dd></dl></div><div class="box"><h3>Information and the game</h3><dl><dt><kbd>Enter</kbd></dt><dd>Menu of every command (web port)</dd><dt><kbd>F1</kbd></dt><dd>The help screens</dd><dt><kbd>Ctrl+R</kbd></dt><dd>Previous messages</dd><dt><kbd>v</kbd></dt><dd>What is here</dd><dt><kbd>F</kbd></dt><dd>Hunger</dd><dt><kbd>o</kbd></dt><dd>Options</dd><dt><kbd>R</kbd></dt><dd>Save and leave</dd><dt><kbd>Q</kbd></dt><dd>Quit</dd></dl></div></div><details><summary>Complete key list (50 commands)</summary><div class="all"><div><kbd>h j k l y u b n</kbd><span>Walk one step (also the arrow keys, Home, End, PgUp, PgDn, keypad)</span></div><div><kbd>H J K L Y U B N</kbd><span>Run until something interesting happens</span></div><div><kbd>f + direction</kbd><span>Find: move in a direction until you reach something</span></div><div><kbd>.</kbd><span>Rest one turn</span></div><div><kbd>:</kbd><span>Rest several turns (F8)</span></div><div><kbd>s</kbd><span>Search for secret doors and traps</span></div><div><kbd>;</kbd><span>Search several turns (F7)</span></div><div><kbd>&gt;</kbd><span class="or">or</span><kbd>+</kbd><span>Go down a staircase</span></div><div><kbd>&lt;</kbd><span class="or">or</span><kbd>-</kbd><span>Go up a staircase</span></div><div><kbd>Z</kbd><span>Explore: walk to what you have not seen (web port)</span></div><div><kbd>&gt; &lt;</kbd><span>Not on stairs: walk to the nearest known staircase (web port)</span></div><div><kbd>Enter</kbd><span>Menu of every command (web port)</span></div><div><kbd>i</kbd><span class="or">or</span><kbd>F3</kbd><span>Inventory</span></div><div><kbd>g</kbd><span>Get what is lying here</span></div><div><kbd>d</kbd><span>Drop something</span></div><div><kbd>e</kbd><span>Eat</span></div><div><kbd>q</kbd><span>Quaff a potion</span></div><div><kbd>r</kbd><span>Read a scroll</span></div><div><kbd>z</kbd><span>Zap a wand, staff or rod</span></div><div><kbd>w</kbd><span>Wield a weapon</span></div><div><kbd>t</kbd><span>Throw (fire arrows with a bow)</span></div><div><kbd>W</kbd><span>Wear or take off armour</span></div><div><kbd>S</kbd><span>Strap on or unstrap a shield</span></div><div><kbd>p</kbd><span>Put on or remove a ring</span></div><div><kbd>x</kbd><span>Swap in the secondary weapon</span></div><div><kbd>X</kbd><span>Choose the secondary weapon</span></div><div><kbd>Ctrl+U</kbd><span>Use a miscellaneous item</span></div><div><kbd>I</kbd><span>Ignite a torch</span></div><div><kbd>E</kbd><span>Extinguish a torch</span></div><div><kbd>Ctrl+K</kbd><span>Unlock a door with a key</span></div><div><kbd>c</kbd><span>Call (name) a kind of object</span></div><div><kbd>a</kbd><span class="or">or</span><kbd>F5</kbd><span>Objects you know</span></div><div><kbd>C</kbd><span class="or">or</span><kbd>P</kbd><span>How full your pack is</span></div><div><kbd>v</kbd><span class="or">or</span><kbd>F6</kbd><span>View: describe what you can see here</span></div><div><kbd>Ctrl</kbd><span class="plus">+</span><kbd>H</kbd><span class="or">or</span><kbd>F2</kbd><span>What is which symbol on the screen</span></div><div><kbd>F</kbd><span>How your stomach feels</span></div><div><kbd>T</kbd><span>Your title (rank)</span></div><div><kbd>A</kbd><span>How long you have been down here</span></div><div><kbd>Ctrl+R</kbd><span>Show the previous messages again</span></div><div><kbd>Ctrl+L</kbd><span>Redraw the screen</span></div><div><kbd>o</kbd><span class="or">or</span><kbd>F4</kbd><span>Options</span></div><div><kbd>V</kbd><span>MAG&#x27;s version</span></div><div><kbd>R</kbd><span>Remember (save) the game and leave</span></div><div><kbd>Q</kbd><span class="or">or</span><kbd>Ctrl</kbd><span class="plus">+</span><kbd>C</kbd><span>Quit the game</span></div><div><kbd>ESC</kbd><span>Stop what you are doing</span></div><div><kbd>F1</kbd><span class="or">or</span><kbd>DEL</kbd><span>The help screens</span></div><div><kbd>{</kbd><span>Start recording a macro</span></div><div><kbd>}</kbd><span>End the macro</span></div><div><kbd>Ctrl</kbd><span class="plus">+</span><kbd>E</kbd><span class="or">or</span><kbd>F9</kbd><span>Play the macro back</span></div><div><kbd>number + command</kbd><span>Repeat a command (9s searches nine times)</span></div></div></details>
 <h2 id="h-saving">Saving your game</h2><ul>
 <li><strong>Saving is automatic.</strong> The game is stored in this browser (IndexedDB)
