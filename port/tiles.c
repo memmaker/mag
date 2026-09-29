@@ -198,7 +198,8 @@ tile_raw(int l, int c, int *under)
 	*under = -1;
 	if (ch == ' ' || ch == 0)
 		return -2;
-	if (d == u.u_d && (ch == PLAYER || ch == IPLAYER || ch == (unsigned char)u.u_sym)) {
+	/* any hero glyph: mid-move the game draws it before u.u_d follows */
+	if (ch == PLAYER || ch == IPLAYER || (d == u.u_d && ch == (unsigned char)u.u_sym)) {
 		*under = ground(d);
 		return TL_PLAYER;
 	}

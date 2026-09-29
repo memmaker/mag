@@ -23,21 +23,21 @@ int fe_click_row, fe_click_col;
 int fe_at_cmd;			/* the game waits for a command (prompt line) */
 int fe_auto_more = 1;		/* top-line =-More-= needs no key (web option) */
 static int fe_icons = 1;
-static int fe_textmode;	/* the page shows the PC screen (Tiles: PC screen) */	/* the page shows tiles (not Tiles: None): item icons */
 extern int port_started;
 
 int tile_for(int l, int c, int *under);
 
 EM_JS(void, js_init, (int ntiles, int auto_more, const unsigned char *anim, const char *pal),
 	{ Module.mag.init(ntiles, auto_more, anim, UTF8ToString(pal)); });
-EM_JS(void, js_map, (const void *scr, const int *t, const int *u, int hy, int hx, int lvl),
-	{ Module.mag.map(scr, t, u, hy, hx, lvl); });
+/* the visual page, map tiles, hero, level; all: every cell as text (title,
+   end, full text pages); box r0 < 0 or the pop-up drawn as text; cursor cell */
+EM_JS(void, js_map, (const void *scr, const int *t, const int *u, int hy, int hx, int lvl, int all,
+	int r0, int c0, int r1, int c1, int cur),
+	{ Module.mag.map(scr, t, u, hy, hx, lvl, all, r0, c0, r1, c1, cur); });
 EM_JS(void, js_line, (int p, int y, const char *s, const char *c, int t),
 	{ Module.mag.line(p, y, UTF8ToString(s), UTF8ToString(c), t); });
 EM_JS(void, js_rows, (int p, int n), { Module.mag.rows(p, n); });
 EM_JS(void, js_cursor, (int p, int y, int x), { Module.mag.cursor(p, y, x); });
-EM_JS(void, js_popup, (int rows, int cols, int r0, int c0, const char *bg),
-	{ Module.mag.popup(rows, cols, r0, c0, UTF8ToString(bg)); });
 EM_JS(void, js_prompt, (const char *s), { Module.mag.prompt(UTF8ToString(s)); });
 EM_JS(void, js_vis, (const char *s), { Module.mag.vis(UTF8ToString(s)); });
 EM_JS(void, js_sound, (const char *s), { Module.mag.sound(UTF8ToString(s)); });
@@ -91,13 +91,6 @@ web_set_icons(int on)
 	fe_icons = on;
 }
 
-/* Tiles: PC screen: the whole visual page goes to the text screen window */
-EMSCRIPTEN_KEEPALIVE void
-web_set_textmode(int on)
-{
-	fe_textmode = on;
-}
-
 /* tests (Module.mag.screen): the visual page */
 EMSCRIPTEN_KEEPALIVE void *
 web_vram(void)
@@ -111,7 +104,7 @@ web_vram(void)
  * are not the default light grey on black starts a run "\x05#fg" or
  * "\x05#fg/#bg" (up to "\x06"), with a row colour ("" default) and an icon
  * tile (-1 none). CP437 goes out as UTF-8. */
-enum { P_MAP, P_MSG, P_STAT, P_INV, P_POP, P_TEXT, NPANES };
+enum { P_MAP, P_MSG, P_STAT, P_INV, NPANES };
 #define RMAX 512
 static const char *pal[16] = { "#000000", "#0000aa", "#00aa00", "#00aaaa", "#aa0000", "#aa00aa", "#aa5500", "#aaaaaa",
 	"#555555", "#5555ff", "#55ff55", "#55ffff", "#ff5555", "#ff55ff", "#ffff55", "#ffffff" };
@@ -142,19 +135,6 @@ be_rows(int p, int n)
 {
 	if (n != rows_sent[p])
 		js_rows(p, rows_sent[p] = n);
-}
-
-/* the page empties the pane: forget what it had */
-static void
-forget(int p)
-{
-	int y;
-
-	for (y = 0; y < RMAX; y++) {
-		free(sent[p][y]);
-		sent[p][y] = NULL;
-	}
-	rows_sent[p] = 0;
 }
 
 /* the one text cursor (p < 0: none): set while a frame is built, sent
@@ -321,7 +301,7 @@ fe_idle(void)
 		else
 			snprintf(inv_l[inv_n], 81, "%.2s %c %s", f, CITEMS[o->o_type], f + 3);
 		inv_t[inv_n] = fe_icons ? obj_sprite(o) : -1;
-		inv_at[inv_n] = o->o_type + 1 + (o->o_type > 6);	/* pr_obj O_COLORINV */
+		inv_at[inv_n] = o->o_type == FOOD ? GREEN | INTENSE : o->o_type + 1 + (o->o_type > 6);	/* pr_obj O_COLORINV */
 	}
 	*p = 0;
 	for (m = mons; m < &mons[nummons] && p < e; m++) {
@@ -373,64 +353,30 @@ page_bbox(int pg, int *r0, int *c0, int *r1, int *c1)
 	return any;
 }
 
-/* rows r0..r1, columns c0..c1 of the visual page into pane p */
-static void
-send_page(int p, int r0, int c0, int r1, int c1)
-{
-	static char buf[80 * 32];
-	int r, used = 0;
-
-	for (r = r0; r <= r1; r++) {
-		be_line(p, r - r0, cells(&vram[vis_page][r][c0], c1 - c0 + 1, buf), "", -1);
-		if (*buf)
-			used = r - r0 + 1;
-	}
-	if (cur_on && cur_row[vis_page] >= r0 && cur_row[vis_page] <= r1 &&
-	    cur_col[vis_page] >= c0 && cur_col[vis_page] <= c1) {
-		set_cursor(p, cur_row[vis_page] - r0, cur_col[vis_page] - c0);
-		if (cur_row[vis_page] - r0 >= used)
-			used = cur_row[vis_page] - r0 + 1;
-	}
-	be_rows(p, used);
-}
-
 void
 fe_present(void)
 {
 	static char buf[80 * 32];
-	static int pr0 = -2, pc0, pr1, pc1;
-	int l, c, r0 = -1, c0 = 0, r1 = 0, c1 = 0;
+	int l, c, r0 = -1, c0 = 0, r1 = 0, c1 = 0, all = !port_started, pg = vis_page;
 
 	fe_init();
 	want_p = -1;
-	if (!port_started || fe_textmode) {	/* title, setup, PC screen */
-		send_page(P_TEXT, 0, 0, 24, 79);
-		cursor_send();
-		if (!port_started)
-			return;
+	if (port_started) {
+		for (l = 1; l <= 22; l++)
+			for (c = 0; c < 80; c++)
+				map_t[(l - 1) * 80 + c] = tile_for(l, c, &map_u[(l - 1) * 80 + c]);
+		if (pop_r0 >= 0)
+			r0 = pop_r0, c0 = pop_c0, r1 = pop_r1, c1 = pop_c1;
+		else if (vis_page != 0 && page_bbox(vis_page, &r0, &c0, &r1, &c1))
+			all = 1;
+		else
+			pg = 0, r0 = -1;	/* an empty text page: the map */
 	}
-	for (l = 1; l <= 22; l++)
-		for (c = 0; c < 80; c++)
-			map_t[(l - 1) * 80 + c] = tile_for(l, c, &map_u[(l - 1) * 80 + c]);
-	js_map(vram[0], map_t, map_u, scrline(u.u_d) - 1, scrcol(u.u_d), u.u_dlevel);
-	if (fe_textmode)
+	/* the whole screen on the map canvas: tiles for the map, text for the rest */
+	js_map(vram[pg], map_t, map_u, port_started ? scrline(u.u_d) - 1 : 0, port_started ? scrcol(u.u_d) : 0, u.u_dlevel, all,
+		all ? -1 : r0, c0, r1, c1, cur_on ? cur_row[pg] * 80 + cur_col[pg] : -1);
+	if (!port_started)
 		return;
-	want_p = -1;
-	if (pop_r0 >= 0)
-		r0 = pop_r0, c0 = pop_c0, r1 = pop_r1, c1 = pop_c1;
-	else if (vis_page != 0 && !page_bbox(vis_page, &r0, &c0, &r1, &c1))
-		r0 = -1;
-	/* the pop-up: a port box or a full text page, at the original's place */
-	if (r0 != pr0 || c0 != pc0 || r1 != pr1 || c1 != pc1) {
-		pr0 = r0; pc0 = c0; pr1 = r1; pc1 = c1;
-		forget(P_POP);
-		if (cur_p == P_POP)
-			cur_p = -1;	/* the page dropped it with the rows */
-		js_popup(r0 < 0 ? 0 : r1 - r0 + 1, c1 - c0 + 1, r0, c0,
-			r0 < 0 ? "" : pal[vram[vis_page][r0][c0] >> 12 & 7]);
-	}
-	if (r0 >= 0)
-		send_page(P_POP, r0, c0, r1, c1);
 	send_msg(!(r0 == 0));
 	be_line(P_STAT, 0, cells(vram[0][23], 80, buf), "", -1);	/* MAG's status lines */
 	be_line(P_STAT, 1, cells(vram[0][24], 80, buf), "", -1);

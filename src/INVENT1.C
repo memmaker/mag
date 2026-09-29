@@ -111,7 +111,7 @@ register	which;
 		/* printing complete inv on sep video page, use different
 		   color for each type if that option is on */
 		else if ((u.u_options & O_COLORINV) && which == DROPABLE)
-			color(o->o_type + 1 + (o->o_type > 6));
+			color(o->o_type == FOOD ? GREEN | INTENSE : o->o_type + 1 + (o->o_type > 6));
 
 		swrite(cp);
 

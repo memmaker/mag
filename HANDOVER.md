@@ -62,10 +62,13 @@ cloud session (the old private `memmaker/mag-cloud` repo is deleted).
 - `port/tiles.c` + `port/mkdawn.py` → `port/tiles-dawn.png` (+ `-1` animation
   frame) / `tiles.h`: DawnLike only, 100 % of 323 slots (name hits + stand-ins,
   unidentified items by appearance name). Credits in `port/dawnlike/CREDITS.txt`.
-- `port/fe_web.c`: the map is the only canvas; Messages (from the `pline()`
-  hook), Status, Inventory, Visible, pop-ups and the PC screen are HTML lines
-  (`be_line`/`be_rows`, CGA colour runs). auto_more skips the top-line
-  `=-More-=`.
+- `port/fe_web.c`: fixed-size (declared by the user 2026-09-30): the Map
+  canvas is always the whole 80x25 visual page on one grid fitted to the window
+  (square cells with tiles, the font's cell otherwise; box/shade glyphs
+  stretched to the cell, no gaps); pop-ups and text pages draw on it, One window
+  = the PC screen. Messages (from the `pline()` hook), Status, Inventory,
+  Visible are HTML lines (`be_line`/`be_rows`, CGA colour runs). auto_more
+  skips the top-line `=-More-=`. Food shows light green (was CGA blue).
 - Upstream fixes: `^Z` bytes, K&R variadic `pline`, `possitems()` `final[-1]`,
   `long t; time(&t)` on wasm32, MAIN.C name prompt `cp[25]`.
 

@@ -382,7 +382,7 @@ main_action(OBJECT *o)
 static int
 item_attr(OBJECT *o)
 {
-	return o->o_type + 1 + (o->o_type > 6);
+	return o->o_type == FOOD ? GREEN | INTENSE : o->o_type + 1 + (o->o_type > 6);	/* food: green, the blue was too dark */
 }
 
 static void
