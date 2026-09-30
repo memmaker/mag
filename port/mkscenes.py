@@ -185,6 +185,22 @@ def gallery(cat, sid, name, w):
     return rec(s, sid, name, [cat])
 
 
+def card():
+    """the roguelikes index card (img/mag.png, 12x5 tiles at 2x): 30 monsters in a torch-lit room,
+    drawn with the current mapping"""
+    s = Scene(12, 5)
+    s.room(1, 1, 10, 3)
+    mons = [m for m in IDS['monster'] if m != 'player']
+    s.scatter(['monster/' + mons[i * len(mons) // 30] for i in range(30)], 1, 1, 10, 3, step=1)
+    s.autotile()
+    return dawnlike_rec.render(os.path.join(HERE, 'mag-dawnlike.rec'), s.cell, s.ground)
+
+
+INDEX = os.path.expanduser(os.environ.get('RVIP_INDEX', '~/Games/roguelikes-index'))
+if os.path.isdir(os.path.join(INDEX, 'img')):
+    card().save(os.path.join(INDEX, 'img', 'mag.png'))
+    print('card: ' + os.path.join(INDEX, 'img', 'mag.png'))
+
 out = ['# Remapper preview scenes for MAG (port/mkscenes.py writes them; design time only)', '', '%rec: Scene', '']
 for r in (dungeon(), world(), gallery('monster', 'bestiary', 'Every monster', 29),
           gallery('object', 'treasury', 'Every object', 45)):
