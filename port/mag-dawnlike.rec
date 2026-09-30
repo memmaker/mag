@@ -44,27 +44,27 @@ icon: 11510
 
 id: ttorch
 name: wall torch, top wall
-icon: 11470
+icon: 12678
 
 id: btorch
 name: wall torch, bottom wall
-icon: 11512
+icon: 12948
 
 id: ltorch
 name: wall torch, left wall
-icon: 11490
+icon: 13006
 
 id: rtorch
 name: wall torch, right wall
-icon: 11492
+icon: 13064
 
 id: marble
 name: marble (solid rock)
-icon: 11740
+icon: 9597
 
 id: door
 name: door
-icon: 6993
+icon: 6867
 
 id: locked
 name: locked door
