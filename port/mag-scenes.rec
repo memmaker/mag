@@ -1,0 +1,482 @@
+# Remapper preview scenes for MAG (port/mkscenes.py writes them; design time only)
+
+%rec: Scene
+
+id: dungeon
+name: Dungeon level
+category: world monster object
+under: world/room_floor_0
+legend: ! monster/apparition
+legend: $ monster/banshee
+legend: % monster/crystalizer
+legend: & monster/dark_elf
+legend: ' monster/fairy
+legend: ( monster/fire_drake
+legend: ) monster/golem
+legend: * monster/gorgon
+legend: , monster/imperial_dragon
+legend: / monster/inflicter
+legend: 0 monster/norker
+legend: 1 monster/panther
+legend: @ monster/player
+legend: 2 monster/sulfuric_cloud
+legend: 3 monster/xuthus
+legend: 4 object/arrow
+legend: 5 object/banded
+legend: 6 object/buckler
+legend: 7 object/cross
+legend: 8 object/green
+legend: 9 object/long_bow
+legend: ; object/opaque
+legend: ? object/padded
+legend: A object/plate
+legend: B object/potion_ochre
+legend: C object/potion_silvery
+legend: D object/scroll_apdaz_a_ujore_uteo
+legend: E object/scroll_draco_te_edeat
+legend: F object/scroll_mein_bustenhalter_uberflute
+legend: G object/scroll_tiro_lasto_cuio
+legend: H object/scroll_tuum_matrem_dat_bonum_capitem
+legend: I object/scroll_voppter_zoy
+legend: J object/sling_bullet
+legend: K object/splint
+legend: L object/wand_mithril
+legend: M object/wand_papyrus
+legend: N object/wand_tapered
+legend: O world/btorch
+legend: P world/corridor_10
+legend: # world/corridor_12
+legend: " world/corridor_3
+legend: > world/dnstair
+legend: + world/door
+legend: - world/hwall
+legend: Q world/llwall
+legend: = world/locked
+legend: R world/lrwall
+legend: S world/ltorch
+legend: ~ world/pool
+legend: . world/room_floor_0
+legend: T world/room_floor_1
+legend: U world/room_floor_10
+legend: V world/room_floor_2
+legend: W world/room_floor_4
+legend: X world/room_floor_5
+legend: Y world/room_floor_6
+legend: Z world/room_floor_8
+legend: [ world/room_floor_9
+legend: \ world/rtorch
+legend: ] world/trap_poison_needle
+legend: _ world/trap_sleeping_gas
+legend: ` world/trap_stun
+legend: a world/ttorch
+legend: b world/ulwall
+legend: < world/upstair
+legend: c world/urwall
+legend: | world/vwall
+map:
++                      b---a-----a---c
++  b---a-----a---c     |UZZ4ZZZZZZZZ[|       b---a-----a-----a---c
++  |UZZZZZZZZZZZ[|     |V.....I.....T|       |UZZZZZZZZZZZZZ/ZZZ[|
++  |V.<........AT|     SV............+#######=............B.....T|
++  SV...@........+#####=....(.......T|       SV.................T\
++  |V..H........T|     |YWWWWW.WWWWWX|       |V.................T|
++  |V.........%.1|     Q---O--+--O---R       |V.....9...........T|
++  |YWW!WW.3WWWWX|            "              |V.................T|
++  Q---O--+--O---R            "         P####=WWWWWWWW.WWWWWWWWWX\
++         "                   "         "    Q---O----+O-----O---R
++         "                b--=a-----a--+--c          "
++         "                |UZ.ZZZZZZZZZ]Z[|          "
++    b---a=----a---c       |V..;`.........T|          "
++    |UZ0Z.ZZZZZZZ[|       SV.............T\     b---a=----a-----c
++    |V...&..2....T|       |V.........M...T|     |UZZZ.ZZZZZZZZZ[|
++    SV...........T\       |V...~~........T|     |V.............T|
++    |V...N...5....+#######=.......L......T|     SV.............T\
++    |V...........T|       SV..K....E.....T\     |V..*..........T|
++    |V........7..T|       |V.....'........+#####=...6....8.?...T|
++    SV..)..D....JT\       |V.....F....,..$|     |V.........C...T|
++    |YWWWWWWWWWWWX|       |YWWWWW_WWWWWWWX|     SV...........>GT\
++    Q---O-----O---R       Q---O-----O-----R     |YWWWWWWWWWWWWWX|
++                                                Q---O-----O-----R
++ 
+
+id: world
+name: All terrain
+category: world
+under: world/room_floor_0
+legend: ! world/btorch
+legend: $ world/corridor_0
+legend: % world/corridor_1
+legend: & world/corridor_10
+legend: ' world/corridor_11
+legend: # world/corridor_12
+legend: ( world/corridor_13
+legend: ) world/corridor_14
+legend: * world/corridor_15
+legend: , world/corridor_2
+legend: " world/corridor_3
+legend: / world/corridor_4
+legend: 0 world/corridor_5
+legend: 1 world/corridor_6
+legend: 2 world/corridor_7
+legend: 3 world/corridor_8
+legend: 4 world/corridor_9
+legend: > world/dnstair
+legend: + world/door
+legend: - world/hwall
+legend: 5 world/llwall
+legend: = world/locked
+legend: 6 world/lrwall
+legend: 7 world/ltorch
+legend: : world/marble
+legend: ~ world/pool
+legend: . world/room_floor_0
+legend: 8 world/room_floor_1
+legend: 9 world/room_floor_10
+legend: ; world/room_floor_11
+legend: ? world/room_floor_12
+legend: A world/room_floor_13
+legend: B world/room_floor_14
+legend: C world/room_floor_15
+legend: D world/room_floor_2
+legend: E world/room_floor_3
+legend: F world/room_floor_4
+legend: G world/room_floor_5
+legend: H world/room_floor_6
+legend: I world/room_floor_7
+legend: J world/room_floor_8
+legend: K world/room_floor_9
+legend: L world/rtorch
+legend: ^ world/trap
+legend: M world/trap_bear
+legend: N world/trap_flying_spear
+legend: O world/trap_poison_needle
+legend: P world/trap_sleeping_gas
+legend: Q world/trap_spider_web
+legend: R world/trap_strangle_weed
+legend: S world/trap_stun
+legend: T world/trap_swinging_pendulum
+legend: U world/trap_teleportation
+legend: V world/ttorch
+legend: W world/ulwall
+legend: < world/upstair
+legend: X world/urwall
+legend: | world/vwall
+map:
++ 
++  W---V-----V-X W-----------X W-X W-X W---V-----V-----V---X
++  |9JJJJJJJJJK| |B?????????A| |;| |C| |9JJJJJJJJJJJJJJJJJK|
++  |D.........8| 5-----------6 |E| 5-6 |^.M.N.O.P.Q.R.S.T.U|
++  7D.........8L               |E|     7D.................8L
++  |D.........8|               |E|     |D.................8|
++  |D.........8|               |E|     |D.<.>.~.~.~.......8|
++  |HFFFFF.FFFG|               |I|     |HFFFFFFFFFFF.FFFFFG|
++  5---!--+--!-6               5-6     5---!-----!--=--!---6
++         "                                         "
++         "                                         2
++     &###/###3#######4               '       ::::::::::::
++     "       "       "     )#####(   "       ::::::::::::
++     "       "       "               "       :::W---VX:::
++     "       "       "               "   *   :::|9JJK|:::
++     ,#######$#######%               "       :::|D..8|:::
++     "       "       "               "       :::7HFFGL:::
++     "       "       "               2       :::5---!6:::
++     "       "       "                       ::::::::::::
++     1#######/#######0                       ::::::::::::
++ 
++ 
+
+id: bestiary
+name: Every monster
+category: monster
+under: world/room_floor_0
+legend: ! monster/apparition
+legend: $ monster/axe_beak
+legend: % monster/babbler
+legend: & monster/banshee
+legend: ' monster/blue_dragon
+legend: ( monster/coatyl
+legend: ) monster/crystalizer
+legend: * monster/dark_elf
+legend: , monster/efreeti
+legend: / monster/fairy
+legend: 0 monster/fire_drake
+legend: 1 monster/frost_fiend
+legend: 2 monster/giant_rat
+legend: 3 monster/golem
+legend: 4 monster/gorgon
+legend: 5 monster/harpy
+legend: 6 monster/hill_giant
+legend: 7 monster/imperial_dragon
+legend: 8 monster/inflicter
+legend: 9 monster/invisixplode
+legend: ; monster/jackal
+legend: ? monster/jaculus
+legend: A monster/kleptum
+legend: B monster/kobold
+legend: C monster/lich
+legend: D monster/lizard_man
+legend: E monster/minotaur
+legend: F monster/mystic
+legend: G monster/naga
+legend: H monster/norker
+legend: I monster/ogre
+legend: J monster/opinicus
+legend: K monster/panther
+legend: @ monster/player
+legend: L monster/polymorpher
+legend: M monster/quasit
+legend: N monster/queen_snake
+legend: O monster/reaper
+legend: P monster/red_dragon
+legend: Q monster/shrieker
+legend: R monster/sulfuric_cloud
+legend: S monster/transmigrant
+legend: T monster/troglodyte
+legend: U monster/umbathri
+legend: V monster/unicorn
+legend: W monster/vine_crawler
+legend: X monster/volcano_demon
+legend: Y monster/white_dragon
+legend: Z monster/will_o_wisp
+legend: [ monster/wyvern
+legend: \ monster/xorn
+legend: ] monster/xuthus
+legend: _ monster/yeth_hound
+legend: ` monster/yeti
+legend: a monster/zabloron
+legend: b monster/zephyr
+legend: c world/btorch
+legend: - world/hwall
+legend: d world/llwall
+legend: e world/lrwall
+legend: f world/ltorch
+legend: . world/room_floor_0
+legend: g world/room_floor_1
+legend: h world/room_floor_10
+legend: i world/room_floor_2
+legend: j world/room_floor_4
+legend: k world/room_floor_5
+legend: l world/room_floor_6
+legend: m world/room_floor_8
+legend: n world/room_floor_9
+legend: o world/rtorch
+legend: p world/ttorch
+legend: q world/ulwall
+legend: r world/urwall
+legend: | world/vwall
+map:
++ 
++  q---p-----p-----p-----p-----p-r
++  |hmmmmmmmmmmmmmmmmmmmmmmmmmmmn|
++  |i$.%.).0.*./.4.5.9.;.B.D.E.Hg|
++  fi...........................go
++  |iI.K.M.2.Q.T.V.W.[.]._.b.!.&g|
++  |i...........................g|
++  |i(.P.Y.'.7.,.1.3.6.8.?.A.C.Fg|
++  fi...........................go
++  |iG.J.L.N.O.R.S.U.X.Z.\.`.a.@g|
++  |ljjjjjjjjjjjjjjjjjjjjjjjjjjjk|
++  d---c-----c-----c-----c-----c-e
++ 
+
+id: treasury
+name: Every object
+category: object
+under: world/room_floor_0
+legend: ! object/amber
+legend: $ object/any_potion
+legend: % object/any_ring
+legend: & object/any_scroll
+legend: ' object/any_wand
+legend: ( object/arrow
+legend: ) object/banded
+legend: * object/beef_jerky
+legend: , object/boulder
+legend: / object/brilliant
+legend: 0 object/buckler
+legend: 1 object/chain
+legend: 2 object/chime_of_opening
+legend: 3 object/coconut
+legend: 4 object/compass_of_translocation
+legend: 5 object/copper
+legend: 6 object/crimson
+legend: 7 object/cross
+legend: 8 object/crossbow
+legend: 9 object/crossbow_bolt
+legend: ; object/dagger
+legend: ? object/dart
+legend: A object/dried_fruit
+legend: B object/electrum
+legend: C object/firey
+legend: D object/flail
+legend: E object/food_ration
+legend: F object/glowing
+legend: G object/gold
+legend: H object/golden
+legend: I object/great_shield
+legend: J object/green
+legend: K object/hand_axe
+legend: L object/leather
+legend: M object/long_bow
+legend: N object/long_sword
+legend: O object/mace
+legend: P object/medium_shield
+legend: Q object/mirror
+legend: R object/mithril_shield
+legend: S object/moldy_cheese_wedge
+legend: T object/mushroom
+legend: U object/oil_flask
+legend: V object/opalescent
+legend: W object/opaque
+legend: X object/padded
+legend: Y object/plate
+legend: Z object/platinum
+legend: [ object/potion_amethyst
+legend: \ object/potion_bubbly
+legend: ] object/potion_cloudy
+legend: _ object/potion_ebony
+legend: ` object/potion_effervescent
+legend: a object/potion_emerald
+legend: b object/potion_fuming
+legend: c object/potion_glowing
+legend: d object/potion_gold
+legend: e object/potion_irridescent
+legend: f object/potion_limpid
+legend: g object/potion_magenta
+legend: h object/potion_ochre
+legend: i object/potion_oily
+legend: j object/potion_silvery
+legend: k object/potion_smokey
+legend: l object/potion_swirly
+legend: m object/potion_syrupy
+legend: n object/potion_vermilion
+legend: o object/potion_viscous
+legend: p object/purple
+legend: q object/ring
+legend: r object/ring_agate
+legend: s object/ring_aquamarine
+legend: t object/ring_bone
+legend: u object/ring_brass
+legend: v object/ring_charcoal
+legend: w object/ring_crystal
+legend: x object/ring_diamond
+legend: y object/ring_gold
+legend: z object/ring_granite
+legend: { object/ring_iron
+legend: } object/ring_ivory
+legend: À object/ring_jade
+legend: Á object/ring_lapis_lazuli
+legend: Â object/ring_leather
+legend: Ã object/ring_mithril
+legend: Ä object/ring_onyx
+legend: Å object/ring_opal
+legend: Æ object/ring_pearl
+legend: Ç object/ring_quartz
+legend: È object/ring_red_gold
+legend: É object/ring_ruby
+legend: Ê object/ring_saphire
+legend: Ë object/ring_tiger_eye
+legend: Ì object/ring_white_gold
+legend: Í object/ring_wooden
+legend: Î object/scale
+legend: Ï object/scroll_apdaz_a_ujore_uteo
+legend: Ð object/scroll_capi_tuum_capitem_ex_tuo_asino
+legend: Ñ object/scroll_draco_te_edeat
+legend: Ò object/scroll_e_pluribus_unix
+legend: Ó object/scroll_ede_fecem_et_mora
+legend: Ô object/scroll_feces_in_mea_ora
+legend: Õ object/scroll_mein_bustenhalter_uberflute
+legend: Ö object/scroll_navigatum_iubet_vicissim
+legend: × object/scroll_oazubu_shzlaut_jaeg
+legend: Ø object/scroll_pafonius_a_um
+legend: Ù object/scroll_rara_avis_defeceat_in_tuo_capite
+legend: Ú object/scroll_semper_ubi_sub_ubi
+legend: Û object/scroll_tiro_lasto_cuio
+legend: Ü object/scroll_tua_mater_est_canem
+legend: Ý object/scroll_tudo_poir
+legend: Þ object/scroll_tuum_matrem_dat_bonum_capitem
+legend: ß object/scroll_tuum_subligaculum_decadat
+legend: à object/scroll_ucme_hulag_sphitz
+legend: á object/scroll_vas_sonarse
+legend: â object/scroll_verbum_sapienti_est_satis
+legend: ã object/scroll_voppter_zoy
+legend: ä object/silver
+legend: å object/silver_2
+legend: æ object/skeleton
+legend: ç object/slime_mold
+legend: è object/sling
+legend: é object/sling_bullet
+legend: ê object/sparkling
+legend: ë object/spear
+legend: ì object/splint
+legend: í object/staff
+legend: î object/stale_bread_roll
+legend: ï object/studded_leather
+legend: ð object/the_sudbury_saphire
+legend: ñ object/tinderbox
+legend: ò object/turquoise
+legend: ó object/two_handed_sword
+legend: ô object/vial_of_ethereal_oil
+legend: õ object/wand_bone
+legend: ö object/wand_cedar
+legend: ÷ object/wand_crystaline
+legend: ø object/wand_driftwood
+legend: ù object/wand_ebony
+legend: ú object/wand_elongated
+legend: û object/wand_frayed
+legend: ü object/wand_iron
+legend: ý object/wand_mahogany
+legend: þ object/wand_maple
+legend: ÿ object/wand_marble
+legend: Ā object/wand_mithril
+legend: ā object/wand_oaken
+legend: Ă object/wand_oblate
+legend: ă object/wand_papyrus
+legend: Ą object/wand_runed
+legend: ą object/wand_saffron
+legend: Ć object/wand_steel
+legend: ć object/wand_tapered
+legend: Ĉ object/wand_teak
+legend: ĉ object/wand_whitewood
+legend: Ċ object/xanthick
+legend: ċ world/btorch
+legend: - world/hwall
+legend: Č world/llwall
+legend: č world/lrwall
+legend: Ď world/ltorch
+legend: . world/room_floor_0
+legend: ď world/room_floor_1
+legend: Đ world/room_floor_10
+legend: đ world/room_floor_2
+legend: Ē world/room_floor_4
+legend: ē world/room_floor_5
+legend: Ĕ world/room_floor_6
+legend: ĕ world/room_floor_8
+legend: Ė world/room_floor_9
+legend: ė world/rtorch
+legend: Ę world/ttorch
+legend: ę world/ulwall
+legend: Ě world/urwall
+legend: | world/vwall
+map:
++ 
++  ę---Ę-----Ę-----Ę-----Ę-----Ę-----Ę-----Ę-----Ě
++  |ĐĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĖ|
++  |đ$.&.'.%.E.ç.*.S.î.A.T.(.M.9.8.é.è.;.?.D.K.Nď|
++  Ďđ...........................................ďė
++  |đO.,.ë.ó.).1.3.L.X.Y.q.Î.ì.ï.0.P.I.R.5.ä.H.æď|
++  |đ...........................................ď|
++  |đð.4.7.Q.U.ñ.ô.2.ê.6.p.ò.W.J.V.C./.!.F.Ċ.Z.Gď|
++  Ďđ...........................................ďė
++  |đB.å._.g.f.a.n.l.j.d.[.e.h.k.c.\.i.o.`.].b.mď|
++  |đ...........................................ď|
++  |đā.ù.Ą.ú.Ĉ.ą.Ć.Ă.ü.ÿ.û.þ.÷.ć.ý.ĉ.ö.ø.õ.ă.Ā.Çď|
++  Ďđ...........................................ďė
++  |đ}.Á.É.À.x.r.y.s.Ì.Å.Ê.Æ.Ä.Ë.z.w.È.v.u.Í.{.Ãď|
++  |đ...........................................ď|
++  |đt.Â.Ú.Ö.Ò.Ý.Þ.Ó.Ô.Ø.ã.×.Ï.à.á.Ñ.Ð.Û.â.Ü.Ù.ßď|
++  Ďđ...........................................ďė
++  |đÕ.í........................................ď|
++  |ĔĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒē|
++  Č---ċ-----ċ-----ċ-----ċ-----ċ-----ċ-----ċ-----č
++ 

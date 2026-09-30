@@ -44,11 +44,20 @@
 	var TILESETS = [['tiles-dawn.png', 'DawnLike'], ['tiles-dawn.png', 'DawnLike|a', 'tiles-dawn-1.png'], [null, 'None']];
 	var dawn = new Image(), dawnReady = false;
 	dawn.onload = function () { dawnReady = true; if (L) applyDom(); };
-	dawn.src = 'tiles-dawn.png';
+	/* the sheet and how it is cut, the cell of each slot (-1: none): port/fe_web.c load_tiles() */
+	var sheet = { w: 16, h: 16, ox: 0, oy: 0, gx: 0, gy: 0, anim: '', cells: null };
+	function cellXY(t, im) {
+		var c = sheet.cells ? sheet.cells[t] : t, cols;
+		if (!(c >= 0)) return null;
+		cols = Math.max(1, Math.floor((im.naturalWidth - sheet.ox + sheet.gx) / (sheet.w + sheet.gx)));
+		return [sheet.ox + (c % cols) * (sheet.w + sheet.gx), sheet.oy + Math.floor(c / cols) * (sheet.h + sheet.gy)];
+	}
 	/* tiles drawn: DawnLike picked and loaded (a late onload can't turn None back) */
 	function tilesOn() { return dawnReady && L && !L.noTiles; }
 	function tile(ctx, t, x, y, w, h, im) {
-		if (tilesOn()) ctx.drawImage(im || dawn, (t & 31) * 16, (t >> 5) * 16, 16, 16, x, y, w, h);
+		var p;
+		im = im || dawn;
+		if (tilesOn() && (p = cellXY(t, im))) ctx.drawImage(im, p[0], p[1], sheet.w, sheet.h, x, y, w, h);
 	}
 	/* DawnLike|a (opt-in): the map swaps to DawnLike's second frame
 	 * (port/mkdawn.py tiles-dawn-1.png) twice a second, redrawing only the
@@ -58,7 +67,8 @@
 	function animOn() { return tilesOn() && L.anim; }
 	setInterval(function () {
 		if (!app.running || !F || !G || document.hidden || !animOn() || !anim) { frame = 0; return; }
-		if (!dawn1.src) dawn1.src = 'tiles-dawn-1.png';
+		if (!sheet.anim) return;
+		if (!dawn1.src) dawn1.src = sheet.anim;
 		if (!dawn1.naturalWidth) return;
 		frame ^= 1;
 		mapPrev = null; drawMap();   /* ponytail: whole-screen redraw twice a second, per-cell if it ever shows up in a profile */
@@ -99,10 +109,14 @@
 	}
 	/* list icon: the sprite as a CSS sprite sized in em (A+ grows it) */
 	function icon(t) {
-		if (!tilesOn() || !(t >= 0)) return null;
+		var p = tilesOn() && t >= 0 && cellXY(t, dawn);
+		if (!p) return null;
 		var e = document.createElement('i');
 		e.className = 'wm-ic mag-ic';
-		e.style.backgroundPosition = -(t & 31) + 'em ' + -(t >> 5) + 'em';
+		/* ponytail: em = one tile width, so a sheet of non-square tiles shows squashed icons */
+		e.style.backgroundImage = 'url(' + dawn.src + ')';
+		e.style.backgroundSize = dawn.naturalWidth / sheet.w + 'em auto';
+		e.style.backgroundPosition = -p[0] / sheet.w + 'em ' + -p[1] / sheet.w + 'em';
 		return e;
 	}
 	function drawRow(p, y) {
@@ -324,6 +338,11 @@
 			.catch(function () { app.status('Could not load the font ' + n + '.', true); setTimeout(function () { app.status(''); }, 2000); });
 	}
 	var mag = {
+		tileset: function (file, animFile, w, h, ox, oy, gx, gy, cells) {
+			sheet = { w: w, h: h, ox: ox, oy: oy, gx: gx, gy: gy, anim: animFile, cells: cells };
+			dawnReady = false;
+			dawn.src = file;
+		},
 		init: function (ntiles, am, animPtr, pal) {
 			PAL = pal.split(',');
 			anim = Module.HEAPU8.slice(animPtr, animPtr + ntiles);

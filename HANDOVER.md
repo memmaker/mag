@@ -62,6 +62,15 @@ cloud session (the old private `memmaker/mag-cloud` repo is deleted).
 - `port/tiles.c` + `port/mkdawn.py` → `port/tiles-dawn.png` (+ `-1` animation
   frame) / `tiles.h`: DawnLike only, 100 % of 323 slots (name hits + stand-ins,
   unidentified items by appearance name). Credits in `port/dawnlike/CREDITS.txt`.
+- Remapping (2026-09-30): `port/mag-dawnlike.rec` maps every tile id
+  (`world/`, `monster/`, `object/` + slug of the game's name) to a cell of
+  `dawnlike-0.png` (all DawnLike sheets stacked, `-1` = second frame). Edit it with
+  `remapper port/mag-dawnlike.rec` (~/Projects/remapper; F2 previews
+  `port/mag-scenes.rec`). `fe_web.c` reads it at startup with c-rec
+  (~/Projects/c-rec, by path in `web/build.sh`, preloaded as
+  /magdata/tiles.rec; `MAG_REC=` picks another rec). No rec → `tiles.h` +
+  `tiles-dawn.png` as before. `mkdawn.py` keeps the rec's icons when re-run;
+  `mkscenes.py` rebuilds the scenes and asserts every id is in one.
 - `port/fe_web.c`: fixed-size (declared by the user 2026-09-30): the Map
   canvas is always the whole 80x25 visual page on one grid fitted to the window
   (square cells with tiles, the font's cell otherwise; box/shade glyphs

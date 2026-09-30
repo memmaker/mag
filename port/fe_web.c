@@ -15,6 +15,7 @@
 #include "fe.h"
 #include "mag.h"
 #include "tiles.h"
+#include "rec.h"
 #undef exit
 
 #define PALS "#000000,#0000aa,#00aa00,#00aaaa,#aa0000,#aa00aa,#aa5500,#aaaaaa,#555555,#5555ff,#55ff55,#55ffff,#ff5555,#ff55ff,#ffff55,#ffffff"
@@ -27,8 +28,50 @@ extern int port_started;
 
 int tile_for(int l, int c, int *under);
 
+EM_JS(void, js_tileset, (const char *file, const char *anim, int w, int h, int ox, int oy, int gx, int gy, const short *cells, int n),
+	{ Module.mag.tileset(UTF8ToString(file), UTF8ToString(anim), w, h, ox, oy, gx, gy, Module.HEAP16.slice(cells >> 1, (cells >> 1) + n)); });
 EM_JS(void, js_init, (int ntiles, int auto_more, const unsigned char *anim, const char *pal),
 	{ Module.mag.init(ntiles, auto_more, anim, UTF8ToString(pal)); });
+
+/*
+ * The sheet and the cell each slot shows: /magdata/tiles.rec (the remapper's
+ * runtime rec, web/build.sh preloads it; ids in tiles.h's tile_id), else the
+ * slots of tiles-dawn.png itself. A slot the rec leaves unassigned (icon -1)
+ * draws no sprite.
+ */
+static short tile_cell[NTILES];
+static unsigned char tile_animated[NTILES];
+
+static void
+load_tiles(void)
+{
+	static const char *const cutf[6] = { "tile_w", "tile_h", "off_x", "off_y", "gap_x", "gap_y" };
+	int cut[6] = { 16, 16, 0, 0, 0, 0 }, i;
+	rec_file *f = rec_load("/magdata/tiles.rec");
+	const char *file = rec_get(f, "Tileset", NULL, "file"), *anim = "tiles-dawn-1.png", *v, *slash;
+	char type[32];
+
+	for (i = 0; i < NTILES; i++) {
+		tile_cell[i] = i;
+		tile_animated[i] = tile_anim[i];
+	}
+	if (!file) {		/* no rec (or no Tileset in it): the built-in tables */
+		file = "tiles-dawn.png";
+	} else {
+		anim = rec_get(f, "Tileset", NULL, "anim_file");
+		for (i = 0; i < 6; i++)
+			if ((v = rec_get(f, "Tileset", NULL, cutf[i])))
+				cut[i] = atoi(v);
+		for (i = 0; i < NTILES; i++) {
+			slash = strchr(tile_id[i], '/');
+			sprintf(type, "%.*s", (int)(slash - tile_id[i]), tile_id[i]);
+			tile_cell[i] = rec_icon(f, type, slash + 1);
+			tile_animated[i] = anim != NULL;	/* ponytail: every cell may change frame, the map redraws whole anyway */
+		}
+	}
+	js_tileset(file, anim ? anim : "", cut[0], cut[1], cut[2], cut[3], cut[4], cut[5], tile_cell, NTILES);
+	rec_free(f);
+}
 /* the visual page, map tiles, hero, level; all: every cell as text (title,
    end, full text pages); box r0 < 0 or the pop-up drawn as text; cursor cell */
 EM_JS(void, js_map, (const void *scr, const int *t, const int *u, int hy, int hx, int lvl, int all,
@@ -68,7 +111,8 @@ fe_init(void)
 				fe_auto_more = buf[10] == '1';
 		fclose(f);
 	}
-	js_init(NTILES, fe_auto_more, tile_anim, PALS);
+	load_tiles();
+	js_init(NTILES, fe_auto_more, tile_animated, PALS);
 }
 
 EMSCRIPTEN_KEEPALIVE void

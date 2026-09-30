@@ -1,0 +1,1105 @@
+# MAG tile mapping: port/mkdawn.py writes it, the remapper edits it
+# (remapper port/mag-dawnlike.rec); tiles.c reads it at startup (c-rec).
+# Re-running mkdawn.py keeps every icon below and adds new ids.
+
+%rec: Tileset
+id: dawnlike
+name: DawnLike
+file: dawnlike-0.png
+anim_file: dawnlike-1.png
+tile_w: 16
+tile_h: 16
+off_x: 0
+off_y: 0
+gap_x: 0
+gap_y: 0
+scenes: mag-scenes.rec
+
+%rec: world
+%doc: World (terrain, walls, traps)
+
+id: hwall
+name: wall, horizontal
+icon: 11467
+
+id: vwall
+name: wall, vertical
+icon: 11487
+
+id: ulwall
+name: wall, top left corner
+icon: 11466
+
+id: urwall
+name: wall, top right corner
+icon: 11468
+
+id: llwall
+name: wall, bottom left corner
+icon: 11508
+
+id: lrwall
+name: wall, bottom right corner
+icon: 11510
+
+id: ttorch
+name: wall torch, top wall
+icon: 11470
+
+id: btorch
+name: wall torch, bottom wall
+icon: 11512
+
+id: ltorch
+name: wall torch, left wall
+icon: 11490
+
+id: rtorch
+name: wall torch, right wall
+icon: 11492
+
+id: marble
+name: marble (solid rock)
+icon: 11740
+
+id: door
+name: door
+icon: 6993
+
+id: locked
+name: locked door
+icon: 6869
+
+id: upstair
+name: stairs up
+icon: 10416
+
+id: dnstair
+name: stairs down
+icon: 10417
+
+id: pool
+name: pool
+icon: 10396
+
+id: trap
+name: trap (unknown kind)
+icon: 10506
+
+id: trap_spider_web
+name: spider web trap
+icon: 6804
+
+id: trap_stun
+name: stun trap
+icon: 10506
+
+id: trap_swinging_pendulum
+name: swinging pendulum trap
+icon: 10485
+
+id: trap_strangle_weed
+name: strangle weed trap
+icon: 8826
+
+id: trap_poison_needle
+name: poison needle trap
+icon: 10480
+
+id: trap_sleeping_gas
+name: sleeping gas trap
+icon: 10486
+
+id: trap_bear
+name: bear trap
+icon: 10483
+
+id: trap_flying_spear
+name: flying spear trap
+icon: 10479
+
+id: trap_teleportation
+name: teleportation trap
+icon: 10502
+
+id: room_floor_0
+name: room floor, border none
+icon: 8191
+
+id: room_floor_1
+name: room floor, border e
+icon: 8192
+
+id: room_floor_2
+name: room floor, border w
+icon: 8190
+
+id: room_floor_3
+name: room floor, border we
+icon: 8193
+
+id: room_floor_4
+name: room floor, border s
+icon: 8212
+
+id: room_floor_5
+name: room floor, border se
+icon: 8213
+
+id: room_floor_6
+name: room floor, border sw
+icon: 8211
+
+id: room_floor_7
+name: room floor, border swe
+icon: 8214
+
+id: room_floor_8
+name: room floor, border n
+icon: 8170
+
+id: room_floor_9
+name: room floor, border ne
+icon: 8171
+
+id: room_floor_10
+name: room floor, border nw
+icon: 8169
+
+id: room_floor_11
+name: room floor, border nwe
+icon: 8172
+
+id: room_floor_12
+name: room floor, border ns
+icon: 8195
+
+id: room_floor_13
+name: room floor, border nse
+icon: 8196
+
+id: room_floor_14
+name: room floor, border nsw
+icon: 8194
+
+id: room_floor_15
+name: room floor, border nswe
+icon: 8174
+
+id: corridor_0
+name: corridor, border none
+icon: 8443
+
+id: corridor_1
+name: corridor, border e
+icon: 8444
+
+id: corridor_2
+name: corridor, border w
+icon: 8442
+
+id: corridor_3
+name: corridor, border we
+icon: 8445
+
+id: corridor_4
+name: corridor, border s
+icon: 8464
+
+id: corridor_5
+name: corridor, border se
+icon: 8465
+
+id: corridor_6
+name: corridor, border sw
+icon: 8463
+
+id: corridor_7
+name: corridor, border swe
+icon: 8466
+
+id: corridor_8
+name: corridor, border n
+icon: 8422
+
+id: corridor_9
+name: corridor, border ne
+icon: 8423
+
+id: corridor_10
+name: corridor, border nw
+icon: 8421
+
+id: corridor_11
+name: corridor, border nwe
+icon: 8424
+
+id: corridor_12
+name: corridor, border ns
+icon: 8447
+
+id: corridor_13
+name: corridor, border nse
+icon: 8448
+
+id: corridor_14
+name: corridor, border nsw
+icon: 8446
+
+id: corridor_15
+name: corridor, border nswe
+icon: 8426
+
+%rec: monster
+%doc: Monsters
+
+id: axe_beak
+name: axe beak
+icon: 1765
+
+id: babbler
+name: babbler
+icon: 1659
+
+id: crystalizer
+name: crystalizer
+icon: 866
+
+id: fire_drake
+name: fire drake
+icon: 2794
+
+id: dark_elf
+name: dark elf
+icon: 1197
+
+id: fairy
+name: fairy
+icon: 1135
+
+id: gorgon
+name: gorgon
+icon: 2544
+
+id: harpy
+name: harpy
+icon: 358
+
+id: invisixplode
+name: invisixplode
+icon: 924
+
+id: jackal
+name: jackal
+icon: 693
+
+id: kobold
+name: kobold
+icon: 1680
+
+id: lizard_man
+name: lizard man
+icon: 2940
+
+id: minotaur
+name: minotaur
+icon: 1092
+
+id: norker
+name: norker
+icon: 1471
+
+id: ogre
+name: ogre
+icon: 1365
+
+id: panther
+name: panther
+icon: 401
+
+id: quasit
+name: quasit
+icon: 610
+
+id: giant_rat
+name: giant rat
+icon: 3130
+
+id: shrieker
+name: shrieker
+icon: 2184
+
+id: troglodyte
+name: troglodyte
+icon: 1218
+
+id: unicorn
+name: unicorn
+icon: 2605
+
+id: vine_crawler
+name: vine crawler
+icon: 8826
+
+id: wyvern
+name: wyvern
+icon: 2775
+
+id: xuthus
+name: xuthus
+icon: 2017
+
+id: yeth_hound
+name: yeth hound
+icon: 799
+
+id: zephyr
+name: zephyr
+icon: 904
+
+id: apparition
+name: apparition
+icon: 3383
+
+id: banshee
+name: banshee
+icon: 3423
+
+id: coatyl
+name: coatyl
+icon: 2861
+
+id: red_dragon
+name: red dragon
+icon: 2838
+
+id: white_dragon
+name: white dragon
+icon: 2796
+
+id: blue_dragon
+name: blue dragon
+icon: 2800
+
+id: imperial_dragon
+name: Imperial Dragon
+icon: 2836
+
+id: efreeti
+name: efreeti
+icon: 905
+
+id: frost_fiend
+name: frost fiend
+icon: 568
+
+id: golem
+name: golem
+icon: 861
+
+id: hill_giant
+name: hill giant
+icon: 1073
+
+id: inflicter
+name: inflicter
+icon: 1491
+
+id: jaculus
+name: jaculus
+icon: 2856
+
+id: kleptum
+name: kleptum
+icon: 1243
+
+id: lich
+name: lich
+icon: 3343
+
+id: mystic
+name: mystic
+icon: 2226
+
+id: naga
+name: naga
+icon: 2878
+
+id: opinicus
+name: opinicus
+icon: 316
+
+id: polymorpher
+name: polymorpher
+icon: 2942
+
+id: queen_snake
+name: queen snake
+icon: 2857
+
+id: reaper
+name: reaper
+icon: 3402
+
+id: sulfuric_cloud
+name: sulfuric cloud
+icon: 882
+
+id: transmigrant
+name: transmigrant
+icon: 3384
+
+id: umbathri
+name: umbathri
+icon: 1743
+
+id: volcano_demon
+name: volcano demon
+icon: 507
+
+id: will_o_wisp
+name: will-o-wisp
+icon: 3381
+
+id: xorn
+name: xorn
+icon: 1009
+
+id: yeti
+name: yeti
+icon: 1513
+
+id: zabloron
+name: zabloron
+icon: 1722
+
+id: player
+name: you (the player)
+icon: 3507
+
+%rec: object
+%doc: Objects
+
+id: any_potion
+name: any potion (delusion)
+icon: 5759
+
+id: any_scroll
+name: any scroll (delusion)
+icon: 6051
+
+id: any_wand
+name: any wand (delusion)
+icon: 6260
+
+id: any_ring
+name: any ring (delusion)
+icon: 5839
+
+id: food_ration
+name: food ration (food)
+icon: 5000
+
+id: slime_mold
+name: slime mold (food)
+icon: 4961
+
+id: beef_jerky
+name: beef jerky (food)
+icon: 4746
+
+id: moldy_cheese_wedge
+name: moldy cheese wedge (food)
+icon: 5002
+
+id: stale_bread_roll
+name: stale bread roll (food)
+icon: 4999
+
+id: dried_fruit
+name: dried fruit (food)
+icon: 4956
+
+id: mushroom
+name: mushroom (food)
+icon: 4936
+
+id: arrow
+name: arrow (weapon)
+icon: 4033
+
+id: long_bow
+name: long bow (weapon)
+icon: 4011
+
+id: crossbow_bolt
+name: crossbow bolt (weapon)
+icon: 4036
+
+id: crossbow
+name: crossbow (weapon)
+icon: 4016
+
+id: sling_bullet
+name: sling bullet (weapon)
+icon: 3993
+
+id: sling
+name: sling (weapon)
+icon: 4015
+
+id: dagger
+name: dagger (weapon)
+icon: 6090
+
+id: dart
+name: dart (weapon)
+icon: 4053
+
+id: flail
+name: flail (weapon)
+icon: 6175
+
+id: hand_axe
+name: hand axe (weapon)
+icon: 5355
+
+id: long_sword
+name: long sword (weapon)
+icon: 5210
+
+id: mace
+name: mace (weapon)
+icon: 5275
+
+id: boulder
+name: boulder (weapon)
+icon: 5924
+
+id: spear
+name: spear (weapon)
+icon: 5187
+
+id: two_handed_sword
+name: two-handed sword (weapon)
+icon: 5211
+
+id: banded
+name: banded (armor)
+icon: 4309
+
+id: chain
+name: chain (armor)
+icon: 4329
+
+id: coconut
+name: coconut (armor)
+icon: 4328
+
+id: leather
+name: leather (armor)
+icon: 4352
+
+id: padded
+name: padded (armor)
+icon: 4327
+
+id: plate
+name: plate (armor)
+icon: 4307
+
+id: ring
+name: ring (armor)
+icon: 6050
+
+id: scale
+name: scale (armor)
+icon: 4308
+
+id: splint
+name: splint (armor)
+icon: 4305
+
+id: studded_leather
+name: studded leather (armor)
+icon: 4306
+
+id: buckler
+name: buckler (shield)
+icon: 6069
+
+id: medium_shield
+name: medium shield (shield)
+icon: 6070
+
+id: great_shield
+name: great shield (shield)
+icon: 6073
+
+id: mithril_shield
+name: mithril shield (shield)
+icon: 6075
+
+id: copper
+name: copper (key)
+icon: 5145
+
+id: silver
+name: silver (key)
+icon: 5145
+
+id: golden
+name: golden (key)
+icon: 5145
+
+id: skeleton
+name: skeleton (key)
+icon: 3339
+
+id: the_sudbury_saphire
+name: The Sudbury Saphire (item)
+icon: 5422
+
+id: compass_of_translocation
+name: compass of translocation (item)
+icon: 6196
+
+id: cross
+name: cross (item)
+icon: 6661
+
+id: mirror
+name: mirror (item)
+icon: 6195
+
+id: oil_flask
+name: oil flask (item)
+icon: 6468
+
+id: tinderbox
+name: tinderbox (item)
+icon: 5170
+
+id: vial_of_ethereal_oil
+name: vial of ethereal oil (item)
+icon: 5759
+
+id: chime_of_opening
+name: chime of opening (item)
+icon: 5628
+
+id: sparkling
+name: sparkling (gem)
+icon: 5419
+
+id: crimson
+name: crimson (gem)
+icon: 5420
+
+id: purple
+name: purple (gem)
+icon: 5424
+
+id: turquoise
+name: turquoise (gem)
+icon: 5422
+
+id: opaque
+name: opaque (gem)
+icon: 5503
+
+id: green
+name: green (gem)
+icon: 5425
+
+id: opalescent
+name: opalescent (gem)
+icon: 5482
+
+id: firey
+name: firey (gem)
+icon: 5421
+
+id: brilliant
+name: brilliant (gem)
+icon: 5418
+
+id: amber
+name: amber (gem)
+icon: 5441
+
+id: glowing
+name: glowing (gem)
+icon: 5504
+
+id: xanthick
+name: xanthick (gem)
+icon: 5502
+
+id: platinum
+name: platinum (money)
+icon: 5400
+
+id: gold
+name: gold (money)
+icon: 5397
+
+id: electrum
+name: electrum (money)
+icon: 5376
+
+id: silver_2
+name: silver (money)
+icon: 5400
+
+id: potion_ebony
+name: ebony potion
+icon: 5714
+
+id: potion_magenta
+name: magenta potion
+icon: 5692
+
+id: potion_limpid
+name: limpid potion
+icon: 5691
+
+id: potion_emerald
+name: emerald potion
+icon: 5674
+
+id: potion_vermilion
+name: vermilion potion
+icon: 5716
+
+id: potion_swirly
+name: swirly potion
+icon: 5696
+
+id: potion_silvery
+name: silvery potion
+icon: 5759
+
+id: potion_gold
+name: gold potion
+icon: 5676
+
+id: potion_amethyst
+name: amethyst potion
+icon: 5675
+
+id: potion_irridescent
+name: irridescent potion
+icon: 5718
+
+id: potion_ochre
+name: ochre potion
+icon: 5737
+
+id: potion_smokey
+name: smokey potion
+icon: 5717
+
+id: potion_glowing
+name: glowing potion
+icon: 5715
+
+id: potion_bubbly
+name: bubbly potion
+icon: 5697
+
+id: potion_oily
+name: oily potion
+icon: 5755
+
+id: potion_viscous
+name: viscous potion
+icon: 5695
+
+id: potion_effervescent
+name: effervescent potion
+icon: 5713
+
+id: potion_cloudy
+name: cloudy potion
+icon: 5712
+
+id: potion_fuming
+name: fuming potion
+icon: 5733
+
+id: potion_syrupy
+name: syrupy potion
+icon: 5734
+
+id: wand_oaken
+name: oaken wand
+icon: 6367
+
+id: wand_ebony
+name: ebony wand
+icon: 6264
+
+id: wand_runed
+name: runed wand
+icon: 6305
+
+id: wand_elongated
+name: elongated wand
+icon: 6286
+
+id: wand_teak
+name: teak wand
+icon: 6259
+
+id: wand_saffron
+name: saffron wand
+icon: 6366
+
+id: wand_steel
+name: steel wand
+icon: 6302
+
+id: wand_oblate
+name: oblate wand
+icon: 6324
+
+id: wand_iron
+name: iron wand
+icon: 6301
+
+id: wand_marble
+name: marble wand
+icon: 6265
+
+id: wand_frayed
+name: frayed wand
+icon: 6280
+
+id: wand_maple
+name: maple wand
+icon: 6261
+
+id: wand_crystaline
+name: crystaline wand
+icon: 6345
+
+id: wand_tapered
+name: tapered wand
+icon: 6327
+
+id: wand_mahogany
+name: mahogany wand
+icon: 6325
+
+id: wand_whitewood
+name: whitewood wand
+icon: 6281
+
+id: wand_cedar
+name: cedar wand
+icon: 6260
+
+id: wand_driftwood
+name: driftwood wand
+icon: 6307
+
+id: wand_bone
+name: bone wand
+icon: 6368
+
+id: wand_papyrus
+name: papyrus wand
+icon: 6363
+
+id: wand_mithril
+name: mithril wand
+icon: 6321
+
+id: ring_quartz
+name: quartz ring
+icon: 5796
+
+id: ring_ivory
+name: ivory ring
+icon: 5782
+
+id: ring_lapis_lazuli
+name: lapis lazuli ring
+icon: 5822
+
+id: ring_ruby
+name: ruby ring
+icon: 5817
+
+id: ring_jade
+name: jade ring
+icon: 5799
+
+id: ring_diamond
+name: diamond ring
+icon: 5843
+
+id: ring_agate
+name: agate ring
+icon: 5819
+
+id: ring_gold
+name: gold ring
+icon: 5839
+
+id: ring_aquamarine
+name: aquamarine ring
+icon: 5820
+
+id: ring_white_gold
+name: white gold ring
+icon: 5781
+
+id: ring_opal
+name: opal ring
+icon: 5801
+
+id: ring_saphire
+name: saphire ring
+icon: 5821
+
+id: ring_pearl
+name: pearl ring
+icon: 5802
+
+id: ring_onyx
+name: onyx ring
+icon: 5841
+
+id: ring_tiger_eye
+name: tiger eye ring
+icon: 5798
+
+id: ring_granite
+name: granite ring
+icon: 5776
+
+id: ring_crystal
+name: crystal ring
+icon: 5777
+
+id: ring_red_gold
+name: red gold ring
+icon: 5779
+
+id: ring_charcoal
+name: charcoal ring
+icon: 4729
+
+id: ring_brass
+name: brass ring
+icon: 5800
+
+id: ring_wooden
+name: wooden ring
+icon: 5775
+
+id: ring_iron
+name: iron ring
+icon: 5824
+
+id: ring_mithril
+name: mithril ring
+icon: 5797
+
+id: ring_bone
+name: bone ring
+icon: 5780
+
+id: ring_leather
+name: leather ring
+icon: 5840
+
+id: scroll_semper_ubi_sub_ubi
+name: Semper Ubi Sub Ubi scroll
+icon: 6029
+
+id: scroll_navigatum_iubet_vicissim
+name: Navigatum Iubet Vicissim scroll
+icon: 5992
+
+id: scroll_e_pluribus_unix
+name: E Pluribus Unix scroll
+icon: 6031
+
+id: scroll_tudo_poir
+name: Tudo Poir scroll
+icon: 6009
+
+id: scroll_tuum_matrem_dat_bonum_capitem
+name: Tuum Matrem Dat Bonum Capitem scroll
+icon: 6013
+
+id: scroll_ede_fecem_et_mora
+name: Ede Fecem Et Mora scroll
+icon: 6006
+
+id: scroll_feces_in_mea_ora
+name: Feces In Mea Ora scroll
+icon: 6008
+
+id: scroll_pafonius_a_um
+name: Pafonius A Um scroll
+icon: 5991
+
+id: scroll_voppter_zoy
+name: Voppter Zoy scroll
+icon: 6028
+
+id: scroll_oazubu_shzlaut_jaeg
+name: Oazubu Shzlaut Jaeg scroll
+icon: 5989
+
+id: scroll_apdaz_a_ujore_uteo
+name: Apdaz A Ujore Uteo scroll
+icon: 5971
+
+id: scroll_ucme_hulag_sphitz
+name: Ucme Hulag Sphitz scroll
+icon: 5946
+
+id: scroll_vas_sonarse
+name: Vas Sonarse scroll
+icon: 5965
+
+id: scroll_draco_te_edeat
+name: Draco Te Edeat scroll
+icon: 5950
+
+id: scroll_capi_tuum_capitem_ex_tuo_asino
+name: Capi Tuum Capitem Ex Tuo Asino scroll
+icon: 5969
+
+id: scroll_tiro_lasto_cuio
+name: Tiro Lasto Cuio scroll
+icon: 5949
+
+id: scroll_verbum_sapienti_est_satis
+name: Verbum Sapienti Est Satis scroll
+icon: 5964
+
+id: scroll_tua_mater_est_canem
+name: Tua Mater Est Canem scroll
+icon: 5945
+
+id: scroll_rara_avis_defeceat_in_tuo_capite
+name: Rara Avis Defeceat In Tuo Capite scroll
+icon: 5947
+
+id: scroll_tuum_subligaculum_decadat
+name: Tuum Subligaculum Decadat scroll
+icon: 6030
+
+id: scroll_mein_bustenhalter_uberflute
+name: Mein Bustenhalter Uberflute scroll
+icon: 6032
+
+id: staff
+name: staff
+icon: 5273
