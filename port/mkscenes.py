@@ -104,7 +104,7 @@ MNEMONIC = {'world/room_floor_0': '.', 'world/corridor_12': '#', 'world/corridor
 def rec(sc, sid, name, cats):
     keys = sorted(sc.used())
     pool = iter(c for c in [chr(i) for i in range(33, 127)] + [chr(i) for i in range(0xc0, 0x2af)]
-                if c not in MNEMONIC.values())
+                if c not in MNEMONIC.values() and c != '\\')   # rec joins a line ending in a backslash to the next
     ch = {k: MNEMONIC.get(k) or next(pool) for k in keys}
     out = ['id: ' + sid, 'name: ' + name, 'category: ' + ' '.join(cats), 'under: world/room_floor_0']
     out += ['legend: %s %s' % (ch[k], k) for k in keys]

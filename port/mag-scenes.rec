@@ -64,37 +64,37 @@ legend: X world/room_floor_5
 legend: Y world/room_floor_6
 legend: Z world/room_floor_8
 legend: [ world/room_floor_9
-legend: \ world/rtorch
-legend: ] world/trap_poison_needle
-legend: _ world/trap_sleeping_gas
-legend: ` world/trap_stun
-legend: a world/ttorch
-legend: b world/ulwall
+legend: ] world/rtorch
+legend: _ world/trap_poison_needle
+legend: ` world/trap_sleeping_gas
+legend: a world/trap_stun
+legend: b world/ttorch
+legend: c world/ulwall
 legend: < world/upstair
-legend: c world/urwall
+legend: d world/urwall
 legend: | world/vwall
 map:
-+                      b---a-----a---c
-+  b---a-----a---c     |UZZ4ZZZZZZZZ[|       b---a-----a-----a---c
++                      c---b-----b---d
++  c---b-----b---d     |UZZ4ZZZZZZZZ[|       c---b-----b-----b---d
 +  |UZZZZZZZZZZZ[|     |V.....I.....T|       |UZZZZZZZZZZZZZ/ZZZ[|
 +  |V.<........AT|     SV............+#######=............B.....T|
-+  SV...@........+#####=....(.......T|       SV.................T\
++  SV...@........+#####=....(.......T|       SV.................T]
 +  |V..H........T|     |YWWWWW.WWWWWX|       |V.................T|
 +  |V.........%.1|     Q---O--+--O---R       |V.....9...........T|
 +  |YWW!WW.3WWWWX|            "              |V.................T|
-+  Q---O--+--O---R            "         P####=WWWWWWWW.WWWWWWWWWX\
++  Q---O--+--O---R            "         P####=WWWWWWWW.WWWWWWWWWX]
 +         "                   "         "    Q---O----+O-----O---R
-+         "                b--=a-----a--+--c          "
-+         "                |UZ.ZZZZZZZZZ]Z[|          "
-+    b---a=----a---c       |V..;`.........T|          "
-+    |UZ0Z.ZZZZZZZ[|       SV.............T\     b---a=----a-----c
++         "                c--=b-----b--+--d          "
++         "                |UZ.ZZZZZZZZZ_Z[|          "
++    c---b=----b---d       |V..;a.........T|          "
++    |UZ0Z.ZZZZZZZ[|       SV.............T]     c---b=----b-----d
 +    |V...&..2....T|       |V.........M...T|     |UZZZ.ZZZZZZZZZ[|
-+    SV...........T\       |V...~~........T|     |V.............T|
-+    |V...N...5....+#######=.......L......T|     SV.............T\
-+    |V...........T|       SV..K....E.....T\     |V..*..........T|
++    SV...........T]       |V...~~........T|     |V.............T|
++    |V...N...5....+#######=.......L......T|     SV.............T]
++    |V...........T|       SV..K....E.....T]     |V..*..........T|
 +    |V........7..T|       |V.....'........+#####=...6....8.?...T|
-+    SV..)..D....JT\       |V.....F....,..$|     |V.........C...T|
-+    |YWWWWWWWWWWWX|       |YWWWWW_WWWWWWWX|     SV...........>GT\
++    SV..)..D....JT]       |V.....F....,..$|     |V.........C...T|
++    |YWWWWWWWWWWWX|       |YWWWWW`WWWWWWWX|     SV...........>GT]
 +    Q---O-----O---R       Q---O-----O-----R     |YWWWWWWWWWWWWWX|
 +                                                Q---O-----O-----R
 + 
@@ -239,44 +239,44 @@ legend: X monster/volcano_demon
 legend: Y monster/white_dragon
 legend: Z monster/will_o_wisp
 legend: [ monster/wyvern
-legend: \ monster/xorn
-legend: ] monster/xuthus
-legend: _ monster/yeth_hound
-legend: ` monster/yeti
-legend: a monster/zabloron
-legend: b monster/zephyr
-legend: c world/btorch
+legend: ] monster/xorn
+legend: _ monster/xuthus
+legend: ` monster/yeth_hound
+legend: a monster/yeti
+legend: b monster/zabloron
+legend: c monster/zephyr
+legend: d world/btorch
 legend: - world/hwall
-legend: d world/llwall
-legend: e world/lrwall
-legend: f world/ltorch
+legend: e world/llwall
+legend: f world/lrwall
+legend: g world/ltorch
 legend: . world/room_floor_0
-legend: g world/room_floor_1
-legend: h world/room_floor_10
-legend: i world/room_floor_2
-legend: j world/room_floor_4
-legend: k world/room_floor_5
-legend: l world/room_floor_6
-legend: m world/room_floor_8
-legend: n world/room_floor_9
-legend: o world/rtorch
-legend: p world/ttorch
-legend: q world/ulwall
-legend: r world/urwall
+legend: h world/room_floor_1
+legend: i world/room_floor_10
+legend: j world/room_floor_2
+legend: k world/room_floor_4
+legend: l world/room_floor_5
+legend: m world/room_floor_6
+legend: n world/room_floor_8
+legend: o world/room_floor_9
+legend: p world/rtorch
+legend: q world/ttorch
+legend: r world/ulwall
+legend: s world/urwall
 legend: | world/vwall
 map:
 + 
-+  q---p-----p-----p-----p-----p-r
-+  |hmmmmmmmmmmmmmmmmmmmmmmmmmmmn|
-+  |i$.%.).0.*./.4.5.9.;.B.D.E.Hg|
-+  fi...........................go
-+  |iI.K.M.2.Q.T.V.W.[.]._.b.!.&g|
-+  |i...........................g|
-+  |i(.P.Y.'.7.,.1.3.6.8.?.A.C.Fg|
-+  fi...........................go
-+  |iG.J.L.N.O.R.S.U.X.Z.\.`.a.@g|
-+  |ljjjjjjjjjjjjjjjjjjjjjjjjjjjk|
-+  d---c-----c-----c-----c-----c-e
++  r---q-----q-----q-----q-----q-s
++  |innnnnnnnnnnnnnnnnnnnnnnnnnno|
++  |j$.%.).0.*./.4.5.9.;.B.D.E.Hh|
++  gj...........................hp
++  |jI.K.M.2.Q.T.V.W.[._.`.c.!.&h|
++  |j...........................h|
++  |j(.P.Y.'.7.,.1.3.6.8.?.A.C.Fh|
++  gj...........................hp
++  |jG.J.L.N.O.R.S.U.X.Z.].a.b.@h|
++  |mkkkkkkkkkkkkkkkkkkkkkkkkkkkl|
++  e---d-----d-----d-----d-----d-f
 + 
 
 id: treasury
@@ -332,151 +332,151 @@ legend: X object/padded
 legend: Y object/plate
 legend: Z object/platinum
 legend: [ object/potion_amethyst
-legend: \ object/potion_bubbly
-legend: ] object/potion_cloudy
-legend: _ object/potion_ebony
-legend: ` object/potion_effervescent
-legend: a object/potion_emerald
-legend: b object/potion_fuming
-legend: c object/potion_glowing
-legend: d object/potion_gold
-legend: e object/potion_irridescent
-legend: f object/potion_limpid
-legend: g object/potion_magenta
-legend: h object/potion_ochre
-legend: i object/potion_oily
-legend: j object/potion_silvery
-legend: k object/potion_smokey
-legend: l object/potion_swirly
-legend: m object/potion_syrupy
-legend: n object/potion_vermilion
-legend: o object/potion_viscous
-legend: p object/purple
-legend: q object/ring
-legend: r object/ring_agate
-legend: s object/ring_aquamarine
-legend: t object/ring_bone
-legend: u object/ring_brass
-legend: v object/ring_charcoal
-legend: w object/ring_crystal
-legend: x object/ring_diamond
-legend: y object/ring_gold
-legend: z object/ring_granite
-legend: { object/ring_iron
-legend: } object/ring_ivory
-legend: À object/ring_jade
-legend: Á object/ring_lapis_lazuli
-legend: Â object/ring_leather
-legend: Ã object/ring_mithril
-legend: Ä object/ring_onyx
-legend: Å object/ring_opal
-legend: Æ object/ring_pearl
-legend: Ç object/ring_quartz
-legend: È object/ring_red_gold
-legend: É object/ring_ruby
-legend: Ê object/ring_saphire
-legend: Ë object/ring_tiger_eye
-legend: Ì object/ring_white_gold
-legend: Í object/ring_wooden
-legend: Î object/scale
-legend: Ï object/scroll_apdaz_a_ujore_uteo
-legend: Ð object/scroll_capi_tuum_capitem_ex_tuo_asino
-legend: Ñ object/scroll_draco_te_edeat
-legend: Ò object/scroll_e_pluribus_unix
-legend: Ó object/scroll_ede_fecem_et_mora
-legend: Ô object/scroll_feces_in_mea_ora
-legend: Õ object/scroll_mein_bustenhalter_uberflute
-legend: Ö object/scroll_navigatum_iubet_vicissim
-legend: × object/scroll_oazubu_shzlaut_jaeg
-legend: Ø object/scroll_pafonius_a_um
-legend: Ù object/scroll_rara_avis_defeceat_in_tuo_capite
-legend: Ú object/scroll_semper_ubi_sub_ubi
-legend: Û object/scroll_tiro_lasto_cuio
-legend: Ü object/scroll_tua_mater_est_canem
-legend: Ý object/scroll_tudo_poir
-legend: Þ object/scroll_tuum_matrem_dat_bonum_capitem
-legend: ß object/scroll_tuum_subligaculum_decadat
-legend: à object/scroll_ucme_hulag_sphitz
-legend: á object/scroll_vas_sonarse
-legend: â object/scroll_verbum_sapienti_est_satis
-legend: ã object/scroll_voppter_zoy
-legend: ä object/silver
-legend: å object/silver_2
-legend: æ object/skeleton
-legend: ç object/slime_mold
-legend: è object/sling
-legend: é object/sling_bullet
-legend: ê object/sparkling
-legend: ë object/spear
-legend: ì object/splint
-legend: í object/staff
-legend: î object/stale_bread_roll
-legend: ï object/studded_leather
-legend: ð object/the_sudbury_saphire
-legend: ñ object/tinderbox
-legend: ò object/turquoise
-legend: ó object/two_handed_sword
-legend: ô object/vial_of_ethereal_oil
-legend: õ object/wand_bone
-legend: ö object/wand_cedar
-legend: ÷ object/wand_crystaline
-legend: ø object/wand_driftwood
-legend: ù object/wand_ebony
-legend: ú object/wand_elongated
-legend: û object/wand_frayed
-legend: ü object/wand_iron
-legend: ý object/wand_mahogany
-legend: þ object/wand_maple
-legend: ÿ object/wand_marble
-legend: Ā object/wand_mithril
-legend: ā object/wand_oaken
-legend: Ă object/wand_oblate
-legend: ă object/wand_papyrus
-legend: Ą object/wand_runed
-legend: ą object/wand_saffron
-legend: Ć object/wand_steel
-legend: ć object/wand_tapered
-legend: Ĉ object/wand_teak
-legend: ĉ object/wand_whitewood
-legend: Ċ object/xanthick
-legend: ċ world/btorch
+legend: ] object/potion_bubbly
+legend: _ object/potion_cloudy
+legend: ` object/potion_ebony
+legend: a object/potion_effervescent
+legend: b object/potion_emerald
+legend: c object/potion_fuming
+legend: d object/potion_glowing
+legend: e object/potion_gold
+legend: f object/potion_irridescent
+legend: g object/potion_limpid
+legend: h object/potion_magenta
+legend: i object/potion_ochre
+legend: j object/potion_oily
+legend: k object/potion_silvery
+legend: l object/potion_smokey
+legend: m object/potion_swirly
+legend: n object/potion_syrupy
+legend: o object/potion_vermilion
+legend: p object/potion_viscous
+legend: q object/purple
+legend: r object/ring
+legend: s object/ring_agate
+legend: t object/ring_aquamarine
+legend: u object/ring_bone
+legend: v object/ring_brass
+legend: w object/ring_charcoal
+legend: x object/ring_crystal
+legend: y object/ring_diamond
+legend: z object/ring_gold
+legend: { object/ring_granite
+legend: } object/ring_iron
+legend: À object/ring_ivory
+legend: Á object/ring_jade
+legend: Â object/ring_lapis_lazuli
+legend: Ã object/ring_leather
+legend: Ä object/ring_mithril
+legend: Å object/ring_onyx
+legend: Æ object/ring_opal
+legend: Ç object/ring_pearl
+legend: È object/ring_quartz
+legend: É object/ring_red_gold
+legend: Ê object/ring_ruby
+legend: Ë object/ring_saphire
+legend: Ì object/ring_tiger_eye
+legend: Í object/ring_white_gold
+legend: Î object/ring_wooden
+legend: Ï object/scale
+legend: Ð object/scroll_apdaz_a_ujore_uteo
+legend: Ñ object/scroll_capi_tuum_capitem_ex_tuo_asino
+legend: Ò object/scroll_draco_te_edeat
+legend: Ó object/scroll_e_pluribus_unix
+legend: Ô object/scroll_ede_fecem_et_mora
+legend: Õ object/scroll_feces_in_mea_ora
+legend: Ö object/scroll_mein_bustenhalter_uberflute
+legend: × object/scroll_navigatum_iubet_vicissim
+legend: Ø object/scroll_oazubu_shzlaut_jaeg
+legend: Ù object/scroll_pafonius_a_um
+legend: Ú object/scroll_rara_avis_defeceat_in_tuo_capite
+legend: Û object/scroll_semper_ubi_sub_ubi
+legend: Ü object/scroll_tiro_lasto_cuio
+legend: Ý object/scroll_tua_mater_est_canem
+legend: Þ object/scroll_tudo_poir
+legend: ß object/scroll_tuum_matrem_dat_bonum_capitem
+legend: à object/scroll_tuum_subligaculum_decadat
+legend: á object/scroll_ucme_hulag_sphitz
+legend: â object/scroll_vas_sonarse
+legend: ã object/scroll_verbum_sapienti_est_satis
+legend: ä object/scroll_voppter_zoy
+legend: å object/silver
+legend: æ object/silver_2
+legend: ç object/skeleton
+legend: è object/slime_mold
+legend: é object/sling
+legend: ê object/sling_bullet
+legend: ë object/sparkling
+legend: ì object/spear
+legend: í object/splint
+legend: î object/staff
+legend: ï object/stale_bread_roll
+legend: ð object/studded_leather
+legend: ñ object/the_sudbury_saphire
+legend: ò object/tinderbox
+legend: ó object/turquoise
+legend: ô object/two_handed_sword
+legend: õ object/vial_of_ethereal_oil
+legend: ö object/wand_bone
+legend: ÷ object/wand_cedar
+legend: ø object/wand_crystaline
+legend: ù object/wand_driftwood
+legend: ú object/wand_ebony
+legend: û object/wand_elongated
+legend: ü object/wand_frayed
+legend: ý object/wand_iron
+legend: þ object/wand_mahogany
+legend: ÿ object/wand_maple
+legend: Ā object/wand_marble
+legend: ā object/wand_mithril
+legend: Ă object/wand_oaken
+legend: ă object/wand_oblate
+legend: Ą object/wand_papyrus
+legend: ą object/wand_runed
+legend: Ć object/wand_saffron
+legend: ć object/wand_steel
+legend: Ĉ object/wand_tapered
+legend: ĉ object/wand_teak
+legend: Ċ object/wand_whitewood
+legend: ċ object/xanthick
+legend: Č world/btorch
 legend: - world/hwall
-legend: Č world/llwall
-legend: č world/lrwall
-legend: Ď world/ltorch
+legend: č world/llwall
+legend: Ď world/lrwall
+legend: ď world/ltorch
 legend: . world/room_floor_0
-legend: ď world/room_floor_1
-legend: Đ world/room_floor_10
-legend: đ world/room_floor_2
-legend: Ē world/room_floor_4
-legend: ē world/room_floor_5
-legend: Ĕ world/room_floor_6
-legend: ĕ world/room_floor_8
-legend: Ė world/room_floor_9
-legend: ė world/rtorch
-legend: Ę world/ttorch
-legend: ę world/ulwall
-legend: Ě world/urwall
+legend: Đ world/room_floor_1
+legend: đ world/room_floor_10
+legend: Ē world/room_floor_2
+legend: ē world/room_floor_4
+legend: Ĕ world/room_floor_5
+legend: ĕ world/room_floor_6
+legend: Ė world/room_floor_8
+legend: ė world/room_floor_9
+legend: Ę world/rtorch
+legend: ę world/ttorch
+legend: Ě world/ulwall
+legend: ě world/urwall
 legend: | world/vwall
 map:
 + 
-+  ę---Ę-----Ę-----Ę-----Ę-----Ę-----Ę-----Ę-----Ě
-+  |ĐĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĕĖ|
-+  |đ$.&.'.%.E.ç.*.S.î.A.T.(.M.9.8.é.è.;.?.D.K.Nď|
-+  Ďđ...........................................ďė
-+  |đO.,.ë.ó.).1.3.L.X.Y.q.Î.ì.ï.0.P.I.R.5.ä.H.æď|
-+  |đ...........................................ď|
-+  |đð.4.7.Q.U.ñ.ô.2.ê.6.p.ò.W.J.V.C./.!.F.Ċ.Z.Gď|
-+  Ďđ...........................................ďė
-+  |đB.å._.g.f.a.n.l.j.d.[.e.h.k.c.\.i.o.`.].b.mď|
-+  |đ...........................................ď|
-+  |đā.ù.Ą.ú.Ĉ.ą.Ć.Ă.ü.ÿ.û.þ.÷.ć.ý.ĉ.ö.ø.õ.ă.Ā.Çď|
-+  Ďđ...........................................ďė
-+  |đ}.Á.É.À.x.r.y.s.Ì.Å.Ê.Æ.Ä.Ë.z.w.È.v.u.Í.{.Ãď|
-+  |đ...........................................ď|
-+  |đt.Â.Ú.Ö.Ò.Ý.Þ.Ó.Ô.Ø.ã.×.Ï.à.á.Ñ.Ð.Û.â.Ü.Ù.ßď|
-+  Ďđ...........................................ďė
-+  |đÕ.í........................................ď|
-+  |ĔĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒĒē|
-+  Č---ċ-----ċ-----ċ-----ċ-----ċ-----ċ-----ċ-----č
++  Ě---ę-----ę-----ę-----ę-----ę-----ę-----ę-----ě
++  |đĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖĖė|
++  |Ē$.&.'.%.E.è.*.S.ï.A.T.(.M.9.8.ê.é.;.?.D.K.NĐ|
++  ďĒ...........................................ĐĘ
++  |ĒO.,.ì.ô.).1.3.L.X.Y.r.Ï.í.ð.0.P.I.R.5.å.H.çĐ|
++  |Ē...........................................Đ|
++  |Ēñ.4.7.Q.U.ò.õ.2.ë.6.q.ó.W.J.V.C./.!.F.ċ.Z.GĐ|
++  ďĒ...........................................ĐĘ
++  |ĒB.æ.`.h.g.b.o.m.k.e.[.f.i.l.d.].j.p.a._.c.nĐ|
++  |Ē...........................................Đ|
++  |ĒĂ.ú.ą.û.ĉ.Ć.ć.ă.ý.Ā.ü.ÿ.ø.Ĉ.þ.Ċ.÷.ù.ö.Ą.ā.ÈĐ|
++  ďĒ...........................................ĐĘ
++  |ĒÀ.Â.Ê.Á.y.s.z.t.Í.Æ.Ë.Ç.Å.Ì.{.x.É.w.v.Î.}.ÄĐ|
++  |Ē...........................................Đ|
++  |Ēu.Ã.Û.×.Ó.Þ.ß.Ô.Õ.Ù.ä.Ø.Ð.á.â.Ò.Ñ.Ü.ã.Ý.Ú.àĐ|
++  ďĒ...........................................ĐĘ
++  |ĒÖ.î........................................Đ|
++  |ĕēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēĔ|
++  č---Č-----Č-----Č-----Č-----Č-----Č-----Č-----Ď
 + 
