@@ -5,7 +5,6 @@
 id: dungeon
 name: Dungeon level
 category: world monster object
-under: world/room_floor_0
 legend: ! monster/apparition
 legend: $ monster/banshee
 legend: % monster/crystalizer
@@ -58,51 +57,79 @@ legend: ~ world/pool
 legend: . world/room_floor_0
 legend: T world/room_floor_1
 legend: U world/room_floor_10
-legend: V world/room_floor_2
-legend: W world/room_floor_4
-legend: X world/room_floor_5
-legend: Y world/room_floor_6
-legend: Z world/room_floor_8
-legend: [ world/room_floor_9
-legend: ] world/rtorch
-legend: _ world/trap_poison_needle
-legend: ` world/trap_sleeping_gas
-legend: a world/trap_stun
-legend: b world/ttorch
-legend: c world/ulwall
+legend: V world/room_floor_11
+legend: W world/room_floor_13
+legend: X world/room_floor_14
+legend: Y world/room_floor_2
+legend: Z world/room_floor_4
+legend: [ world/room_floor_5
+legend: ] world/room_floor_6
+legend: _ world/room_floor_7
+legend: ` world/room_floor_8
+legend: a world/room_floor_9
+legend: b world/rtorch
+legend: c world/trap_poison_needle
+legend: d world/trap_sleeping_gas
+legend: e world/trap_stun
+legend: f world/ttorch
+legend: g world/ulwall
 legend: < world/upstair
-legend: d world/urwall
+legend: h world/urwall
 legend: | world/vwall
 map:
-+                      c---b-----b---d
-+  c---b-----b---d     |UZZ4ZZZZZZZZ[|       c---b-----b-----b---d
-+  |UZZZZZZZZZZZ[|     |V.....I.....T|       |UZZZZZZZZZZZZZ/ZZZ[|
-+  |V.<........AT|     SV............+#######=............B.....T|
-+  SV...@........+#####=....(.......T|       SV.................T]
-+  |V..H........T|     |YWWWWW.WWWWWX|       |V.................T|
-+  |V.........%.1|     Q---O--+--O---R       |V.....9...........T|
-+  |YWW!WW.3WWWWX|            "              |V.................T|
-+  Q---O--+--O---R            "         P####=WWWWWWWW.WWWWWWWWWX]
++                      g---f-----f---h
++  g---f-----f---h     |U``4````````a|       g---f-----f-----f---h
++  |U```````````a|     |Y.....I.....T|       |U`````````````/```a|
++  |Y.<........AT|     SY............+#######=............B.....T|
++  SY...@........+#####=....(.......T|       SY.................Tb
++  |Y..H........T|     |]ZZZZZ.ZZZZZ[|       |Y.................T|
++  |Y.........%.1|     Q---O--+--O---R       |Y.....9...........T|
++  |]ZZ!ZZ.3ZZZZ[|            "              |Y.................T|
++  Q---O--+--O---R            "         P####=ZZZZZZZZ.ZZZZZZZZZ[b
 +         "                   "         "    Q---O----+O-----O---R
-+         "                c--=b-----b--+--d          "
-+         "                |UZ.ZZZZZZZZZ_Z[|          "
-+    c---b=----b---d       |V..;a.........T|          "
-+    |UZ0Z.ZZZZZZZ[|       SV.............T]     c---b=----b-----d
-+    |V...&..2....T|       |V.........M...T|     |UZZZ.ZZZZZZZZZ[|
-+    SV...........T]       |V...~~........T|     |V.............T|
-+    |V...N...5....+#######=.......L......T|     SV.............T]
-+    |V...........T|       SV..K....E.....T]     |V..*..........T|
-+    |V........7..T|       |V.....'........+#####=...6....8.?...T|
-+    SV..)..D....JT]       |V.....F....,..$|     |V.........C...T|
-+    |YWWWWWWWWWWWX|       |YWWWWW`WWWWWWWX|     SV...........>GT]
-+    Q---O-----O---R       Q---O-----O-----R     |YWWWWWWWWWWWWWX|
++         "                g--=f-----f--+--h          "
++         "                |U`.`````````c`a|          "
++    g---f=----f---h       |Y..;e.........T|          "
++    |U`0`.```````a|       SY.............Tb     g---f=----f-----h
++    |Y...&..2....T|       |Y.........M...T|     |U```.`````````a|
++    SY...........Tb       |Y...~~........T|     |Y.............T|
++    |Y...N...5....+#######=.......L......T|     SY.............Tb
++    |Y...........T|       SY..K....E.....Tb     |Y..*..........T|
++    |Y........7..T|       |Y.....'........+#####=...6....8.?...T|
++    SY..)..D....JTb       |Y.....F....,..$|     |Y.........C...T|
++    |]ZZZZZZZZZZZ[|       |]ZZZZZdZZZZZZZ[|     SY...........>GTb
++    Q---O-----O---R       Q---O-----O-----R     |]ZZZZZZZZZZZZZ[|
 +                                                Q---O-----O-----R
++ 
+ground:
++ 
++                          `
++                             .                             `
++     .        .                     W       X            .
++       .        W     X    .
++      .
++             . T             _                     .
++      Z   Z
++         _                                  X
++                                                     _
++                             V         V
++                                       .
++         V                    ..
++       `                                             V
++         .  .                        .
++ 
++         .   .    W       X       .
++                              .    .                .
++              .                  .        W     X   .    . .
++        .  .    .                .    .  T                 .
++                                 Z                           ..
++ 
++ 
 + 
 
 id: world
 name: All terrain
 category: world
-under: world/room_floor_0
 legend: ! world/btorch
 legend: $ world/corridor_0
 legend: % world/corridor_1
@@ -184,11 +211,33 @@ map:
 +     1#######/#######0                       ::::::::::::
 + 
 + 
+ground:
++ 
++ 
++ 
++                                       D . . . . . . . . 8
++ 
++ 
++                                         . .
++ 
++         I                                         I
++ 
++ 
++ 
++ 
++ 
++ 
++ 
++ 
++ 
++ 
++ 
++ 
++ 
 
 id: bestiary
 name: Every monster
 category: monster
-under: world/room_floor_0
 legend: ! monster/apparition
 legend: $ monster/axe_beak
 legend: % monster/babbler
@@ -278,11 +327,24 @@ map:
 +  |mkkkkkkkkkkkkkkkkkkkkkkkkkkkl|
 +  e---d-----d-----d-----d-----d-f
 + 
+ground:
++ 
++ 
++ 
++    . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . .
++ 
++ 
++ 
 
 id: treasury
 name: Every object
 category: object
-under: world/room_floor_0
 legend: ! object/amber
 legend: $ object/any_potion
 legend: % object/any_ring
@@ -479,4 +541,26 @@ map:
 +  |ĒÖ.î........................................Đ|
 +  |ĕēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēēĔ|
 +  č---Č-----Č-----Č-----Č-----Č-----Č-----Č-----Ď
++ 
+ground:
++ 
++ 
++ 
++    . . . . . . . . . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . . . . . . . . . .
++ 
++    . . . . . . . . . . . . . . . . . . . . . .
++ 
++    . .
++ 
++ 
 + 

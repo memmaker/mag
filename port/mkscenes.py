@@ -73,22 +73,32 @@ class Scene:
             self.put(k, x, y)
 
     def autotile(self):
-        """plain floor and corridor cells get tiles.c's autotile border mask (n8 s4 w2 e1)"""
+        """as tiles.c: plain floor and corridor cells get their autotile border mask (n8 s4 w2 e1); ground is
+        what tile_raw() draws under a cell: a creature or object stands on its cell's floor or corridor, a
+        door, stairs or trap on the room floor; walls, torches and pools stand on nothing"""
         def k(x, y):
             return self.kind[y][x] if 0 <= x < self.w and 0 <= y < self.h else 0
+
+        def floor(x, y, t):
+            m = 0
+            for b, (dx, dy) in zip((8, 4, 2, 1), ((0, -1), (0, 1), (-1, 0), (1, 0))):
+                n = k(x + dx, y + dy)
+                if n != t and n != DOOR:
+                    m |= b
+            return 'world/%s_%d' % ('room_floor' if t == FLOOR else 'corridor', m)
+        self.ground = [[None] * self.w for _ in range(self.h)]
         for y in range(self.h):
             for x in range(self.w):
-                t = self.kind[y][x]
-                if self.cell[y][x] is None and t in (FLOOR, CORR):
-                    m = 0
-                    for b, (dx, dy) in zip((8, 4, 2, 1), ((0, -1), (0, 1), (-1, 0), (1, 0))):
-                        n = k(x + dx, y + dy)
-                        if n != t and n != DOOR:
-                            m |= b
-                    self.cell[y][x] = 'world/%s_%d' % ('room_floor' if t == FLOOR else 'corridor', m)
+                t, c = self.kind[y][x], self.cell[y][x]
+                if c is None and t in (FLOOR, CORR):
+                    self.cell[y][x] = floor(x, y, t)
+                elif c and not c.startswith('world/') and t in (FLOOR, CORR):
+                    self.ground[y][x] = floor(x, y, t)
+                elif c and c.split('/')[1] in ('door', 'locked', 'upstair', 'dnstair') or (c or '').startswith('world/trap'):
+                    self.ground[y][x] = floor(x, y, FLOOR)
 
     def used(self):
-        return {c for row in self.cell for c in row if c}
+        return {c for grid in (self.cell, self.ground) for row in grid for c in row if c}
 
 
 # legend characters: mnemonics first, then printable ASCII, then Latin-1 and on
@@ -99,7 +109,7 @@ MNEMONIC = {'world/room_floor_0': '.', 'world/corridor_12': '#', 'world/corridor
 
 
 def rec(sc, sid, name, cats):
-    return dawnlike_rec.scene_lines(sid, name, cats, 'world/room_floor_0', sc.cell, MNEMONIC)
+    return dawnlike_rec.scene_lines(sid, name, cats, sc.cell, sc.ground, MNEMONIC)
 
 
 def check(sc, cat):
