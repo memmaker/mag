@@ -8,15 +8,12 @@ Reads the ids from port/mag-dawnlike.rec, writes port/mag-scenes.rec:
   bestiary  every monster, treasury  every object
 Each scene asserts it shows every id of its category. Run after mkdawn.py:
   python3 port/mkscenes.py"""
-import os, random, re
+import os, random, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-IDS, typ = {}, None
-for line in open(os.path.join(HERE, 'mag-dawnlike.rec')).read().splitlines():
-    if line.startswith('%rec:'):
-        typ = line[5:].strip()
-    elif line.startswith('id:') and typ != 'Tileset':
-        IDS.setdefault(typ, []).append(line[3:].strip())
+sys.path.insert(0, os.environ.get('RVIP_TILESETS', os.path.expanduser('~/Games/rvip-tools/tilesets')))
+import dawnlike_rec
+IDS = {c: [i for i, _ in v] for c, v in dawnlike_rec.read_ids(os.path.join(HERE, 'mag-dawnlike.rec')).items()}
 
 FLOOR, CORR, DOOR = 1, 2, 3   # floor kinds as tiles.c's floor_kind() sees them
 
@@ -102,15 +99,7 @@ MNEMONIC = {'world/room_floor_0': '.', 'world/corridor_12': '#', 'world/corridor
 
 
 def rec(sc, sid, name, cats):
-    keys = sorted(sc.used())
-    pool = iter(c for c in [chr(i) for i in range(33, 127)] + [chr(i) for i in range(0xc0, 0x2af)]
-                if c not in MNEMONIC.values() and c != '\\')   # rec joins a line ending in a backslash to the next
-    ch = {k: MNEMONIC.get(k) or next(pool) for k in keys}
-    out = ['id: ' + sid, 'name: ' + name, 'category: ' + ' '.join(cats), 'under: world/room_floor_0']
-    out += ['legend: %s %s' % (ch[k], k) for k in keys]
-    rows = [''.join(ch[c] if c else ' ' for c in row).rstrip() for row in sc.cell]
-    out += ['map:'] + ['+ ' + r for r in rows]
-    return out
+    return dawnlike_rec.scene_lines(sid, name, cats, 'world/room_floor_0', sc.cell, MNEMONIC)
 
 
 def check(sc, cat):

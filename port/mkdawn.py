@@ -231,56 +231,18 @@ print('%d sprites; monsters %d/55 by name, %d stand-ins; object kinds %d/151 by 
          len(FPOT) + len(FWAND) + len(FRING) + len(FSCROLL), nf,
          55 + 151 + len(FPOT) + len(FWAND) + len(FRING) + len(FSCROLL) + nf))
 
-# ---- remapping: every DawnLike sheet stacked into one atlas + mag-dawnlike.rec --------------
-# dawnlike-0.png / -1.png (second animation frame): the sheets one below the other, 16x16 cells,
-# as wide as the widest; any sprite of the whole set can be picked in the remapper
-SHEETS = sorted({s for s, _, _ in POS.values()})
-sheet_img = {sh: Image.open(os.path.join(TS, 'DawnLike', sh)).convert('RGBA') for sh in SHEETS}
-COLS = max(im.width for im in sheet_img.values()) // 16
-sheet_row, rows = {}, 0
-for sh in SHEETS:
-    sheet_row[sh] = rows
-    rows += (sheet_img[sh].height + 15) // 16
-for fr in (0, 1):
-    img = Image.new('RGBA', (COLS * 16, rows * 16), (0, 0, 0, 0))
-    for sh in SHEETS:
-        f1 = os.path.join(TS, 'DawnLike', sh[:-5] + '1.png')
-        im = Image.open(f1).convert('RGBA') if fr and sh.endswith('0.png') and os.path.exists(f1) else sheet_img[sh]
-        img.paste(im, (0, sheet_row[sh] * 16))
-    out_png = os.path.join(HERE, 'dawnlike-%d.png' % fr)
-    if os.path.exists(out_png):   # rows below the sheets: tiles the remapper composed (shift+click), kept
-        old_png = Image.open(out_png).convert('RGBA')
-        if old_png.height > img.height:
-            grown = Image.new('RGBA', (img.width, old_png.height), (0, 0, 0, 0))
-            grown.paste(img, (0, 0))
-            grown.paste(old_png.crop((0, img.height, img.width, old_png.height)), (0, img.height))
-            img = grown
-    img.save(out_png)
-def cell(name):
-    sh, c, r = POS[name]
-    return (sheet_row[sh] + r) * COLS + c
-
-# the rec keeps what the remapper saved: icons of ids it already has stay
+# ---- remapping: the stacked atlas + mag-dawnlike.rec (rvip-tools/tilesets/dawnlike_rec.py) ------------
+sys.path.insert(0, TS)
+import dawnlike_rec
+cell = dawnlike_rec.stack(HERE, extra_pos={'warrior s': POS['warrior s']})
 REC = os.path.join(HERE, 'mag-dawnlike.rec')
-old, typ, rid = {}, None, None
-if os.path.exists(REC):
-    for line in open(REC).read().splitlines():
-        if line.startswith('%rec:'):
-            typ = line[5:].strip()
-        elif line.startswith('id:'):
-            rid = line[3:].strip()
-        elif line.startswith('icon:'):
-            old[typ, rid] = line[5:].strip()
-DOCS = {'world': 'World (terrain, walls, traps)', 'monster': 'Monsters', 'object': 'Objects'}
-out = ['# MAG tile mapping: port/mkdawn.py writes it, the remapper edits it',
-       '# (remapper port/mag-dawnlike.rec); tiles.c reads it at startup (c-rec).',
-       '# Re-running mkdawn.py keeps every icon below and adds new ids.', '',
-       '%rec: Tileset', 'id: dawnlike', 'name: DawnLike', 'file: dawnlike-0.png', 'anim_file: dawnlike-1.png',
-       'tile_w: 16', 'tile_h: 16', 'off_x: 0', 'off_y: 0', 'gap_x: 0', 'gap_y: 0', 'scenes: mag-scenes.rec', '']
-for cat in DOCS:
-    out += ['%rec: ' + cat, '%doc: ' + DOCS[cat], '']
-    for slot_i, (c, i, display) in enumerate(ents):
-        if c == cat and (c, i) not in (('world', 'floor'), ('world', 'corridor')):  # always autotiled, never drawn
-            out += ['id: ' + i, 'name: ' + display, 'icon: ' + old.get((c, i), str(cell(slots[slot_i]))), '']
-open(REC, 'w').write('\n'.join(out))
-print('dawnlike-0.png %dx%d cells; %s: %d ids (%d kept from the old file)' % (COLS, rows, os.path.basename(REC), len(ents), sum((e[0], e[1]) in old for e in ents)))
+kept = dawnlike_rec.write_rec(REC,
+    ['MAG tile mapping: port/mkdawn.py writes it, the remapper edits it',
+     '(remapper port/mag-dawnlike.rec); tiles.c reads it at startup (c-rec).',
+     'Re-running mkdawn.py keeps every icon below and adds new ids.'],
+    [('id', 'dawnlike'), ('name', 'DawnLike'), ('file', 'dawnlike-0.png'), ('anim_file', 'dawnlike-1.png'),
+     ('tile_w', 16), ('tile_h', 16), ('off_x', 0), ('off_y', 0), ('gap_x', 0), ('gap_y', 0), ('scenes', 'mag-scenes.rec')],
+    {'world': 'World (terrain, walls, traps)', 'monster': 'Monsters', 'object': 'Objects'},
+    [(c, i, display, cell(slots[n])) for n, (c, i, display) in enumerate(ents)
+     if (c, i) not in (('world', 'floor'), ('world', 'corridor'))])   # always autotiled, never drawn
+print('mag-dawnlike.rec: %d ids (%d kept from the old file)' % (len(ents) - 2, kept))
