@@ -247,7 +247,15 @@ for fr in (0, 1):
         f1 = os.path.join(TS, 'DawnLike', sh[:-5] + '1.png')
         im = Image.open(f1).convert('RGBA') if fr and sh.endswith('0.png') and os.path.exists(f1) else sheet_img[sh]
         img.paste(im, (0, sheet_row[sh] * 16))
-    img.save(os.path.join(HERE, 'dawnlike-%d.png' % fr))
+    out_png = os.path.join(HERE, 'dawnlike-%d.png' % fr)
+    if os.path.exists(out_png):   # rows below the sheets: tiles the remapper composed (shift+click), kept
+        old_png = Image.open(out_png).convert('RGBA')
+        if old_png.height > img.height:
+            grown = Image.new('RGBA', (img.width, old_png.height), (0, 0, 0, 0))
+            grown.paste(img, (0, 0))
+            grown.paste(old_png.crop((0, img.height, img.width, old_png.height)), (0, img.height))
+            img = grown
+    img.save(out_png)
 def cell(name):
     sh, c, r = POS[name]
     return (sheet_row[sh] + r) * COLS + c
